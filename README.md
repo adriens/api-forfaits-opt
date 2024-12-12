@@ -15,12 +15,7 @@ A la racine du dépôt :
 
 - compiler
     ```bash
-    ./mvnw clean install
+    mvn clean install
 - lancer
     ```bash
     java -jar target/quarkus-app/quarkus-run.jar
-
-
-- ou lancer en mode dev : 
-    ```bash
-    ./mvnw quarkus:dev
