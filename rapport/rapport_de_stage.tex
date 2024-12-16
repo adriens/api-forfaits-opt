@@ -1,0 +1,56 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\geometry{a4paper, margin=1in}
+
+% en-têtes/pieds de page
+\pagestyle{fancy}
+\fancyhead[L]{Rapport de stage - OPT-NC}
+\fancyhead[R]{Morgan CARRE}
+\fancyfoot[C]{\thepage}
+
+
+\begin{document}
+	
+	\begin{titlepage}
+		\begin{center}
+			{\LARGE \textbf{Rapport de Stage}} \\[1.5cm]
+			{\large Effectué du \textbf{09/12/2024} au \textbf{[à déterminer]}} \\[1cm]
+			
+			
+			
+			{\large Réalisé au sein de la société :} \\[1cm]
+			{\Large \textbf{DSI/GLIA OPT-NC}} \\[1cm]
+			
+			\includegraphics[width=0.3\textwidth]{asset/logo_opt.jpg} \\[1cm] 
+			
+			
+			\textbf{à Nouméa} \\[1cm]
+			
+			{\large \textbf{Développement d'une API REST des forfaits télécoms conteneurisée}} \\[1cm]
+			
+			{\large Présenté par :} \\[1cm]
+			{\LARGE \textbf{Morgan CARRE}} \\[0.5cm]
+			Étudiant en Licence Informatique, Semestre 5 \\[0.5cm]
+			\textbf{Université de la Nouvelle-Calédonie} \\[0.5cm]
+			
+			\includegraphics[width=0.2\textwidth]{asset/logo_universite.jpg} \\[2cm]
+			
+			{\large Supervisé par : \textbf{Adrien SALES}} \\[0.5cm]
+		\end{center}
+	\end{titlepage}
+	\newpage
+	\begin{abstract}
+		Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai travaillé sur le développement d'une API permettant de fournir des informations sur les différents forfaits télécoms. Ce projet a pour objectif de rendre les données publiques liées aux offres mobiles plus accessibles, en utilisant des outils modernes pour assurer une solution efficace et évolutive.
+		
+		L'API repose sur une stack technologique composée de Quarkus pour le développement de microservices performants, Flyway pour la gestion des migrations de base de données, et une base de données H2 pour le développement et les tests. 
+		
+		Ce rapport détaille les méthodologies adoptées, les technologies choisies et les différentes étapes de réalisation du projet, tout en mettant en lumière les défis rencontrés.
+	\end{abstract}
+\end{document}
