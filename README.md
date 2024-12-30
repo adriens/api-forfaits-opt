@@ -22,10 +22,10 @@ A la racine du dépôt :
 ### Build l'image : 
 - A la racine du dépôt :
     ```bash
-        podman build -t forfaits-opt-nc .
+        mvn package -Dquarkus.container-image.tag=1.0.0-SNAPSHOT -Dquarkus.container-image.name=forfaits-opt-nc
 ### Lancer le conteneur :
 - ```bash
-    podman run --name forfaits-container -p 8080:8080 forfaits-opt-nc
+    podman run --name forfaits-opt -p 8080:8080 forfaits-opt-nc:1.0.0-SNAPSHOT
 
 - vérifier que l'endpoint `/offres` fonctionne :  
     ```bash 
