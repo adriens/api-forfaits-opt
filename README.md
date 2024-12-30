@@ -15,6 +15,7 @@ A la racine du dépôt :
     mvn quarkus:dev
 ## Lancer le projet dans un conteneur
 ### Prérequis (sous ubunutu) : 
+- Maven : version 3.9
 - Podman : 
     ```bash
         sudo apt-get update
@@ -22,7 +23,7 @@ A la racine du dépôt :
 ### Build l'image : 
 - A la racine du dépôt :
     ```bash
-        mvn package -Dquarkus.container-image.tag=1.0.0-SNAPSHOT -Dquarkus.container-image.name=forfaits-opt-nc
+        mvn package
 ### Lancer le conteneur :
 - ```bash
     podman run --name forfaits-opt -p 8080:8080 forfaits-opt-nc:1.0.0-SNAPSHOT
