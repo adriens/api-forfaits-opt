@@ -1,4 +1,26 @@
 \documentclass{article}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+	language=Java,
+	basicstyle=\ttfamily\footnotesize,
+	keywordstyle=\color{blue}\bfseries,
+	stringstyle=\color{red},
+	commentstyle=\color{green},
+	numbers=left,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	frame=single,
+	tabsize=2,
+	breaklines=true,
+	breakatwhitespace=false,
+	escapeinside={\%*}{*)}
+}
 
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
@@ -54,6 +76,18 @@
 		Ce rapport détaille les méthodologies adoptées, les technologies choisies et les différentes étapes de réalisation du projet, tout en mettant en lumière les défis rencontrés.
 	\end{abstract}
 	\newpage
+	\section*{Remerciements}
+	
+	Je tiens à exprimer mes remerciements à toutes les personnes qui ont contribué à la réussite de ce stage et à l’élaboration de ce rapport.
+	
+	Tout d’abord, je remercie \textbf{Adrien SALES}, mon maître de stage, pour son accompagnement, sa disponibilité et ses conseils précieux tout au long de ce stage. Son expertise et ses retours constructifs ont grandement enrichi mon apprentissage.
+	
+	Je tiens également à remercier Vinh Faucher du département \textbf{DSI/GLIA} de l’OPT-NC pour ses conseils m'ayant permis de bien débuter mon stage.
+	
+	Je remercie également \textbf{M. Salmon} d’avoir accepté d’être mon enseignant référent pour ce stage.
+		
+	% à compléter au fil du stage
+	\newpage
 	\tableofcontents
 	%à compléter : titre et sous titres
 	\newpage
@@ -91,10 +125,11 @@
 	
 	Ce processus a été appliqué tout au long du projet pour assurer la qualité du code et une bonne gestion des étapes de développement.
 	
-	\subsection{Outils et technologies utilisés}
+	\subsection{Stack}
 	
 	Voici les principaux outils et technologies que j’ai utilisés pour ce projet :
 \begin{itemize}
+	\item \textbf{Ubunutu} : Système d'exploitation Linux utilisé comme environnement de développement pour le projet.
 	\item \textbf{Java} : Langage de programmation principal utilisé pour le développement de l'API.
 	\item \textbf{Maven} : Outil de gestion de projet et des dépendances.
 	\item \textbf{Quarkus} : Framework Java pour le développement de microservices performants.
@@ -118,7 +153,7 @@
 	
 	\begin{itemize}
 		\item Étudier les données pour l'API \texttt{/offres} (\#4)
-		\item nitialiser le projet Quarkus (\#5)
+		\item intialiser le projet Quarkus (\#5)
 		\item Comprendre le rôle de Flyway
 		\item Implémenter l'endpoint \texttt{/offres} avec Flyway
 		\item Documenter avec des spécifications OpenAPI complètes
@@ -149,7 +184,7 @@
 	
 	J’ai donc créé une issue distincte pour chaque sous-tâche, en précisant le contexte, les objectifs et les résultats attendus. Cette structuration a permis une meilleure visibilité sur les étapes du projet, tout en facilitant le suivi et la validation des différentes phases par mon maître de stage.
 	\newpage
-	\subsection{Identification des types de forfaits et création du fichier \texttt{offres.csv}}
+	\section{Identification des types de forfaits et création du fichier \texttt{offres.csv}}
 	
 	Ma deuxième tâche a consisté à identifier les différents types de forfaits disponibles sur la page de l’OPT intitulée \textit{"Identifiez le forfait qui vous ressemble"} (voir capture d’écran ci-dessous). Pour cela, j’ai analysé les caractéristiques propres à chaque forfait, notamment leur nom, leur description et leur utilisation, afin de les préparer sous une forme exploitable.
 	
@@ -171,11 +206,7 @@
 	
 	J’ai choisi le format \texttt{CSV} en raison de sa portabilité et de sa facilité d’exploitation dans de nombreux cas. Ce format est particulièrement adapté à notre contexte, car il permet de charger efficacement les données dans une base de données à l’aide de Flyway, un outil utilisé pour gérer les migrations et remplir les tables avec les données préparées.
 	
-	\subsection{Initialisation du projet Quarkus et création d’un endpoint \textit{Hello World}}
-	
-	Une des premières étapes de mon projet a été d’initialiser le projet Quarkus et de mettre en place un endpoint basique permettant de tester le bon fonctionnement de l’environnement.
-	
-	\subsection{Initialisation du projet Quarkus et création d’un endpoint \textit{Hello World}}
+	\section{Initialisation du projet Quarkus et création d’un endpoint \textit{Hello World}}
 	
 	Une des premières étapes de mon projet a été d’initialiser le projet Quarkus et de mettre en place un endpoint basique permettant de tester le bon fonctionnement de l’environnement.
 	
@@ -219,7 +250,7 @@
 		\label{fig:hello_endpoint}
 	\end{figure}
 	
-	\subsubsection{Avantages de Quarkus pour le développement}
+	\subsection{Avantages de Quarkus pour le développement}
 	
 	L’utilisation de Quarkus offre plusieurs avantages, notamment :
 	\begin{itemize}
@@ -230,7 +261,7 @@
 	
 	Cette première étape m’a permis de comprendre l’organisation d’un projet Quarkus et de mettre en place un environnement fonctionnel prêt à accueillir des fonctionnalités plus avancées.
 	
-	\subsection{Configuration de Flyway et mise en place de l'endpoint \texttt{/offres}}
+	\section{Configuration de Flyway et mise en place de l'endpoint \texttt{/offres}}
 	
 	Dans le cadre de ce projet, il était nécessaire de centraliser les données des forfaits télécoms dans une base de données et de les exposer via un endpoint accessible. Pour ce faire, j'ai configuré Flyway pour gérer les migrations de base de données et j'ai développé l'endpoint \texttt{/offres} permettant de récupérer ces données.
 	
@@ -263,17 +294,17 @@
 		Ce fichier SQL configure la table \texttt{Forfaits} et y insère les données issues du fichier \texttt{offres.csv} grâce à la méthode \texttt{CSVREAD}.
 	\end{itemize}
 	
-	\subsubsection{Mise en place de l'endpoint \texttt{/offres}}
+	\subsection{Mise en place de l'endpoint \texttt{/offres}}
 	
 	L'endpoint \texttt{/offres} a été conçu pour exposer les données des forfaits télécoms sous forme JSON. Voici les étapes principales de son implémentation :
-	
+	\subsection{Création de l'entité \texttt{Forfait}}
 	\begin{itemize}
 		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{Forfaits} dans la base de données. Cette classe représente la table \texttt{Forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "Forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
 		
 		Les champs \texttt{id}, \texttt{desc}, et \texttt{description} correspondent aux colonnes de la table \texttt{Forfaits}. L'annotation \texttt{@Id} sur le champ \texttt{id} désigne ce champ comme la clé primaire.
-		
+		\newpage
 		Voici le code de l'entité \texttt{Forfait} :
-		\begin{verbatim}
+		\begin{lstlisting}
 			@Entity
 			@Table(name = "Forfaits")
 			public class Forfait {
@@ -307,15 +338,15 @@
 					this.description = description;
 				}
 			}
-		\end{verbatim}
+		\end{lstlisting}
 		
 		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{Forfaits} comme des objets Java.
-		
+		\subsection{Développement de la ressource REST \texttt{OffresResource}}
 		\item Développement de la ressource REST \texttt{OffresResource}, définissant l'endpoint \texttt{/offres}. Cette ressource utilise \texttt{EntityManager} pour exécuter une requête JPA récupérant toutes les données de la table.
 	\end{itemize}
 	
 	Voici un extrait de la classe \texttt{OffresResource} :
-	\begin{verbatim}
+	\begin{lstlisting}
 		@Path("/offres")
 		@Produces(MediaType.APPLICATION_JSON)
 		public class OffresResource {
@@ -328,7 +359,7 @@
 				return entityManager.createQuery("SELECT f FROM Forfait f", Forfait.class).getResultList();
 			}
 		}
-	\end{verbatim}
+	\end{lstlisting}
 	\newpage
 	\subsubsection{Validation de l'endpoint avec HTTPIE}
 	
@@ -340,5 +371,15 @@
 		\caption{Validation de l'endpoint \texttt{/offres} avec HTTPIE.}
 		\label{fig:offres_endpoint}
 	\end{figure}
+	
+	\newpage
+	\section{Bibliographie}
+	\begin{itemize}
+		\item \textbf{Documentation Quarkus} : Une ressource essentielle pour comprendre et utiliser Quarkus. Disponible sur : \url{https://quarkus.io/documentation/}
+		\item \textbf{Documentation Flyway} : Guide pour utiliser Flyway dans Quarkus : \url{https://quarkus.io/guides/flyway}
+		\item \textbf{Tutoriel sur HTTPie} : Introduction à l'utilisation de HTTPie pour tester des API REST. Disponible sur : \url{https://httpie.io/docs/cli}
+		\item \textbf{Podman Documentation} : Documentation officielle pour apprendre à gérer des conteneurs avec Podman. Disponible sur : \url{https://podman.io/documentation}
+		\item \textbf{Article sur OpenAPI et Redocly} : Tutoriel sur la génération de documentation statique avec OpenAPI et Redocly. Disponible sur : \url{https://redocly.com/docs/cli/} et demo : \url{https://dev.to/optnc/api-documentation-release-automation-with-github-redocly-and-open-api-f6h}
+	\end{itemize}
 	
 \end{document}

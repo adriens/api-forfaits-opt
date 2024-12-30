@@ -5,7 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Forfaits") // map la table forfait avec l'entitée
+@Table(name = "forfaits") // map la table forfait avec l'entitée
 public class Forfait {
     @Id
     private String id;
