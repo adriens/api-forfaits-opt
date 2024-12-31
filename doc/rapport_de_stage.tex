@@ -291,7 +291,7 @@
 		Ces paramètres définissent une base de données en mémoire H2, qui est initialisée à chaque démarrage de l'application et remplie  automatiquement grâce à Flyway.
 		
 		\item Création du fichier de migration \texttt{V1\_\_create\_and\_feed\_forfaits.sql} :
-		Ce fichier SQL configure la table \texttt{Forfaits} et y insère les données issues du fichier \texttt{offres.csv} grâce à la méthode \texttt{CSVREAD}.
+		Ce fichier SQL configure la table \texttt{forfaits} et y insère les données issues du fichier \texttt{offres.csv} grâce à la méthode \texttt{CSVREAD}.
 	\end{itemize}
 	
 	\subsection{Mise en place de l'endpoint \texttt{/offres}}
@@ -299,14 +299,14 @@
 	L'endpoint \texttt{/offres} a été conçu pour exposer les données des forfaits télécoms sous forme JSON. Voici les étapes principales de son implémentation :
 	\subsection{Création de l'entité \texttt{Forfait}}
 	\begin{itemize}
-		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{Forfaits} dans la base de données. Cette classe représente la table \texttt{Forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "Forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
+		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{forfaits} dans la base de données. Cette classe représente la table \texttt{forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
 		
 		Les champs \texttt{id}, \texttt{desc}, et \texttt{description} correspondent aux colonnes de la table \texttt{Forfaits}. L'annotation \texttt{@Id} sur le champ \texttt{id} désigne ce champ comme la clé primaire.
 		\newpage
 		Voici le code de l'entité \texttt{Forfait} :
 		\begin{lstlisting}
 			@Entity
-			@Table(name = "Forfaits")
+			@Table(name = "forfaits")
 			public class Forfait {
 				@Id
 				private String id;
@@ -340,7 +340,7 @@
 			}
 		\end{lstlisting}
 		
-		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{Forfaits} comme des objets Java.
+		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{forfaits} comme des objets Java.
 		\subsection{Développement de la ressource REST \texttt{OffresResource}}
 		\item Développement de la ressource REST \texttt{OffresResource}, définissant l'endpoint \texttt{/offres}. Cette ressource utilise \texttt{EntityManager} pour exécuter une requête JPA récupérant toutes les données de la table.
 	\end{itemize}
@@ -371,6 +371,142 @@
 		\caption{Validation de l'endpoint \texttt{/offres} avec HTTPIE.}
 		\label{fig:offres_endpoint}
 	\end{figure}
+	\section{Conteneurisation de l'API}
+	
+	\subsection{Pourquoi conteneuriser ?}
+	
+	La conteneurisation permet d'encapsuler une application et toutes ses dépendances dans un conteneur. Ce conteneur peut être exécuté de manière identique sur différentes machines, ce qui assure sa portabilité.
+	
+	Dans le cadre de ce projet, la conteneurisation de l'API des forfaits télécoms permet :
+	\begin{itemize}
+		\item de simplifier le déploiement en rendant l'application indépendante de la machine hôte ;
+		\item de garantir un environnement de production identique à l'environnement de développement ;
+	\end{itemize}
+	
+	\subsection{Approche initiale : Dockerfile}
+	
+	Dans un premier temps, j'avais créé un \texttt{Dockerfile} pour conteneuriser l'API. Voici un extrait du fichier initial :
+	
+	\begin{verbatim}
+		FROM docker.io/library/maven:3.9.9-eclipse-temurin-21
+		WORKDIR /app
+		COPY . .
+		EXPOSE 8080
+		CMD ["mvn", "quarkus:dev"]
+	\end{verbatim}
+	
+	Adrien a identifié plusieurs problèmes dans cette approche :
+	\begin{itemize}
+		\item \textbf{Utilisation de Maven dans l'image} : L'image contenait Maven, ce qui rendait le conteneur très lourd inutilement.
+		\item \textbf{Compilation dans le conteneur} : Le \texttt{Dockerfile} compilait l'application à chaque démarrage, ce qui est inefficace. L'image doit directement pointer vers le fichier JAR généré.
+	\end{itemize}
+	
+	\subsection{Solution proposée : JIB}
+	
+	Pour répondre à ces problèmes, mon tuteur m'a conseillé d'utiliser \textbf{JIB}, un outil de conteneurisation intégré à Maven. JIB permet de construire une image optimisée sans \texttt{Dockerfile}, en exploitant directement les ressources nécessaires identifiées par Maven.
+	
+	\subsection{Configuration de JIB}
+	
+	J'ai configuré JIB dans le projet en suivant ces étapes :
+	\begin{enumerate}
+		\item \textbf{Ajout de la dépendance dans \texttt{pom.xml}} :
+		\begin{lstlisting}
+			<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-container-image-jib</artifactId>
+			</dependency>
+		\end{lstlisting}
+		
+		\item \textbf{Configuration dans \texttt{application.properties}} :
+		\begin{verbatim}
+			quarkus.container-image.build=true
+			quarkus.jib.docker-executable-name=podman
+			quarkus.container-image.name=forfaits-opt-nc
+		\end{verbatim}
+		
+		Cette configuration permet d'automatiser la création d'une image conteneurisée avec Jib :
+		
+		\begin{itemize}
+			\item \texttt{quarkus.container-image.build=true} : Active la fonctionnalité de génération d'image conteneurisée lors de la construction du projet.
+			\item \texttt{quarkus.jib.docker-executable-name=podman} : Indique à Jib d'utiliser Podman comme runtime de conteneur. Podman est une alternative à Docker, légère et adaptée aux environnements rootless (sans besoin de privilèges root).
+			\item \texttt{quarkus.container-image.name=forfaits-opt-nc} : Définit le nom de l'image
+		\end{itemize}
+		\item \textbf{Commandes pour builder et exécuter l'image} :
+		\begin{itemize}
+			\item \textbf{Construction de l'image} :
+			\begin{verbatim}
+				mvn package
+			\end{verbatim}
+			\item \textbf{Lancement du conteneur} :
+			\begin{verbatim}
+				podman run --name forfaits-container -p 8080:8080 forfaits-opt-nc:1.0.0-SNAPSHOT
+			\end{verbatim}
+		\end{itemize}
+	\end{enumerate}
+	\subsection{Validation de l'approche}
+	
+	Pour valider la conteneurisation, j'ai utilisé Podman Desktop pour vérifier que l'image a bien été générée. Ensuite, j'ai testé l'API en exécutant une requête HTTPie sur l'endpoint \texttt{/offres}. Voici les résultats obtenus :
+	\newpage
+	\begin{itemize}
+		\item \textbf{Après le build de l'image avec \texttt{mvn package}} : La capture d'écran montre l'image générée dans Podman Desktop.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=1\textwidth]{asset/image_podman.png}
+			\caption{Capture d'écran de l'image générée dans Podman Desktop.}
+			\label{fig:image_podman}
+		\end{figure}
+		
+		\item \textbf{Après l'exécution de l'image avec \texttt{podman run}} : L'exécution de l'image crée un conteneur, vérifiable via Podman Desktop. Une capture d'écran du conteneur en cours d'exécution est ajoutée pour valider cette étape.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=1\textwidth]{asset/conteneur_podman.png}
+			\caption{Capture d'écran du conteneur en cours d'exécution dans Podman Desktop.}
+			\label{fig:conteneur_podman}
+		\end{figure}
+		
+		\item \textbf{Test de l'API via l'endpoint \texttt{/offres}} : Une fois le conteneur lancé, j'ai testé l'endpoint \texttt{/offres} avec une requête HTTPie. Voici la capture d'écran montrant la réponse renvoyée par l'API :
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.9\textwidth]{asset/appel_api_conteneur.png}
+			\caption{Résultat de l'appel à l'endpoint \texttt{/offres} avec HTTPie.}
+			\label{fig:appel_api_conteneur}
+		\end{figure}
+	\end{itemize}
+	
+	\subsection{Amélioration de l'expérience développeur}
+	
+	Mon tuteur a également souligné l'importance de la Developer Experience (\textbf{DevEx}). Grâce à JIB, la génération des conteneurs est simplifiée, rapide et reproductible, ce qui réduit considérablement les efforts nécessaires pour maintenir et déployer l'API.
+	
+	\newpage
+	\section{From 0 to Hero}
+	
+	\subsection{Évolution des compétences}
+	
+	Durant ce stage, j'ai significativement progressé dans différents domaines techniques et pratiques. Voici un tableau résumant mon évolution avant et après le stage, sur une échelle de 0 (aucune connaissance) à 5 (maîtrise avancée) :
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|l|c|c|c|}
+			\hline
+			\textbf{Compétence}         & \textbf{Avant le stage} & \textbf{Après le stage} & \textbf{Commentaire} \\ \hline
+			Java                        & 2                       & à determiner            & Approfondissement via Quarkus. \\ \hline
+			Linux                       & 2                       & à determiner            & Utilisation quotidienne d'Ubuntu et Podman. \\ \hline
+			Conteneurs                  & 1                       & à determiner            & Découverte et maîtrise de Podman et JIB. \\ \hline
+			Gestion de bases de données & 3                       & à determiner            & Utilisation de H2 et Flyway. \\ \hline
+			API REST                    & 0                       & à determiner            & Conception et implémentation avec Quarkus. \\ \hline
+			Rédaction avec Latex    & 0 & à determiner& Création et mise à jour du rapport en \LaTeX. \\ \hline
+		\end{tabular}
+		\caption{Évolution des compétences techniques.}
+		\label{tab:competences}
+	\end{table}
+	
+	\subsection{Efforts et résultats}
+	
+	à determiner
+	
+	\subsection{Ressenti personnel}
+	
+	à determiner
 	
 	\newpage
 	\section{Bibliographie}
