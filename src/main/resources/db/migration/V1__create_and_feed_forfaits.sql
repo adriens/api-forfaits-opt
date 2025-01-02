@@ -2,10 +2,11 @@
 CREATE TABLE forfaits (
     id VARCHAR(255) PRIMARY KEY,
     desc VARCHAR(255) NOT NULL,
-    description TEXT
+    description TEXT,
+    url VARCHAR(255) NOT NULL
 );
 
 -- Chargement des données depuis offres.csv
-INSERT INTO forfaits (id, desc, description)
-SELECT id, desc, desc_full
+INSERT INTO forfaits (id, desc, description,url)
+SELECT id, desc, desc_full, url
 FROM CSVREAD('classpath:db/data/offres.csv');
