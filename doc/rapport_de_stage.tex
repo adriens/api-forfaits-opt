@@ -488,7 +488,7 @@
 	\newpage
 	\section{From 0 to Hero}
 	
-	\subsection{Évolution des compétences}
+	\subsection{Acquisition de Compétences Techniques}
 	
 	Durant ce stage, j'ai significativement progressé dans différents domaines techniques et pratiques. Voici un tableau résumant mon évolution avant et après le stage, sur une échelle de 0 (aucune connaissance) à 5 (maîtrise avancée) :
 	
@@ -496,7 +496,7 @@
 		\begin{axis}[
 			ybar=0pt,
 			bar width=15pt,
-			symbolic x coords={Java, Linux, Conteneurs, Bases de données, API REST, LaTeX},
+			symbolic x coords={Java, Quarkus,Linux, Conteneurs, Bases de données, API REST, LaTeX},
 			xtick=data,
 			x tick label style={rotate=45, anchor=east},
 			ylabel={Niveau de compétence},
@@ -510,12 +510,14 @@
 			height=0.6\textwidth
 			]
 			% Données Avant le stage
-			\addplot coordinates {(Java, 2) (Linux, 2) (Conteneurs, 1) (Bases de données, 3) (API REST, 0) (LaTeX, 0)};
+			\addplot coordinates {(Java, 2) (Quarkus, 0) (Linux, 1) (Conteneurs, 1) (Bases de données, 3) (API REST, 0) (LaTeX, 0)};
 			
+			\addplot coordinates {(Java, 2) (Quarkus, 2) (Linux, 2) (Conteneurs, 2) (Bases de données, 3) (API REST, 0) (LaTeX, 0)};
+
 			% Données Après le stage (à déterminer, on les met en blanc pour indication)
-			\addplot coordinates {(Java, 0) (Linux, 0) (Conteneurs, 0) (Bases de données, 0) (API REST, 0) (LaTeX, 0)};
+			\addplot coordinates {(Java, 0) (Quarkus, 0) (Linux, 0) (Conteneurs, 0) (Bases de données, 0) (API REST, 0) (LaTeX, 0)};
 			
-			\legend{Avant le stage, Après le stage (à déterminer)}
+			\legend{Avant le stage,1 mois de stage, Après le stage (à déterminer)}
 		\end{axis}
 	\end{tikzpicture}
 	
