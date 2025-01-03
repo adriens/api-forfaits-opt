@@ -23,6 +23,9 @@
 }
 
 \usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{lmodern}
@@ -140,6 +143,8 @@
 	\item \textbf{HTTPie} : Outil en ligne de commande pour tester les endpoints de l'API.
 	\item \textbf{Podman} : Outil pour la gestion et l'exécution de conteneurs, utilisé pour tester l'API en environnement conteneurisé.
 	\item \textbf{Redocly} : Outil utilisé pour générer de la documentation statique à partir des spécifications OpenAPI.
+	\item \textbf{Jib} : Outil intégré à Maven pour créer des images conteneurisées sans utiliser de \texttt{Dockerfile}. Il simplifie la conteneurisation et génère des images légères et optimisées.
+	
 \end{itemize}
 
 	
@@ -291,7 +296,7 @@
 		Ces paramètres définissent une base de données en mémoire H2, qui est initialisée à chaque démarrage de l'application et remplie  automatiquement grâce à Flyway.
 		
 		\item Création du fichier de migration \texttt{V1\_\_create\_and\_feed\_forfaits.sql} :
-		Ce fichier SQL configure la table \texttt{Forfaits} et y insère les données issues du fichier \texttt{offres.csv} grâce à la méthode \texttt{CSVREAD}.
+		Ce fichier SQL configure la table \texttt{forfaits} et y insère les données issues du fichier \texttt{offres.csv} grâce à la méthode \texttt{CSVREAD}.
 	\end{itemize}
 	
 	\subsection{Mise en place de l'endpoint \texttt{/offres}}
@@ -299,14 +304,14 @@
 	L'endpoint \texttt{/offres} a été conçu pour exposer les données des forfaits télécoms sous forme JSON. Voici les étapes principales de son implémentation :
 	\subsection{Création de l'entité \texttt{Forfait}}
 	\begin{itemize}
-		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{Forfaits} dans la base de données. Cette classe représente la table \texttt{Forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "Forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
+		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{forfaits} dans la base de données. Cette classe représente la table \texttt{forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
 		
 		Les champs \texttt{id}, \texttt{desc}, et \texttt{description} correspondent aux colonnes de la table \texttt{Forfaits}. L'annotation \texttt{@Id} sur le champ \texttt{id} désigne ce champ comme la clé primaire.
 		\newpage
 		Voici le code de l'entité \texttt{Forfait} :
 		\begin{lstlisting}
 			@Entity
-			@Table(name = "Forfaits")
+			@Table(name = "forfaits")
 			public class Forfait {
 				@Id
 				private String id;
@@ -340,7 +345,7 @@
 			}
 		\end{lstlisting}
 		
-		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{Forfaits} comme des objets Java.
+		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{forfaits} comme des objets Java.
 		\subsection{Développement de la ressource REST \texttt{OffresResource}}
 		\item Développement de la ressource REST \texttt{OffresResource}, définissant l'endpoint \texttt{/offres}. Cette ressource utilise \texttt{EntityManager} pour exécuter une requête JPA récupérant toutes les données de la table.
 	\end{itemize}
@@ -371,6 +376,158 @@
 		\caption{Validation de l'endpoint \texttt{/offres} avec HTTPIE.}
 		\label{fig:offres_endpoint}
 	\end{figure}
+	\section{Conteneurisation de l'API}
+	
+	\subsection{Pourquoi conteneuriser ?}
+	
+	La conteneurisation permet d'encapsuler une application, ses dépendances et son runtime complet ce qui en permet un déploiment aisé par tout un chacun. Ce conteneur peut être exécuté de manière identique sur différentes machines, ce qui assure sa portabilité.
+	
+	Dans le cadre de ce projet, la conteneurisation de l'API des forfaits télécoms permet :
+	\begin{itemize}
+		\item de simplifier le déploiement en rendant l'application indépendante de la machine hôte ;
+		\item de garantir un environnement de production identique à l'environnement de développement ;
+	\end{itemize}
+	
+	\subsection{Solution proposée : JIB}
+	
+	Mon tuteur m'a conseillé d'utiliser \textbf{JIB}, un outil de conteneurisation intégré à Maven. JIB permet de construire une image optimisée sans \texttt{Dockerfile}, en exploitant directement les ressources nécessaires identifiées par Maven.
+	
+	\subsection{Configuration de JIB}
+	
+	J'ai configuré JIB dans le projet en suivant ces étapes :
+	\begin{enumerate}
+		\item \textbf{Ajout de la dépendance dans \texttt{pom.xml}} :
+		\begin{lstlisting}
+			<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-container-image-jib</artifactId>
+			</dependency>
+		\end{lstlisting}
+		
+		\item \textbf{Configuration dans \texttt{application.properties}} :
+		\begin{verbatim}
+			quarkus.container-image.build=true
+			quarkus.jib.docker-executable-name=podman
+			quarkus.container-image.name=forfaits-opt-nc
+		\end{verbatim}
+		
+		Cette configuration permet d'automatiser la création d'une image conteneurisée avec Jib :
+		
+		\begin{itemize}
+			\item \texttt{quarkus.container-image.build=true} : Active la fonctionnalité de génération d'image conteneurisée lors de la construction du projet.
+			\item \texttt{quarkus.jib.docker-executable-name=podman} : Indique à Jib d'utiliser Podman comme runtime de conteneur. Podman est une alternative à Docker, légère et adaptée aux environnements rootless (sans besoin de privilèges root).
+			\item \texttt{quarkus.container-image.name=forfaits-opt-nc} : Définit le nom de l'image
+		\end{itemize}
+		\item \textbf{Commandes pour builder et exécuter l'image} :
+		\begin{itemize}
+			\item \textbf{Construction de l'image} :
+			\begin{verbatim}
+				mvn package
+			\end{verbatim}
+			\item \textbf{Lancement du conteneur} :
+			\begin{verbatim}
+				podman run --name forfaits-container -p 8080:8080 forfaits-opt-nc:1.0.0-SNAPSHOT
+			\end{verbatim}
+		\end{itemize}
+	\end{enumerate}
+	\subsection{Validation de l'approche}
+	
+	Pour valider la conteneurisation, j'ai utilisé Podman Desktop pour vérifier que l'image a bien été générée. Ensuite, j'ai testé l'API en exécutant une requête HTTPie sur l'endpoint \texttt{/offres}. Voici les résultats obtenus :
+	\newpage
+	\begin{itemize}
+		\item \textbf{Après le build de l'image avec \texttt{mvn package}} : La capture d'écran montre l'image générée dans Podman Desktop.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=1\textwidth]{asset/image_podman.png}
+			\caption{Capture d'écran de l'image générée dans Podman Desktop.}
+			\label{fig:image_podman}
+		\end{figure}
+		
+		\item \textbf{Après l'exécution de l'image avec \texttt{podman run}} : L'exécution de l'image crée un conteneur, vérifiable via Podman Desktop. Une capture d'écran du conteneur en cours d'exécution est ajoutée pour valider cette étape.
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=1\textwidth]{asset/conteneur_podman.png}
+			\caption{Capture d'écran du conteneur en cours d'exécution dans Podman Desktop.}
+			\label{fig:conteneur_podman}
+		\end{figure}
+		
+		\item \textbf{Test de l'API via l'endpoint \texttt{/offres}} : Une fois le conteneur lancé, j'ai testé l'endpoint \texttt{/offres} avec une requête HTTPie. Voici la capture d'écran montrant la réponse renvoyée par l'API :
+		\begin{figure}[h!]
+			\centering
+			\includegraphics[width=0.9\textwidth]{asset/appel_api_conteneur.png}
+			\caption{Résultat de l'appel à l'endpoint \texttt{/offres} avec HTTPie.}
+			\label{fig:appel_api_conteneur}
+		\end{figure}
+	\end{itemize}
+	
+	\subsection{Amélioration de l'expérience développeur}
+	
+	Mon tuteur a également souligné l'importance de la Developer Experience (\textbf{DevEx}). Grâce à JIB, la génération des conteneurs est simplifiée, rapide et reproductible, ce qui réduit considérablement les efforts nécessaires pour maintenir et déployer l'API.
+	
+	\newpage
+	\section{Anti-patterns}
+	\subsection{Erreur initiale : conteneurisation avec Dockerfile}
+	Dans un premier temps, j'avais créé un \texttt{Dockerfile} pour conteneuriser l'API. Voici un extrait du fichier initial :
+	\begin{verbatim}
+		FROM docker.io/library/maven:3.9.9-eclipse-temurin-21
+		WORKDIR /app
+		COPY . .
+		EXPOSE 8080
+		CMD ["mvn", "quarkus:dev"]
+	\end{verbatim}
+	
+	Cette approche présentait plusieurs problèmes :
+	\begin{itemize}
+		\item \textbf{Utilisation de Maven dans l'image} : L'image contenait Maven, ce qui rendait le conteneur très lourd inutilement.
+		\item \textbf{Compilation dans le conteneur} : Le \texttt{Dockerfile} compilait l'application à chaque démarrage, ce qui est inefficace. L'image doit directement pointer vers le fichier JAR généré.
+	\end{itemize}
+	
+	Ce problème a été résolu en utilisant \textbf{Jib}, un outil intégré à Maven, qui simplifie la conteneurisation et génère une image optimisée sans nécessiter de \texttt{Dockerfile}.
+	
+	
+	\newpage
+	\section{From 0 to Hero}
+	
+	\subsection{Acquisition de Compétences Techniques}
+	
+	Durant ce stage, j'ai significativement progressé dans différents domaines techniques et pratiques. Voici un tableau résumant mon évolution avant et après le stage, sur une échelle de 0 (aucune connaissance) à 5 (maîtrise avancée) :
+	
+	\begin{tikzpicture}
+		\begin{axis}[
+			ybar=0pt,
+			bar width=15pt,
+			symbolic x coords={Java, Quarkus,Linux, Conteneurs, Bases de données, API REST, LaTeX},
+			xtick=data,
+			x tick label style={rotate=45, anchor=east},
+			ylabel={Niveau de compétence},
+			xlabel={Compétences},
+			legend style={at={(0.5,-0.4)}, anchor=north, legend columns=1}, % Légende beaucoup plus bas
+			ymin=0,
+			ymax=5,
+			nodes near coords,
+			every node near coord/.append style={font=\tiny},
+			width=\textwidth,
+			height=0.6\textwidth
+			]
+			% Données Avant le stage
+			\addplot coordinates {(Java, 2) (Quarkus, 0) (Linux, 1) (Conteneurs, 1) (Bases de données, 3) (API REST, 0) (LaTeX, 0)};
+			
+			\addplot coordinates {(Java, 2) (Quarkus, 2) (Linux, 2) (Conteneurs, 2) (Bases de données, 3) (API REST, 0) (LaTeX, 0)};
+
+			% Données Après le stage (à déterminer, on les met en blanc pour indication)
+			\addplot coordinates {(Java, 0) (Quarkus, 0) (Linux, 0) (Conteneurs, 0) (Bases de données, 0) (API REST, 0) (LaTeX, 0)};
+			
+			\legend{Avant le stage,1 mois de stage, Après le stage (à déterminer)}
+		\end{axis}
+	\end{tikzpicture}
+	
+	\subsection{Efforts et résultats}
+	
+	à determiner
+	
+	\subsection{Ressenti personnel}
+	
+	à determiner
 	
 	\newpage
 	\section{Bibliographie}
