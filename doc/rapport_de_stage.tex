@@ -144,6 +144,7 @@
 	\item \textbf{Podman} : Outil pour la gestion et l'exécution de conteneurs, utilisé pour tester l'API en environnement conteneurisé.
 	\item \textbf{Redocly} : Outil utilisé pour générer de la documentation statique à partir des spécifications OpenAPI.
 	\item \textbf{Jib} : Outil intégré à Maven pour créer des images conteneurisées sans utiliser de \texttt{Dockerfile}. Il simplifie la conteneurisation et génère des images légères et optimisées.
+	\item \textbf{Redocly} : Permet de générer la documentation statique de l'API à partir de fichier openapi.
 	
 \end{itemize}
 
@@ -464,6 +465,67 @@
 	
 	Mon tuteur a également souligné l'importance de la Developer Experience (\textbf{DevEx}). Grâce à JIB, la génération des conteneurs est simplifiée, rapide et reproductible, ce qui réduit considérablement les efforts nécessaires pour maintenir et déployer l'API.
 	
+	\section{Documentation de l'API}
+	
+	La documentation d'une API est essentielle pour garantir une utilisation efficace et correcte de celle-ci par les développeurs. Elle facilite la compréhension des fonctionnalités offertes, les méthodes disponibles, les formats de données acceptés, et les réponses possibles. Une API bien documentée améliore non seulement l'expérience utilisateur pour les développeurs mais aussi la maintenance et l'évolution du service.
+	
+	\subsection{Utilisation de OpenAPI}
+	
+	Dans ce projet, l'outil \textbf{OpenAPI} a été choisi pour documenter automatiquement l'API. Grâce à lui, la documentation est générée directement à partir des annotations. Cela permet d'avoir une documentation de l'API toujours à jour. 
+	
+	L'intérêt principal d'OpenAPI est sa capacité à produire une spécification au format \texttt{YAML} et \texttt{JSON}, qui pourra être utiliser par la suite (cf. la sous-section\ref{subsec:redocly}).
+	
+	La configuration de OpenAPI dans le projet a été réalisée avec les étapes suivantes :
+	\begin{itemize}
+		\item Ajout de la dépendance \texttt{quarkus-smallrye-openapi} dans le fichier \texttt{pom.xml}.
+		\item Annotation des endpoints pour décrire leur fonctionnement et leurs objectifs.
+		\item Configuration des options dans le fichier \texttt{application.properties} pour spécifier l'emplacement des fichiers générés.
+	\end{itemize}
+	
+	Ces étapes garantissent une documentation fiable et à jour.
+	\subsection{Utilisation de Redocly pour la génération de documentation statique}
+	\label{subsec:redocly}
+	
+	Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI. La documentation générée est une interface graphique visuel, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
+	
+	\subsubsection*{Intégration de Redocly avec GitHub Actions}
+	
+	Pour automatiser la génération de cette documentation, un workflow GitHub Actions a été configuré. Voici le fonctionnement détaillé de ce workflow :
+	
+	\begin{itemize}
+		\item \textbf{Déclenchement automatique} : 
+		\begin{verbatim}
+			on:
+				push:
+					branches:
+					 - main
+				pull_request:
+					branches:
+					 - main
+		\end{verbatim}
+		
+		Le workflow est déclenché à chaque modification de la branche principale du projet, ou lors d'une demande de fusion (\texttt{pull\_request}). Cela garantit que la documentation est toujours à jour avec le fichier OpenAPI.
+		
+		\item \textbf{Étapes du workflow} : 
+		Le workflow défini dans le fichier de configuration contient un job nommé \texttt{build-docs}, qui s'exécute sur un environnement \texttt{ubuntu-latest}. Ce job suit les étapes suivantes :
+		\begin{enumerate}
+			\item \textbf{Clonage du dépôt} : Utilisation de l'action \texttt{actions/checkout@v3} pour récupérer le code source depuis le dépôt GitHub.
+			\item \textbf{Configuration de Node.js} : Configuration de la version de Node.js (\texttt{18.19.1}) nécessaire pour Redocly CLI.
+			\item \textbf{Installation de Redocly CLI} : Installation de l'outil via la commande \texttt{npm install -g @redocly/cli}.
+			\item \textbf{Génération de la documentation} : Exécution de la commande \texttt{redocly build-docs} pour convertir le fichier \texttt{openapi.yaml} en une page HTML statique placée dans le répertoire \texttt{./docs/index.html}.
+		\end{enumerate}
+		
+		\item \textbf{Résultat} : 
+		Une fois le workflow terminé, un fichier HTML est généré.
+		\end{itemize}
+		
+	
+	\subsubsection*{Avantages de cette approche}
+	
+	\begin{itemize}
+		\item \textbf{Automatisation} : Plus besoin de générer manuellement la documentation après chaque modification.
+		\item \textbf{Maintien à jour} : La documentation est toujours alignée sur les changements apportés à l'API.
+	\end{itemize}
 	\newpage
 	\section{Anti-patterns}
 	\subsection{Erreur initiale : conteneurisation avec Dockerfile}
