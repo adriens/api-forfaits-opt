@@ -25,4 +25,4 @@ jobs:
         run: npm install -g @redocly/cli
 
       - name: Generate OpenAPI Docs
-        run: redocly build-docs openapi/openapi.yaml --output=./docs/index.html
+        run: redocly build-docs openapi/openapi.yaml --output=./api-doc/index.html

@@ -1,0 +1,53 @@
+---
+openapi: 3.1.0
+paths:
+  /hello:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+      summary: Hello
+      tags:
+      - Greeting Resource
+  /offres:
+    get:
+      tags:
+      - Forfaits
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Forfait"
+      summary: Get All Offres
+tags:
+- name: Forfaits
+  description: Liste les différentes gammes d'offres télécoms de l'OPT
+components:
+  schemas:
+    Forfait:
+      type: object
+      properties:
+        id:
+          type: string
+        desc:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+info:
+  title: forfaits-opt-nc API
+  version: 1.0.0-SNAPSHOT
+servers:
+- url: http://localhost:8080
+  description: Auto generated value
+- url: http://0.0.0.0:8080
+  description: Auto generated value
