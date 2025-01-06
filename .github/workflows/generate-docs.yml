@@ -26,3 +26,12 @@ jobs:
 
       - name: Generate OpenAPI Docs
         run: redocly build-docs openapi/openapi.yaml --output=./api-doc/index.html
+
+        # Ajouter les fichiers générés à Git
+      - name: Commit and push generated documentation
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add openapi-doc/
+          git commit -m "Add generated OpenAPI documentation"
+          git push
