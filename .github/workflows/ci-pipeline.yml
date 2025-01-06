@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '23'
+          distribution: 'zulu'
 
       # si couverture de code inférieur a 10 % alors le build échoue.  
       - name: Build and run tests with Maven
