@@ -488,46 +488,23 @@
 	
 	Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI. La documentation générée est une interface graphique visuel, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
 	
-	\subsubsection*{Intégration de Redocly avec GitHub Actions}
+	J'ai utilisé la commande : 
+	\begin{verbatim}
+		redocly build-docs openapi/openapi.yaml --output=./docs/index.html
+	\end{verbatim}
+	\textbf{index.html} est alors généré : 
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=1\textwidth]{asset/redocly.png}
+		\caption{Page générée par Redocly}
+		\label{fig:redocly}
+	\end{figure}
+	\subsection{Déploiement de la page sur GitHub Pages}
+	Le déploiement sur GitHub Pages permet d'héberger la documentation générée par Redocly de manière accessible en ligne. Cela permet à toute personne  de consulter facilement la documentation via une URL publique.
 	
-	Pour automatiser la génération de cette documentation, un workflow GitHub Actions a été configuré. Voici le fonctionnement détaillé de ce workflow :
+	A compléter quand ça sera fait.
 	
-	\begin{itemize}
-		\item \textbf{Déclenchement automatique} : 
-		\begin{verbatim}
-			on:
-				push:
-					branches:
-					 - main
-				pull_request:
-					branches:
-					 - main
-		\end{verbatim}
-		
-		Le workflow est déclenché à chaque modification de la branche principale du projet, ou lors d'une demande de fusion (\texttt{pull\_request}). Cela garantit que la documentation est toujours à jour avec le fichier OpenAPI.
-		
-		\item \textbf{Étapes du workflow} : 
-		Le workflow défini dans le fichier de configuration contient un job nommé \texttt{build-docs}, qui s'exécute sur un environnement \texttt{ubuntu-latest}. Ce job suit les étapes suivantes :
-		\begin{enumerate}
-			\item \textbf{Clonage du dépôt} : Utilisation de l'action \texttt{actions/checkout@v3} pour récupérer le code source depuis le dépôt GitHub.
-			\item \textbf{Configuration de Node.js} : Configuration de la version de Node.js (\texttt{18.19.1}) nécessaire pour Redocly CLI.
-			\item \textbf{Installation de Redocly CLI} : Installation de l'outil via la commande \texttt{npm install -g @redocly/cli}.
-			\item \textbf{Génération de la documentation} : Exécution de la commande \texttt{redocly build-docs} pour convertir le fichier \texttt{openapi.yaml} en une page HTML statique placée dans le répertoire \texttt{./docs/index.html}.
-		\end{enumerate}
-		
-		\item \textbf{Résultat} : 
-		Une fois le workflow terminé, un fichier HTML est généré.
-		\end{itemize}
-		
-	
-	\subsubsection*{Avantages de cette approche}
-	
-	\begin{itemize}
-		\item \textbf{Automatisation} : Plus besoin de générer manuellement la documentation après chaque modification.
-		\item \textbf{Maintien à jour} : La documentation est toujours alignée sur les changements apportés à l'API.
-	\end{itemize}
-	
-		\section{Mise en place des tests unitaires et de la couverture de code}
+	\section{Mise en place des tests unitaires et de la couverture de code}
 	
 	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%. 
 	
