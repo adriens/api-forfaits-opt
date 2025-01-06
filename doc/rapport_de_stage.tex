@@ -492,17 +492,13 @@
 	\begin{verbatim}
 		redocly build-docs openapi/openapi.yaml --output=./docs/index.html
 	\end{verbatim}
-	\textbf{index.html} est alors généré : 
+	\textbf{index.html} est alors généré dans le répertoire \textbf{docs/}: 
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=1\textwidth]{asset/redocly.png}
 		\caption{Page générée par Redocly}
 		\label{fig:redocly}
 	\end{figure}
-	\subsection{Déploiement de la page sur GitHub Pages}
-	Le déploiement sur GitHub Pages permet d'héberger la documentation générée par Redocly de manière accessible en ligne. Cela permet à toute personne  de consulter facilement la documentation via une URL publique.
-	
-	A compléter quand ça sera fait.
 	
 	\section{Mise en place des tests unitaires et de la couverture de code}
 	
@@ -588,6 +584,7 @@
 	\end{lstlisting}
 	
 	Avec cette configuration, GitHub Actions va vérifier si le build passe et si les tests unitaires couvrent suffisamment le code. Si la couverture est inférieure au seuil de 10\%, le processus échoue automatiquement, garantissant ainsi que les tests sont suffisamment nombreux pour valider la stabilité du code.
+	
 	
 	\newpage
 	\section{Anti-patterns}
