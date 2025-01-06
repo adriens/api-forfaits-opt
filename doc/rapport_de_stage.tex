@@ -526,6 +526,92 @@
 		\item \textbf{Automatisation} : Plus besoin de générer manuellement la documentation après chaque modification.
 		\item \textbf{Maintien à jour} : La documentation est toujours alignée sur les changements apportés à l'API.
 	\end{itemize}
+	
+		\section{Mise en place des tests unitaires et de la couverture de code}
+	
+	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%. 
+	
+	\subsection{Tests unitaires}
+	Les tests unitaires permettent de valider le bon fonctionnement des différentes parties du code. Pour ce projet, nous avons utilisé \texttt{JUnit} en combinaison avec \texttt{QuarkusTest}, une extension de Quarkus permettant de tester les endpoints. 
+	
+	La classe \texttt{OffresResourceTest.java} que j'ai développée teste l'endpoint \texttt{/offres} de notre API. Ce test vérifie si l'endpoint répond correctement (status code 200) et si le corps de la réponse contient bien 5 offres.
+	
+	
+	\begin{lstlisting}[language=Java]
+		@QuarkusTest
+		public class OffresResourceTest {
+			
+			@Test
+			public void testGetAllOffres() {
+				given()
+				.when().get("/offres")
+				.then()
+				.statusCode(200)
+				.body("$", notNullValue())
+				.body("$", hasSize(5));
+			}
+		}
+	\end{lstlisting}
+	
+	\subsection{Ajout de la dépendance JaCoCo}
+	Pour mesurer la couverture des tests unitaires, nous avons utilisé \textbf{JaCoCo}, un outil de couverture de code Java. JaCoCo génère un rapport indiquant la proportion de code exécutée par les tests, ce qui permet d'identifier les parties du code qui ne sont pas couvertes.
+	
+	La dépendance JaCoCo a été ajoutée dans le fichier \texttt{pom.xml} puis le plugin \texttt{jacoco-maven-plugin} a été configuré pour mesurer la couverture de code et générer un rapport détaillé après l'exécution des tests.
+	
+	Dans cette configuration, le seuil de couverture est fixé à 10\%, ce qui signifie que si moins de 10\% des lignes de code sont couvertes par les tests, le build échouera.
+	
+	Une capture d'écran du rapport généré par JaCoCo est montrée ci-dessous :
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=\textwidth]{asset/jacoco.png}
+		\caption{Capture d'écran du rapport de couverture généré par JaCoCo}
+		\label{fig:jacoco-report}
+	\end{figure}
+	
+	\subsection{Configuration de la pipeline CI avec GitHub Actions}
+	Pour automatiser l'exécution des tests et la validation du build, une pipeline CI a été configurée avec **GitHub Actions**. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
+	
+	La pipeline effectue les étapes suivantes :
+	\begin{itemize}
+		\item Récupération du code source avec l'action \texttt{actions/checkout@v3}.
+		\item Installation de JDK 23 avec l'action \texttt{actions/setup-java@v2}.
+		\item Exécution des tests et validation du build avec \texttt{mvn clean verify}.
+		\item Si le seuil de couverture est inférieur à 10\%, le build échoue.
+	\end{itemize}
+	
+	Voici la configuration complète de la pipeline dans GitHub Actions :
+	
+	\begin{lstlisting}
+		name: CI Pipeline
+		
+		on:
+		push:
+		branches:
+		- main
+		pull_request:
+		branches:
+		- main
+		
+		jobs:
+		build:
+		runs-on: ubuntu-latest
+		
+		steps:
+		- name: Checkout repository
+		uses: actions/checkout@v3
+		
+		- name: Set up JDK 23
+		uses: actions/setup-java@v2
+		with:
+		java-version: '23'
+		
+		- name: Build and run tests with Maven
+		run: mvn clean verify
+	\end{lstlisting}
+	
+	Avec cette configuration, GitHub Actions va vérifier si le build passe et si les tests unitaires couvrent suffisamment le code. Si la couverture est inférieure au seuil de 10\%, le processus échoue automatiquement, garantissant ainsi que les tests sont suffisamment nombreux pour valider la stabilité du code.
+	
 	\newpage
 	\section{Anti-patterns}
 	\subsection{Erreur initiale : conteneurisation avec Dockerfile}
@@ -545,7 +631,6 @@
 	\end{itemize}
 	
 	Ce problème a été résolu en utilisant \textbf{Jib}, un outil intégré à Maven, qui simplifie la conteneurisation et génère une image optimisée sans nécessiter de \texttt{Dockerfile}.
-	
 	
 	\newpage
 	\section{From 0 to Hero}
