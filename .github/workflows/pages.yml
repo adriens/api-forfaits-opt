@@ -1,0 +1,50 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Deploy job
+  deploy:
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.19.1'
+
+      - name: Install Redocly
+        run: npm i -g @redocly/cli@latest
+
+      - name: Build API HTML page
+        id: build_api_html_page
+        run: |
+          redocly build-docs openapi/openapi.yaml --output=./docs/index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: './docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main # or specific "vX.X.X" version tag for this action
