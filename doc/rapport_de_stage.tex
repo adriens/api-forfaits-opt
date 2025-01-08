@@ -473,42 +473,102 @@
 	
 	Dans ce projet, l'outil \textbf{OpenAPI} a été choisi pour documenter automatiquement l'API. Grâce à lui, la documentation est générée directement à partir des annotations. Cela permet d'avoir une documentation de l'API toujours à jour. 
 	
-	L'intérêt principal d'OpenAPI est sa capacité à produire une spécification au format \texttt{YAML} et \texttt{JSON}, qui pourra être utiliser par la suite (cf. la sous-section\ref{subsec:redocly}).
+	L'intérêt principal d'OpenAPI est sa capacité à produire une spécification au format \texttt{YAML} et \texttt{JSON}, qui pourra être utilisée par la suite (cf. la sous-section \ref{subsec:redocly}).
 	
 	La configuration de OpenAPI dans le projet a été réalisée avec les étapes suivantes :
 	\begin{itemize}
 		\item Ajout de la dépendance \texttt{quarkus-smallrye-openapi} dans le fichier \texttt{pom.xml}.
-		\item Annotation des endpoints pour décrire leur fonctionnement et leurs objectifs.
-		\item Configuration des options dans le fichier \texttt{application.properties} pour spécifier l'emplacement des fichiers générés.
+		\item Annotation des endpoints pour décrire leur fonctionnement et leurs objectifs:
 	\end{itemize}
-	
-	Ces étapes garantissent une documentation fiable et à jour.
+		
+	\begin{itemize}
+		\item \texttt{@Path("/offres")} : Ajoute l'URL de l'endpoint \texttt{/offres}.
+		\item \texttt{@Produces(MediaType.APPLICATION\_JSON)} : Indique que la réponse de cet endpoint sera au format JSON.
+		\item \texttt{@GET} : Indique que cet endpoint utilise la méthode HTTP GET pour récupérer des données.
+		\item \texttt{@Tag} : Ajoute une catégorie (\texttt{Forfaits}) et une description détaillant la fonctionnalité de l'endpoint ("Liste les différentes gammes d'offres télécoms de l'OPT").
+	\end{itemize}
+
 	\subsection{Utilisation de Redocly pour la génération de documentation statique}
 	\label{subsec:redocly}
 	
-	Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI. La documentation générée est une interface graphique visuel, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
+	Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI générées précédemment. La documentation produite est une interface graphique interactive, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
 	
-	J'ai utilisé la commande : 
-	\begin{verbatim}
+	\subsubsection{Mise en place d'un workflow GitHub Actions}
+	
+	Pour automatiser la génération de la documentation à chaque nouvelle release, un workflow \textbf{GitHub Actions} a été intégré dans le projet. Ce workflow est déclenché automatiquement dès qu'une nouvelle release est publiée sur GitHub, et il permet de générer la documentation statique à l'aide de Redocly, puis de la déployer directement sur \textbf{GitHub Pages}.
+	
+	Voici les étapes principales de ce workflow :
+	\begin{itemize}
+		\item \textbf{Installation de Node.js} : Le workflow commence par l'installation de \texttt{Node.js} via l'action \texttt{actions/setup-node@v3}. Node.js est nécessaire pour exécuter Redocly.
+		\item \textbf{Installation de Redocly} : Ensuite, Redocly est installé à l'aide de la commande \texttt{npm i -g @redocly/cli@latest}.
+		\item \textbf{Génération de la documentation HTML} : Le workflow génère la documentation statique en exécutant \texttt{redocly build-docs}, qui prend le fichier OpenAPI (\texttt{openapi.yaml}) et génère une page HTML dans le répertoire \texttt{./docs}.
+		\item \textbf{Déploiement sur GitHub Pages} : Enfin, la documentation est déployée sur GitHub Pages en utilisant l'action \texttt{actions/deploy-pages@main}.
+	\end{itemize}
+	
+	Voici un extrait de mon fichier \texttt{pages.yml} dans le répertoire \texttt{.github/workflows/} :
+	
+	\begin{lstlisting}
+		name: Deploy
+		on:
+		release:
+		types: [published]
+		
+		permissions:
+		contents: read
+		pages: write
+		id-token: write
+		
+		jobs:
+		deploy:
+		environment:
+		name: github-pages
+		url: ${{ steps.deployment.outputs.page_url }}
+		runs-on: ubuntu-latest
+		steps:
+		- name: Checkout
+		uses: actions/checkout@v3
+		
+		- name: Install NodeJS
+		uses: actions/setup-node@v3
+		with:
+		node-version: '18.19.1'
+		
+		- name: Install Redocly
+		run: npm i -g @redocly/cli@latest
+		
+		- name: Build API HTML page
+		id: build_api_html_page
+		run: |
 		redocly build-docs openapi/openapi.yaml --output=./docs/index.html
-	\end{verbatim}
-	\textbf{index.html} est alors généré dans le répertoire \textbf{docs/}: 
+		
+		- name: Setup Pages
+		uses: actions/configure-pages@v2
+		
+		- name: Upload artifact
+		uses: actions/upload-artifact@v4
+		with:
+		path: './docs'
+		
+		- name: Deploy to GitHub Pages
+		id: deployment
+		uses: actions/deploy-pages@main
+	\end{lstlisting}
 	\begin{figure}[h!]
 		\centering
-		\includegraphics[width=1\textwidth]{asset/redocly.png}
-		\caption{Page générée par Redocly}
-		\label{fig:redocly}
+		\includegraphics[width=\textwidth]{asset/redocly.png}
+		\caption{Capture d'écran de la documentation Redocly}
 	\end{figure}
+	
+	Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages.
 	
 	\section{Mise en place des tests unitaires et de la couverture de code}
 	
-	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%. 
+	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%.
 	
 	\subsection{Tests unitaires}
 	Les tests unitaires permettent de valider le bon fonctionnement des différentes parties du code. Pour ce projet, nous avons utilisé \texttt{JUnit} en combinaison avec \texttt{QuarkusTest}, une extension de Quarkus permettant de tester les endpoints. 
 	
 	La classe \texttt{OffresResourceTest.java} que j'ai développée teste l'endpoint \texttt{/offres} de notre API. Ce test vérifie si l'endpoint répond correctement (status code 200) et si le corps de la réponse contient bien 5 offres.
-	
 	
 	\begin{lstlisting}[language=Java]
 		@QuarkusTest
@@ -533,8 +593,6 @@
 	
 	Dans cette configuration, le seuil de couverture est fixé à 10\%, ce qui signifie que si moins de 10\% des lignes de code sont couvertes par les tests, le build échouera.
 	
-	Une capture d'écran du rapport généré par JaCoCo est montrée ci-dessous :
-	
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=\textwidth]{asset/jacoco.png}
@@ -542,49 +600,83 @@
 		\label{fig:jacoco-report}
 	\end{figure}
 	
-	\subsection{Configuration de la pipeline CI avec GitHub Actions}
-	Pour automatiser l'exécution des tests et la validation du build, une pipeline CI a été configurée avec **GitHub Actions**. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
+	\subsection{Configuration de la pipeline CI avec GitHub Actions et SonarQube}
+	Pour automatiser l'exécution des tests, la validation du build et l'analyse de la qualité du code, une pipeline CI a été configurée avec \textbf{GitHub Actions}. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
 	
-	La pipeline effectue les étapes suivantes :
+	\subsubsection{SonarQube}
+	SonarQube est un outil de qualité de code qui permet d'analyser en profondeur le code source, d'identifier des problèmes de qualité, des vulnérabilités et des codes redondants. Dans ce projet, SonarQube a été intégré à la pipeline CI pour effectuer une analyse automatique de la qualité du code à chaque build.
+	
+	Pour l'intégration de SonarQube, voici les étapes réalisées :
 	\begin{itemize}
-		\item Récupération du code source avec l'action \texttt{actions/checkout@v3}.
-		\item Installation de JDK 23 avec l'action \texttt{actions/setup-java@v2}.
-		\item Exécution des tests et validation du build avec \texttt{mvn clean verify}.
-		\item Si le seuil de couverture est inférieur à 10\%, le build échoue.
+		\item \textbf{Ajout de la configuration dans le fichier \texttt{pom.xml}} : J'ai ajouté la configuration suivante pour lier le projet à SonarQube Cloud :
 	\end{itemize}
+	\begin{verbatim}
+		<sonar.organization>adriens</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	\end{verbatim}
+	
+	\noindent
+	\textbf{Intégration dans la pipeline CI} : SonarQube a été intégré à la pipeline GitHub Actions. La configuration complète est présentée ci-dessous. Elle inclut l'installation du JDK, la mise en cache des packages Maven et SonarQube, l'exécution des tests et l'analyse SonarQube.
 	
 	Voici la configuration complète de la pipeline dans GitHub Actions :
 	
 	\begin{lstlisting}
-		name: CI Pipeline
+		name: CI Pipeline with SonarQube
 		
 		on:
-		push:
-		branches:
-		- main
-		pull_request:
-		branches:
-		- main
+			push:
+				branches:
+					- main
+			pull_request:
+				branches:
+					- main
 		
 		jobs:
-		build:
-		runs-on: ubuntu-latest
+			build-and-analyze:
+				runs-on: ubuntu-latest
+				steps:
+					- name: Checkout repository
+					uses: actions/checkout@v3
+					with:
+						fetch-depth: 0  # Shallow clones should be disabled for SonarQube analysis
 		
-		steps:
-		- name: Checkout repository
-		uses: actions/checkout@v3
-		
-		- name: Set up JDK 23
-		uses: actions/setup-java@v2
-		with:
-		java-version: '23'
-		
-		- name: Build and run tests with Maven
-		run: mvn clean verify
+					- name: Set up JDK 23
+						uses: actions/setup-java@v3
+						with:
+							java-version: '23'
+							distribution: 'zulu'
+					
+					- name: Cache SonarQube packages
+					uses: actions/cache@v3
+					with:
+						path: ~/.sonar/cache
+						key: ${{ runner.os }}-sonar
+						restore-keys: ${{ runner.os }}-sonar
+					
+					- name: Cache Maven packages
+					uses: actions/cache@v3
+					with:
+						path: ~/.m2
+						key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+						restore-keys: ${{ runner.os }}-m2
+					
+					- name: Build and run tests with Maven
+					run: mvn clean verify
+					
+					- name: Run SonarQube analysis
+					env:
+						GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+						SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+					run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=adriens_api-forfaits-opt
 	\end{lstlisting}
-	
-	Avec cette configuration, GitHub Actions va vérifier si le build passe et si les tests unitaires couvrent suffisamment le code. Si la couverture est inférieure au seuil de 10\%, le processus échoue automatiquement, garantissant ainsi que les tests sont suffisamment nombreux pour valider la stabilité du code.
-	
+	\newpage
+	SonarQube génère un rapport détaillé sur la qualité du code, accessible directement en ligne via l'interface de SonarCloud. Ce rapport fournit une vue complète sur les problèmes de qualité du code, les vulnérabilités potentielles, ainsi que la couverture des tests.
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=\textwidth]{asset/sonarq.png}
+		\caption{Capture d'écran du rapport SonarQube}
+		\label{fig:sonarq-report}
+	\end{figure}
 	
 	\newpage
 	\section{Anti-patterns}
