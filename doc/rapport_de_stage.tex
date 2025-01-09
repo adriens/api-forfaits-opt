@@ -21,7 +21,9 @@
 	breakatwhitespace=false,
 	escapeinside={\%*}{*)}
 }
-
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{longtable}
 \usepackage[utf8]{inputenc}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -541,14 +543,12 @@
 		run: |
 		redocly build-docs openapi/openapi.yaml --output=./docs/index.html
 		
-		- name: Setup Pages
-		uses: actions/configure-pages@v2
-		
+		- name: Setup Github Pages
+		uses: actions/configure-pages@v5
 		- name: Upload artifact
-		uses: actions/upload-artifact@v4
+		uses: actions/upload-pages-artifact@v3
 		with:
 		path: './docs'
-		
 		- name: Deploy to GitHub Pages
 		id: deployment
 		uses: actions/deploy-pages@main
@@ -559,7 +559,52 @@
 		\caption{Capture d'écran de la documentation Redocly}
 	\end{figure}
 	
-	Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages.
+	Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages à l'url : \url{https://adriens.github.io/api-forfaits-opt/}.
+	
+	\section{Bump.sh et Redocly : Comparaison et Mise en Place}
+	
+	\textbf{Bump.sh} est une plateforme qui facilite la gestion et la publication de la documentation d'API, avec une fonctionnalité unique de suivi des différences détaillant les ajouts et modifications entre les versions de l'API. Contrairement à \textbf{Redocly}, qui génère uniquement une documentation statique interactive à partir des spécifications OpenAPI.	
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabularx}{\textwidth}{|X|X|X|}
+			\hline
+			\textbf{Critère} & \textbf{Bump.sh} & \textbf{Redocly} \\
+			\hline
+			\textbf{Génération de la documentation} & $\checkmark$ & $\checkmark$ \\
+			\hline
+			\textbf{Suivi des versions} & $\checkmark$ & $\times$ \\
+			\hline
+			\textbf{Prise en charge de l'intégration CI/CD} & $\checkmark$ & $\checkmark$ \\
+			\hline
+			\textbf{Support pour les APIs} &  \textbf{OpenAPI} & \textbf{OpenAPI}, \textbf{AsyncAPI}, \textbf{GraphQL}, \textbf{gRPC}, \textbf{SOAP}  \\
+			\hline
+			\textbf{Mise à jour automatique de la documentation} & $\checkmark$ & $\checkmark$ \\
+			\hline
+		\end{tabularx}
+		\caption{Comparaison entre Bump.sh et Redocly}
+	\end{table}
+	\subsection{Mise en place de Bump.sh}
+	
+	Pour mettre en place Bump.sh dans ce projet, j'ai procédé à l'upload d'une spécification OpenAPI au format YAML sur la plateforme Bump.sh. Voici les étapes réalisées :
+	
+	\begin{itemize}
+		\item J'ai récupérer le fichier de spécification OpenAPI au format \textbf{openapi.yml} généré lors du build.
+		\item J'ai téléchargé ce fichier sur la plateforme Bump.sh, qui a automatiquement généré la documentation de l'API.
+		\item Bump.sh l'a hébergée en ligne pour un accès facile et publique à l'url \url{https://bump.sh/morgancarre/doc/forfaits-opt-nc}.
+	\end{itemize}
+	
+	\subsection{Résultat : Documentation générée par Bump.sh}
+	
+	La documentation générée par Bump.sh est accessible via l'URL fournie par le service d'hébergement intégré. Cette documentation est mise à jour chaque fois que la spécification de l'API change.
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=\textwidth]{asset/bump-sh-documentation.png}
+		\caption{Capture d'écran de la documentation générée par Bump.sh}
+	\end{figure}
+
+	
 	
 	\section{Mise en place des tests unitaires et de la couverture de code}
 	
