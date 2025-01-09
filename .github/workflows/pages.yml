@@ -39,8 +39,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
+          name: github-pages
           path: './docs'
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main # or specific "vX.X.X" version tag for this action
+        with:
+          artifact-name: github-pages
