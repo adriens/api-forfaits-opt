@@ -4,7 +4,7 @@ CREATE TABLE forfait_m (
     volumetrie VARCHAR(255),
     vocal VARCHAR(255),
     sms VARCHAR(255),
-    prix DECIMAL(10, 2),
+    prix DOUBLE,
     url VARCHAR(255) NOT NULL
 );
 
