@@ -20,47 +20,25 @@ public class ForfaitM {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getVolumetrie() {
         return volumetrie;
-    }
-
-    public void setVolumetrie(String volumetrie) {
-        this.volumetrie = volumetrie;
     }
 
     public String getVocal() {
         return vocal;
     }
 
-    public void setVocal(String vocal) {
-        this.vocal = vocal;
-    }
-
     public String getSms() {
         return sms;
-    }
-
-    public void setSms(String sms) {
-        this.sms = sms;
     }
 
     public Double getPrix() {
         return prix;
     }
 
-    public void setPrix(Double prix) {
-        this.prix = prix;
-    }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 }
