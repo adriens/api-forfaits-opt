@@ -21,4 +21,20 @@ public class OffresResource {
     public List<Forfait> getAllOffres() {
         return entityManager.createQuery("SELECT f FROM Forfait f", Forfait.class).getResultList();
     }
+
+    @GET
+    @Path("/forfait-m")
+    @Tag(name = "Forfait-m", description = "Liste tous les forfaits de la gamme forfait-m")
+    public List<ForfaitM> getForfaitsGammeM() {
+        return entityManager.createQuery("SELECT fm FROM ForfaitM fm", ForfaitM.class).getResultList();
+    }
+
+    @GET
+    @Path("/forfait-m/{id}")
+    @Tag(name = "Forfait-m", description = "Détails d'un forfait spécifique de la gamme forfait-m")
+    public ForfaitM getForfaitMById(@PathParam("id") String id) {
+        return entityManager.createQuery("SELECT fm FROM ForfaitM fm WHERE fm.id = :id", ForfaitM.class)
+                            .setParameter("id", id)
+                            .getSingleResult();
+    }
 }
