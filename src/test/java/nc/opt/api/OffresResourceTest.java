@@ -18,4 +18,26 @@ public class OffresResourceTest {
              .body("$", notNullValue())
              .body("$", hasSize(5));
     }
+
+    @Test
+    public void testGetAllForfaitsGammeM() {
+        given()
+          .when().get("/offres/forfait-m")
+          .then()
+             .statusCode(200)
+             .body("$", notNullValue())
+             .body("$", hasSize(4))
+             .body("[0].id", equalTo("forfait-m-1"));
+    }
+
+    @Test
+    public void testGetForfaitMById() {
+        given()
+          .pathParam("id", "forfait-m-1")  // Spécifier l'ID du forfait à rechercher
+          .when().get("/offres/forfait-m/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("forfait-m-1"))  // Vérifier l'ID du forfait renvoyé
+             .body("prix", equalTo(1000.0f));  // Vérifier le prix du forfait
+    }
 }

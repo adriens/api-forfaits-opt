@@ -148,7 +148,6 @@
 	% à compléter au fil du stage
 	\newpage
 	\tableofcontents
-	%à compléter : titre et sous titres
 	\newpage
 	\section{Introduction}
 	
@@ -659,6 +658,7 @@
 	
 	
 	\section{Mise en place des tests unitaires et de la couverture de code}
+	\label{subsec:test-offres}
 	
 	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%.
 	
@@ -782,6 +782,7 @@
 	\item Mise en place des données de la gamme de forfait M dans un fichier CSV et créer le fichier de migration SQL.(\ref{subsec:mpd}).
 	\item Création d'une entitée JPA pour le forfait M pour pouvoir manipuler les données de la base de données en Java. (\ref{subsec:JPA}). 
 	\item Créer l'endpoint /offres/forfaits-m. (\ref{subsec:endpoint-m})
+	\item Mettre en place des tests unitaires (\ref{subsec:tests})
 	\end{itemize}
 	
 	\subsection{Mise en place des données}
@@ -818,7 +819,7 @@
 		@Table(name = "forfait_m") 
 	\end{lstlisting}
 	
-	On créer notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les méthodes getter et setter pour chaque attribut. Cela permet de gérer les données de manière encapsulée et de faciliter l'accès et la modification des valeurs des attributs de l'entité.
+	On créer notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les méthodes getter pour chaque attribut.
 	\begin{lstlisting}[language=java]
 		public class ForfaitM {
 			
@@ -897,6 +898,33 @@
 			"volumetrie": "1 Go"
 		}
 	\end{lstlisting}
+	
+	\subsection{Tests unitaires}
+	\label{subsec:tests}
+	Comme pour l'endpoint \texttt{/offres} dans la section \textbf{\ref{subsec:test-offres}}, on met en place les tests unitaire avec un seuil de couverture minimum de 10\% : 
+	
+	\begin{lstlisting}[language=java] 
+	    @Test
+		[...]
+			.body("$", notNullValue())
+			.body("$", hasSize(4))
+			.body("[0].id", equalTo("forfait-m-1"));
+		}
+	\end{lstlisting}
+	
+	Ce test vérifie que l'endpoint \texttt{/offres/forfait-m} renvoie 4 forfaits et que le premier a l'ID "forfait-m-1".
+	
+	\begin{lstlisting}[language=java] 
+	 	given()
+		.pathParam("id", "forfait-m-1")
+		[...]
+		.statusCode(200)
+		.body("id", equalTo("forfait-m-1"))
+		.body("prix", equalTo(1000.0f));
+		}
+	\end{lstlisting}
+	
+	Ce test vérifie que l'endpoint \texttt{/offres/forfait-m/{id}} renvoie le forfait avec l'ID "forfait-m-1" et un prix de 1000.0.
 
 	\newpage
 	\section{From 0 to Hero}
