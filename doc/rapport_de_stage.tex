@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -78,7 +79,6 @@
 \usepackage{amssymb}
 \usepackage{tabularx}
 \usepackage{longtable}
-\usepackage[utf8]{inputenc}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{pgfplotstable}
@@ -783,6 +783,7 @@
 	\item Création d'une entitée JPA pour le forfait M pour pouvoir manipuler les données de la base de données en Java. (\ref{subsec:JPA}). 
 	\item Créer l'endpoint /offres/forfaits-m. (\ref{subsec:endpoint-m})
 	\item Mettre en place des tests unitaires (\ref{subsec:tests})
+	\item Documentation avec annotations \textbf{Openapi} (\ref{subsec:doc})
 	\end{itemize}
 	
 	\subsection{Mise en place des données}
@@ -898,6 +899,37 @@
 			"volumetrie": "1 Go"
 		}
 	\end{lstlisting}
+	\subsection{Gestion des erreurs 404 lors de la saisie d'un mauvais ID}
+	\label{subsec:error-handling}
+	
+	Dans le cadre de l'implémentation des endpoints de l'API, il est crucial de gérer correctement les erreurs, en particulier lorsque l'utilisateur fournit des identifiants invalides. La gestion des erreurs permet d'optimiser l'expérience utilisateur, de garantir la sécurité de l'application.
+	
+	Lorsque l'utilisateur demande des informations sur un forfait en utilisant un identifiant (ID) qui n'existe pas dans la base de données, il est essentiel que l'API réagisse de manière adéquate. Une réponse 404 est une manière standard de signaler que la ressource demandée est introuvable. Cette gestion des erreurs présente plusieurs avantages :
+	
+	\begin{itemize}
+		\item \textbf{Amélioration de l'expérience utilisateur} : Si l'utilisateur entre un mauvais ID, il recevra une réponse claire, lui permettant de comprendre que l'ID n'existe pas. Cela évite de laisser l'utilisateur dans l'incertitude ou de lui renvoyer une réponse incorrecte.
+		\item \textbf{Sécurité} : Sans une gestion d'erreur appropriée, des comportements non désirés peuvent survenir, comme le dévoilement d'informations internes à travers des messages d'erreur vagues ou des ressources mal protégées. Le renvoi d'une erreur 404 empêche la divulgation d'informations sensibles.
+	\end{itemize}
+	
+	\textbf{Implémentation de l'erreur 404} : 
+	Lorsqu'un ID erroné est fourni par l'utilisateur, l'API retourne une réponse 404. Voici le traitement effectué dans le code :
+	
+	\begin{lstlisting}[language=java]
+		try {
+			forfaitM = entityManager.createQuery("SELECT fm FROM ForfaitM fm WHERE fm.id = :id", ForfaitM.class)
+			.setParameter("id", id)
+			.getSingleResult();
+			return Response.ok(forfaitM).build();
+		} catch (Exception e) {
+			return Response.status(Response.Status.NOT_FOUND)
+			.entity("Forfait avec ID '" + id + "' non trouve")
+			.type(MediaType.TEXT_PLAIN)
+			.build();
+		}
+	\end{lstlisting}
+	
+	Dans cet extrait, un bloc \texttt{try-catch} est utilisé pour capturer une exception si l'ID fourni n'existe pas dans la base de données. Si l'ID est invalide, l'API lance une erreur 404 et renvoie un message texte indiquant que le forfait avec l'ID spécifié n'a pas été trouvé.
+
 	
 	\subsection{Tests unitaires}
 	\label{subsec:tests}
@@ -926,6 +958,31 @@
 	
 	Ce test vérifie que l'endpoint \texttt{/offres/forfait-m/{id}} renvoie le forfait avec l'ID "forfait-m-1" et un prix de 1000.0.
 
+	\subsection{Ajout de la documentation}
+	\label{subsec:doc}
+	
+	Comme pour l'endpoint \textbf{/offres} j'ai utilisé les annotations \textbf{openapi} pour documenter cet endpoint.
+	
+	Les principales annotations utilisées sont :
+	
+	\begin{itemize}
+		\item \textbf{\texttt{@Path}} : Spécifie le chemin de chaque endpoint.
+		\item \textbf{\texttt{@Operation}} : Décrit les actions effectuées par un endpoint (ex. : récupérer un forfait spécifique).
+		\item \textbf{\texttt{@Parameter}} : Déclare les paramètres d'entrée d'un endpoint, comme l'ID du forfait à récupérer.
+		\item \textbf{\texttt{@APIResponse}} : Définit les réponses possibles d'un endpoint, incluant les codes de réponse et les exemples de données retournées.
+		\item \textbf{\texttt{@Tag}} : Permet de regrouper les endpoints sous une même catégorie pour mieux organiser la documentation.
+		\item \textbf{\texttt{@ExampleObject}} : Fournit des exemples de réponses pour aider à comprendre le format des données.
+	\end{itemize}
+	
+	En générant la documentation statique avec Redocly à partir de ces annotations OpenAPI, nous avons pu obtenir une documentation claire et bien structurée : 
+	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=\textwidth]{asset/Redocly_v2.png}
+		\caption{Documentation générée par Redocly}
+	\end{figure}
+	
+	
 	\newpage
 	\section{From 0 to Hero}
 	
