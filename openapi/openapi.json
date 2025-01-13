@@ -21,7 +21,7 @@
     },
     "/offres" : {
       "get" : {
-        "tags" : [ "Forfaits" ],
+        "tags" : [ "Gammes de Forfaits" ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -39,10 +39,95 @@
         },
         "summary" : "Get All Offres"
       }
+    },
+    "/offres/forfait-m" : {
+      "get" : {
+        "summary" : "Liste des forfaits de la gamme forfait-m",
+        "description" : "Retourne la liste complète des forfaits disponibles dans la gamme forfait-m.",
+        "tags" : [ "Forfait-m" ],
+        "responses" : {
+          "200" : {
+            "description" : "Liste des forfaits de la gamme forfait-m",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : [ {
+                      "id" : "forfait-m-1",
+                      "volumetrie" : "1 Go",
+                      "vocal" : "1 H",
+                      "sms" : "SMS illimités",
+                      "prix" : 1000.0,
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go"
+                    }, {
+                      "id" : "forfait-m-100",
+                      "volumetrie" : "100 Go",
+                      "vocal" : "Appels illimités",
+                      "sms" : "SMS illimités",
+                      "prix" : 10000.0,
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-100-go"
+                    } ]
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForfaitM"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/offres/forfait-m/{id}" : {
+      "get" : {
+        "summary" : "Détails d'un forfait spécifique de la gamme forfait-m",
+        "description" : "Retourne les détails d'un forfait spécifique de la gamme forfait-m en fonction de l'ID fourni.",
+        "tags" : [ "Forfait-m" ],
+        "parameters" : [ {
+          "description" : "ID du forfait",
+          "example" : "forfait-m-1",
+          "name" : "id",
+          "required" : true,
+          "in" : "path",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Détails du forfait",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : {
+                      "id" : "forfait-m-1",
+                      "volumetrie" : "1 Go",
+                      "vocal" : "1 H",
+                      "sms" : "Illimité",
+                      "prix" : 1000.0,
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go"
+                    }
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForfaitM"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Forfait non trouvé"
+          }
+        }
+      }
     }
   },
   "tags" : [ {
-    "name" : "Forfaits",
+    "name" : "Forfait-m",
+    "description" : "Détails d'un forfait spécifique de la gamme forfait-m"
+  }, {
+    "name" : "Gammes de Forfaits",
     "description" : "Liste les différentes gammes d'offres télécoms de l'OPT"
   } ],
   "components" : {
@@ -58,6 +143,30 @@
           },
           "description" : {
             "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ForfaitM" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "volumetrie" : {
+            "type" : "string"
+          },
+          "vocal" : {
+            "type" : "string"
+          },
+          "sms" : {
+            "type" : "string"
+          },
+          "prix" : {
+            "type" : "number",
+            "format" : "double"
           },
           "url" : {
             "type" : "string"
