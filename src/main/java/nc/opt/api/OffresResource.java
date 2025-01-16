@@ -91,9 +91,8 @@ public class OffresResource {
             forfaitM = entityManager.createQuery("SELECT fm FROM ForfaitM fm WHERE fm.id = :id", ForfaitM.class)
                                     .setParameter("id", id)
                                     .getSingleResult();
-            return Response.ok(forfaitM).build(); // retourne la réponse 200 avec le forfait trouvé
+            return Response.ok(forfaitM).build();
         } catch (Exception e) {
-            // Si aucun forfait n'est trouvé, retourne un 404 avec un message texte en "text/plain"
             return Response.status(Response.Status.NOT_FOUND)
                            .entity("Forfait avec ID '" + id + "' non trouvé")
                            .type(MediaType.TEXT_PLAIN)
