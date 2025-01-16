@@ -40,4 +40,13 @@ public class OffresResourceTest {
              .body("id", equalTo("forfait-m-1"))  // Vérifier l'ID du forfait renvoyé
              .body("prix", equalTo(1000.0f));  // Vérifier le prix du forfait
     }
+    @Test
+    public void testGetForfaitMById_NotFound() {
+        given()
+          .pathParam("id", "forfait-m-unknown")  // ID qui n'existe pas
+          .when().get("/offres/forfait-m/{id}")
+          .then()
+             .statusCode(404)  // Vérifier que le code d'état est 404
+             .body(equalTo("Forfait avec ID 'forfait-m-unknown' non trouvé"));  // Vérifier le message d'erreur retourné
+    }
 }
