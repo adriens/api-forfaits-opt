@@ -140,13 +140,26 @@
                 <version>0.8.12</version>
                 <executions>
                     <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal> <!-- Prépare l'agent JaCoCo -->
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal> <!-- Génère le rapport JaCoCo après les tests -->
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>jacoco-check</id>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <phase>post-integration-test</phase>
                         <configuration>
-                            <dataFile>${project.build.directory}/jacoco-quarkus.exec</dataFile>
+                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
                             <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
                             <rules>
                                 <rule>
