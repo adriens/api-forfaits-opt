@@ -21,7 +21,7 @@ jobs:
         with:
           doc: forfaits-opt-nc
           token: KtzSRnrutjvTeXff2qG8DBkps6Crk4tb
-          file: openapi/openapi.yml
+          file: openapi/openapi.yaml
 
   api-diff:
     if: ${{ github.event_name == 'release' }}
@@ -35,7 +35,7 @@ jobs:
         with:
           doc: forfaits-opt-nc
           token: KtzSRnrutjvTeXff2qG8DBkps6Crk4tb
-          file: openapi/openapi.yml
+          file: openapi/openapi.yaml
           command: diff
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
