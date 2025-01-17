@@ -1,7 +1,63 @@
 \documentclass{article}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{float}
 
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\definecolor{eclipseStrings}{RGB}{42,0.0,255}
+\definecolor{eclipseKeywords}{RGB}{127,0,85}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+	basicstyle=\normalfont\ttfamily,
+	commentstyle=\color{eclipseStrings}, % style of comment
+	stringstyle=\color{eclipseKeywords}, % style of strings
+	numbers=left,
+	numberstyle=\scriptsize,
+	stepnumber=1,
+	numbersep=8pt,
+	showstringspaces=false,
+	breaklines=true,
+	frame=lines,
+	backgroundcolor=\color{gray}, %only if you like
+	string=[s]{"}{"},
+	comment=[l]{:\ "},
+	morecomment=[l]{:"},
+	literate=
+	*{0}{{{\color{numb}0}}}{1}
+	{1}{{{\color{numb}1}}}{1}
+	{2}{{{\color{numb}2}}}{1}
+	{3}{{{\color{numb}3}}}{1}
+	{4}{{{\color{numb}4}}}{1}
+	{5}{{{\color{numb}5}}}{1}
+	{6}{{{\color{numb}6}}}{1}
+	{7}{{{\color{numb}7}}}{1}
+	{8}{{{\color{numb}8}}}{1}
+	{9}{{{\color{numb}9}}}{1}
+}
+\lstset{language=SQL,
+	basicstyle={\small\ttfamily},
+	belowskip=3mm,
+	breakatwhitespace=true,
+	breaklines=true,
+	classoffset=0,
+	columns=flexible,
+	commentstyle=\color{dkgreen},
+	framexleftmargin=0.25em,
+	frameshape={}{yy}{}{}, %To remove to vertical lines on left, set `frameshape={}{}{}{}`
+	keywordstyle=\color{blue},
+	numbers=none, %If you want line numbers, set `numbers=left`
+	numberstyle=\tiny\color{gray},
+	showstringspaces=false,
+	stringstyle=\color{mauve},
+	tabsize=3,
+	xleftmargin =1em
+}
 \lstset{
 	language=Java,
 	basicstyle=\ttfamily\footnotesize,
@@ -21,8 +77,9 @@
 	breakatwhitespace=false,
 	escapeinside={\%*}{*)}
 }
-
-\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{tabularx}
+\usepackage{longtable}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \usepackage{pgfplotstable}
@@ -70,6 +127,8 @@
 			{\large Supervisé par : \textbf{Adrien SALES}} \\[0.5cm]
 		\end{center}
 	\end{titlepage}
+	
+	\pagenumbering{gobble} 
 	\newpage
 	\begin{abstract}
 		Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai travaillé sur le développement d'une API permettant de fournir des informations sur les différents forfaits télécoms. Ce projet a pour objectif de rendre les données publiques liées aux offres mobiles plus accessibles, en utilisant des outils modernes pour assurer une solution efficace et évolutive.
@@ -92,13 +151,13 @@
 	% à compléter au fil du stage
 	\newpage
 	\tableofcontents
-	%à compléter : titre et sous titres
 	\newpage
+	\pagenumbering{arabic}
 	\section{Introduction}
 	
 	\subsection{Annonce du stage}
 	
-	Du \textbf{09 décembre 2024} au \textbf{[à déterminer]}, j’ai effectué un stage au sein de l’entreprise \textbf{OPT} (située à Nouméa, Nouvelle-Calédonie). Au cours de ce stage au département \textbf{DSI/GLIA (Direction des Systèmes d'Information / Gestion des Logiciels et Infrastructure Applicative)}, j’ai eu l’occasion de me plonger dans le développement d’une API permettant de fournir des informations sur les différents forfaits télécoms proposés par l’entreprise.
+	Du \textbf{09 décembre 2024} au \textbf{[à déterminer]}, j’ai effectué un stage au sein de l’entreprise \textbf{OPT} (située à Nouméa, Nouvelle-Calédonie). Au cours de ce stage au département \textbf{DSI/GLIA (Direction des Systèmes d'Information / Génie Logiciel Inter-Applicatif)}, j’ai eu l’occasion de me plonger dans le développement d’une API permettant de fournir des informations sur les différents forfaits télécoms proposés par l’entreprise.
 	
 	Ce stage a été pour moi une opportunité d’explorer plusieurs aspects clés du métier de développeur \textbf{backend}, notamment en matière de gestion de bases de données, d’architecture de microservices, et de l’utilisation des technologies modernes comme Quarkus et Flyway. J’ai également pu développer des compétences techniques liées à la conception d’API REST.
 	
@@ -109,7 +168,7 @@
 	Au sein de son département \textbf{DSI/GLIA}, j’ai intégré une équipe dynamique spécialisée dans le développement et la gestion de solutions logicielles.
 	
 	
-	Supervisé par \textbf{Adrien SALES}, responsable au sein de l’équipe \textbf{GLIA}, j’ai bénéficié d’un encadrement rigoureux, favorisant l’apprentissage et la réalisation des différentes missions. Parmi ces missions, j’ai été chargé de concevoir une architecture basée sur Quarkus et Flyway, tout en suivant les bonnes pratiques de développement logiciel.
+	Supervisé par \textbf{Adrien SALES}, chef de section de l’équipe \textbf{GLIA}, j’ai bénéficié d’un encadrement rigoureux, favorisant l’apprentissage et la réalisation des différentes missions. Parmi ces missions, j’ai été chargé de concevoir une architecture basée sur Quarkus et Flyway, tout en suivant les bonnes pratiques de développement logiciel.
 	
 	\subsection{Problématique et objectifs du rapport}
 	
@@ -126,7 +185,7 @@
 	
 	Une fois une tâche terminée, je soumettais mon travail pour vérification à travers une demande spécifique appelée \textit{pull request}. Mon maître de stage, Adrien SALES, examinait ces propositions, identifiait d'éventuelles améliorations ou corrections, et me fournissait des retours. Après validation, les modifications étaient intégrées à la branche principale du projet, garantissant ainsi une progression structurée et contrôlée.
 	
-	Ce processus a été appliqué tout au long du projet pour assurer la qualité du code et une bonne gestion des étapes de développement.
+	Des extraits de code sont inclus dans ce rapport, mais le code complet est disponible sur le dépôt \textbf{GitHub} à l'adresse suivante : \url{https://github.com/adriens/api-forfaits-opt}. Si des détails supplémentaires sont nécessaires, vous pouvez consulter le dépôt GitHub.
 	
 	\subsection{Stack}
 	
@@ -143,40 +202,28 @@
 	\item \textbf{HTTPie} : Outil en ligne de commande pour tester les endpoints de l'API.
 	\item \textbf{Podman} : Outil pour la gestion et l'exécution de conteneurs, utilisé pour tester l'API en environnement conteneurisé.
 	\item \textbf{Redocly} : Outil utilisé pour générer de la documentation statique à partir des spécifications OpenAPI.
+	\item\textbf{Bump.sh} : Outil similaire à Redocly avec des fonctionnalités supplémentaires.
 	\item \textbf{Jib} : Outil intégré à Maven pour créer des images conteneurisées sans utiliser de \texttt{Dockerfile}. Il simplifie la conteneurisation et génère des images légères et optimisées.
-	\item \textbf{Redocly} : Permet de générer la documentation statique de l'API à partir de fichier openapi.
 	\item \textbf{SonarQube} : Outil d'analyse de la qualité du code qui détecte les problèmes, les vulnérabilités et les redondances, améliorant ainsi la qualité et la sécurité du code.
 \end{itemize}
-
 	
 	\section{Première tâche : conversion des sous-tâches en issues}
 	
 	La première tâche qui m’a été confiée au début de mon stage était de convertir une liste de sous-tâches fournies par mon maître de stage, Adrien SALES, en \textit{issues} distinctes sur \textbf{Github}. Cette démarche avait pour but de structurer et d’organiser les différentes étapes nécessaires à la réalisation de l’endpoint \texttt{/offres}, qui devait permettre de lister les types de forfaits, leurs pages de référence et une description associée.
 	
-	\subsection{Contexte}
+	\paragraph{Contexte : }
 	
-	L’issue principale intitulée \textit{/offres : Lister les types d'abonnements \#1} décrivait les objectifs généraux et les actions attendues pour atteindre ce résultat. Voici les différentes sous-tâches qui devaient être transformées en issues individuelles :
+	L’issue principale intitulée \textit{/offres : Lister les types d'abonnements \#1} décrivait les objectifs généraux et les actions attendues pour atteindre ce résultat. Voici quelques exemples de sous-tâches qui devaient être transformées en issues individuelles :
 	
 	\begin{itemize}
-		\item Étudier les données pour l'API \texttt{/offres} (\#4)
-		\item intialiser le projet Quarkus (\#5)
-		\item Comprendre le rôle de Flyway
 		\item Implémenter l'endpoint \texttt{/offres} avec Flyway
 		\item Documenter avec des spécifications OpenAPI complètes
-		\item Montrer un exemple d’appel avec \texttt{httpie}
-		\item Implémentation au sein de Microcks (article à venir)
 		\item Builder l’image en local avec \texttt{podman}
-		\item Exécuter l’image en local avec \texttt{podman} et visualisation via [Podman Desktop](https://podman-desktop.io/)
 		\item Générer la documentation OpenAPI
 		\item Ajouter une CI pour tester le build Maven
-		\item Mettre en œuvre des tests unitaires (seuil minimal 10\%)
-		\item Lire des articles et regarder des vidéos sur l’automatisation de la documentation API avec GitHub, Redocly, et OpenAPI
 		\item Générer une documentation HTML statique avec Redocly
 		\item Livrer une première version du rapport au format \LaTeX{} : abstract et introduction
 	\end{itemize}
-	
-	Pour illustrer la structuration et la mise en forme des issues, voici un exemple concret d’une issue que j’ai créée dans le cadre de cette tâche. Cela permet de visualiser comment chaque sous-tâche a été documentée et organisée pour garantir un suivi efficace.
-	
 	\begin{center}
 		\textbf{Exemple d'issue mise en forme :}
 	\end{center}
@@ -192,23 +239,10 @@
 	\newpage
 	\section{Identification des types de forfaits et création du fichier \texttt{offres.csv}}
 	
-	Ma deuxième tâche a consisté à identifier les différents types de forfaits disponibles sur la page de l’OPT intitulée \textit{"Identifiez le forfait qui vous ressemble"} (voir capture d’écran ci-dessous). Pour cela, j’ai analysé les caractéristiques propres à chaque forfait, notamment leur nom, leur description et leur utilisation, afin de les préparer sous une forme exploitable.
+	Ma deuxième tâche a consisté à identifier les différents types de forfaits disponibles sur la page de l’OPT intitulée \textit{"Identifiez le forfait qui vous ressemble"} (voir Figure~\ref{fig:page_forfait} dans l'Annexe). Pour cela, j’ai analysé les caractéristiques propres à chaque forfait, notamment leur nom, leur description et leur utilisation, afin de les préparer sous une forme exploitable.
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.8\textwidth]{asset/page_forfait.png}
-		\caption{Page \textit{"Identifiez le forfait qui vous ressemble"} sur le site de l’OPT.}
-		\label{fig:page_forfait}
-	\end{figure}
-	
-	Après cette analyse, j’ai structuré ces informations dans un fichier au format \texttt{CSV}, nommé \texttt{offres.csv}. Ce fichier contient les champs suivants : l’identifiant (\texttt{id}), le nom (\texttt{desc}) et la description détaillée (\texttt{desc full}) de chaque forfait. Ce fichier est illustré dans la capture ci-dessous.
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.8\textwidth]{asset/offres_csv.png}
-		\caption{Extrait du fichier \texttt{offres.csv} contenant les données des forfaits.}
-		\label{fig:offres_csv}
-	\end{figure}
+	\subsection*{Structuration dans un fichier \texttt{CSV}}
+	Après cette analyse, j’ai structuré ces informations dans un fichier au format \texttt{CSV}, nommé \texttt{offres.csv}. Ce fichier contient les champs suivants : l’identifiant (\texttt{id}), le nom (\texttt{desc}) et la description détaillée (\texttt{desc full}) de chaque forfait.
 	
 	J’ai choisi le format \texttt{CSV} en raison de sa portabilité et de sa facilité d’exploitation dans de nombreux cas. Ce format est particulièrement adapté à notre contexte, car il permet de charger efficacement les données dans une base de données à l’aide de Flyway, un outil utilisé pour gérer les migrations et remplir les tables avec les données préparées.
 	
@@ -216,7 +250,7 @@
 	
 	Une des premières étapes de mon projet a été d’initialiser le projet Quarkus et de mettre en place un endpoint basique permettant de tester le bon fonctionnement de l’environnement.
 	
-	\subsubsection{Initialisation du projet Quarkus}
+	\subsection{Initialisation du projet Quarkus}
 	
 	Pour initialiser le projet, j’ai utilisé la commande suivante :
 	\begin{verbatim}
@@ -227,13 +261,13 @@
 	\begin{itemize}
 		\item \texttt{pom.xml} : le fichier de configuration Maven qui liste les dépendances nécessaires au projet.
 		\item \texttt{src/main/java} : le répertoire contenant le code source de l’application, avec un premier exemple de classe.
-		\item \texttt{src/main/resources} : le répertoire pour les fichiers de configuration et les ressources statiques.
+		\item \texttt{src/main/resources} : le répertoire pour les fichiers de configuration et les ressources statiques, comme notre fichier \textbf{CSV}.
 		\item \texttt{src/test/java} : le répertoire dédié aux tests unitaires.
 	\end{itemize}
 	
 	Par défaut, Quarkus inclut un endpoint basique accessible à l’adresse \texttt{/hello}, qui renvoie un simple message \textit{"Hello World"}.
 	
-	\subsubsection{Lancement et test du projet}
+	\subsection{Lancement et test du projet}
 	
 	Pour exécuter le projet, il suffit d’utiliser la commande suivante :
 	\begin{verbatim}
@@ -247,14 +281,7 @@
 		http://localhost:8080
 	\end{verbatim}
 	
-	J’ai ensuite vérifié le bon fonctionnement de l’endpoint par défaut \texttt{/hello} grâce à un appel réalisé avec l’outil HTTPIE. Voici une capture d’écran montrant la réponse renvoyée par le serveur :
-	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=0.8\textwidth]{asset/hello.png}
-		\caption{Test de l'endpoint \texttt{/hello} avec HTTPIE.}
-		\label{fig:hello_endpoint}
-	\end{figure}
+	J’ai ensuite vérifié le bon fonctionnement de l’endpoint par défaut \texttt{/hello} grâce à un appel réalisé avec l’outil HTTPIE (Voir figure \ref{fig:hello_endpoint} dans l'annexe).
 	
 	\subsection{Avantages de Quarkus pour le développement}
 	
@@ -269,11 +296,11 @@
 	
 	\section{Configuration de Flyway et mise en place de l'endpoint \texttt{/offres}}
 	
-	Dans le cadre de ce projet, il était nécessaire de centraliser les données des forfaits télécoms dans une base de données et de les exposer via un endpoint accessible. Pour ce faire, j'ai configuré Flyway pour gérer les migrations de base de données et j'ai développé l'endpoint \texttt{/offres} permettant de récupérer ces données.
+	Dans le cadre de ce projet, il était nécessaire de centraliser les données des forfaits télécoms dans une base de données et de les exposer via un endpoint accessible. Pour ce faire, j'ai configuré Flyway pour gérer la base de données et j'ai développé l'endpoint \texttt{/offres} permettant de récupérer ces données.
 	
-	\subsubsection{Configuration de Flyway et de la base de données H2}
+	\subsection{Configuration de Flyway et de la base de données H2}
 	
-	La gestion des migrations de base de données a été confiée à Flyway, une solution reconnue pour son efficacité et sa simplicité d'intégration dans des projets modernes. Voici les principales étapes de configuration :
+	La gestion de la base de données a été confiée à Flyway, une solution reconnue pour son efficacité et sa simplicité d'intégration dans des projets modernes. Voici les principales étapes de configuration :
 	
 	\begin{itemize}
 		\item Ajout des dépendances nécessaires dans le fichier \texttt{pom.xml} :
@@ -281,7 +308,7 @@
 			\item \texttt{quarkus-flyway} : pour gérer les migrations de la base de données.
 			\item \texttt{quarkus-jdbc-h2} : pour utiliser une base de données H2 en mémoire.
 			\item \texttt{quarkus-hibernate-orm} : pour mapper les entités avec les tables de la base de données.
-			\item \texttt{quarkus-resteasy-reactive-jackson} : pour gérer les réponses JSON dans les endpoints REST.
+			\item \texttt{quarkus-rest-jackson} : pour gérer les réponses JSON dans les endpoints REST.
 		\end{itemize}
 		
 		\item Configuration dans le fichier \texttt{application.properties} :
@@ -303,93 +330,75 @@
 	\subsection{Mise en place de l'endpoint \texttt{/offres}}
 	
 	L'endpoint \texttt{/offres} a été conçu pour exposer les données des forfaits télécoms sous forme JSON. Voici les étapes principales de son implémentation :
-	\subsection{Création de l'entité \texttt{Forfait}}
+	\subsection*{Création de l'entité \texttt{Forfait}}
 	\begin{itemize}
-		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{forfaits} dans la base de données. Cette classe représente la table \texttt{forfaits} dans la base de données. Elle est annotée avec \texttt{@Entity}, indiquant à Hibernate qu'il s'agit d'une entité persistante. L'annotation \texttt{@Table(name = "forfaits")} est utilisée pour spécifier explicitement le nom de la table dans la base de données. 
+		\item Création de l'entité \texttt{Forfait}, mappée avec la table \texttt{forfaits} dans la base de données. Cette classe représente la table \texttt{forfaits} dans la base de données. 	
 		
-		Les champs \texttt{id}, \texttt{desc}, et \texttt{description} correspondent aux colonnes de la table \texttt{Forfaits}. L'annotation \texttt{@Id} sur le champ \texttt{id} désigne ce champ comme la clé primaire.
-		\newpage
-		Voici le code de l'entité \texttt{Forfait} :
-		\begin{lstlisting}
-			@Entity
-			@Table(name = "forfaits")
-			public class Forfait {
-				@Id
-				private String id;
-				private String desc;
-				private String description;
+		\begin{itemize}
+			\item
+			\begin{lstlisting}
+				@Entity
+				@Table(name = "forfaits")
+				public class Forfait {
+				\end{lstlisting}
+				\begin{itemize}
+					\item L'annotation \texttt{@Entity} indique que cette classe est une entité JPA, mappée sur une table dans la base de données.
+					\item L'annotation \texttt{@Table(name = "forfaits")} spécifie le nom de la table associée à cette entité.
+				\end{itemize}
 				
-				// Getters et setters
-				public String getId() {
-					return id;
-				}
+				\item
+				\begin{lstlisting}
+					@Id
+					private String id;
+				\end{lstlisting}
+				\begin{itemize}
+					\item L'annotation \texttt{@Id} désigne le champ \texttt{id} comme étant la clé primaire de la table \texttt{forfaits}.
+				\end{itemize}
 				
-				public void setId(String id) {
-					this.id = id;
-				}
-				
-				public String getDesc() {
-					return desc;
-				}
-				
-				public void setDesc(String desc) {
-					this.desc = desc;
-				}
-				
-				public String getDescription() {
-					return description;
-				}
-				
-				public void setDescription(String description) {
-					this.description = description;
-				}
-			}
-		\end{lstlisting}
+				\item
+				\begin{lstlisting}
+					private String desc;
+					private String description;
+				\end{lstlisting}
+				\begin{itemize}
+					\item Ces champs représentent les colonnes \texttt{desc} et \texttt{description} dans la table \texttt{forfaits}.
+				\end{itemize}
+		\end{itemize}
+	\end{itemize}
+			
 		
 		Cette classe joue un rôle crucial, car elle permet de manipuler les données de la table \texttt{forfaits} comme des objets Java.
-		\subsection{Développement de la ressource REST \texttt{OffresResource}}
-		\item Développement de la ressource REST \texttt{OffresResource}, définissant l'endpoint \texttt{/offres}. Cette ressource utilise \texttt{EntityManager} pour exécuter une requête JPA récupérant toutes les données de la table.
-	\end{itemize}
+	\subsection*{Développement de la ressource REST \texttt{OffresResource}}
 	
-	Voici un extrait de la classe \texttt{OffresResource} :
-	\begin{lstlisting}
-		@Path("/offres")
-		@Produces(MediaType.APPLICATION_JSON)
-		public class OffresResource {
+	\begin{itemize}
+		\item \begin{lstlisting}
+			@Path("/offres")
+			@Produces(MediaType.APPLICATION_JSON)
+			public class OffresResource {
+			\end{lstlisting}
+			\item L'annotation \texttt{@Path("/offres")} définit l'endpoint \texttt{/offres}.
+			\item L'annotation \texttt{@Produces(MediaType.APPLICATION\_JSON)} indique que la réponse sera au format JSON.
 			
-			@Inject
-			EntityManager entityManager;
-			
-			@GET
-			public List<Forfait> getAllOffres() {
-				return entityManager.createQuery("SELECT f FROM Forfait f", Forfait.class).getResultList();
-			}
-		}
-	\end{lstlisting}
-	\newpage
-	\subsubsection{Validation de l'endpoint avec HTTPIE}
+			\item \begin{lstlisting}
+				@GET
+				public List<Forfait> getAllOffres() {
+					return entityManager.createQuery("SELECT f FROM Forfait f", Forfait.class).getResultList();
+				}
+			\end{lstlisting}
+			\item La méthode \texttt{getAllOffres()} est mappée à la méthode HTTP \texttt{GET} et renvoie tous les enregistrements de la table \texttt{Forfait}.
+		\end{itemize}
+
+	\subsection*{Validation de l'endpoint avec HTTPIE}
 	
-	Pour vérifier le bon fonctionnement de l'endpoint \texttt{/offres}, un appel a été effectué à l'aide de l'outil HTTPIE. Voici une capture d'écran du résultat obtenu :
+	Pour vérifier le bon fonctionnement de l'endpoint \texttt{/offres}, un appel a été effectué à l'aide de l'outil HTTPIE (Voir Figure \ref{fig:offres_endpoint} dans l'annexe).
 	
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=1\textwidth]{asset/endpoint offres.png}
-		\caption{Validation de l'endpoint \texttt{/offres} avec HTTPIE.}
-		\label{fig:offres_endpoint}
-	\end{figure}
 	\section{Conteneurisation de l'API}
 	
-	\subsection{Pourquoi conteneuriser ?}
+	\subsection*{Pourquoi conteneuriser ?}
 	
 	La conteneurisation permet d'encapsuler une application, ses dépendances et son runtime complet ce qui en permet un déploiment aisé par tout un chacun. Ce conteneur peut être exécuté de manière identique sur différentes machines, ce qui assure sa portabilité.
 	
-	Dans le cadre de ce projet, la conteneurisation de l'API des forfaits télécoms permet :
-	\begin{itemize}
-		\item de simplifier le déploiement en rendant l'application indépendante de la machine hôte ;
-		\item de garantir un environnement de production identique à l'environnement de développement ;
-	\end{itemize}
-	
-	\subsection{Solution proposée : JIB}
+	\subsection*{Solution proposée : JIB}
 	
 	Mon tuteur m'a conseillé d'utiliser \textbf{JIB}, un outil de conteneurisation intégré à Maven. JIB permet de construire une image optimisée sans \texttt{Dockerfile}, en exploitant directement les ressources nécessaires identifiées par Maven.
 	
@@ -405,20 +414,16 @@
 			</dependency>
 		\end{lstlisting}
 		
-		\item \textbf{Configuration dans \texttt{application.properties}} :
-		\begin{verbatim}
-			quarkus.container-image.build=true
-			quarkus.jib.docker-executable-name=podman
-			quarkus.container-image.name=forfaits-opt-nc
-		\end{verbatim}
-		
-		Cette configuration permet d'automatiser la création d'une image conteneurisée avec Jib :
+		\item \textbf{Configuration dans \texttt{application.properties}} :	
 		
 		\begin{itemize}
 			\item \texttt{quarkus.container-image.build=true} : Active la fonctionnalité de génération d'image conteneurisée lors de la construction du projet.
 			\item \texttt{quarkus.jib.docker-executable-name=podman} : Indique à Jib d'utiliser Podman comme runtime de conteneur. Podman est une alternative à Docker, légère et adaptée aux environnements rootless (sans besoin de privilèges root).
-			\item \texttt{quarkus.container-image.name=forfaits-opt-nc} : Définit le nom de l'image
+			\item \texttt{quarkus.jib.base-jvm-image=openjdk:23-jdk} : Spécifie l'image de base utilisée pour l'image conteneurisée. Dans ce cas, l'image \texttt{openjdk:23-jdk} Spécifie la version Java à utiliser, ici Java 23 (par défaut java 21).
+			\item \texttt{quarkus.container-image.name=forfaits-opt-nc} : Définit le nom de l'image.
 		\end{itemize}
+
+		Cette configuration permet d'automatiser la création d'une image conteneurisée avec Jib.
 		\item \textbf{Commandes pour builder et exécuter l'image} :
 		\begin{itemize}
 			\item \textbf{Construction de l'image} :
@@ -434,7 +439,6 @@
 	\subsection{Validation de l'approche}
 	
 	Pour valider la conteneurisation, j'ai utilisé Podman Desktop pour vérifier que l'image a bien été générée. Ensuite, j'ai testé l'API en exécutant une requête HTTPie sur l'endpoint \texttt{/offres}. Voici les résultats obtenus :
-	\newpage
 	\begin{itemize}
 		\item \textbf{Après le build de l'image avec \texttt{mvn package}} : La capture d'écran montre l'image générée dans Podman Desktop.
 		\begin{figure}[h!]
@@ -451,17 +455,8 @@
 			\caption{Capture d'écran du conteneur en cours d'exécution dans Podman Desktop.}
 			\label{fig:conteneur_podman}
 		\end{figure}
-		
-		\item \textbf{Test de l'API via l'endpoint \texttt{/offres}} : Une fois le conteneur lancé, j'ai testé l'endpoint \texttt{/offres} avec une requête HTTPie. Voici la capture d'écran montrant la réponse renvoyée par l'API :
-		\begin{figure}[h!]
-			\centering
-			\includegraphics[width=0.9\textwidth]{asset/appel_api_conteneur.png}
-			\caption{Résultat de l'appel à l'endpoint \texttt{/offres} avec HTTPie.}
-			\label{fig:appel_api_conteneur}
-		\end{figure}
 	\end{itemize}
-	
-	\subsection{Amélioration de l'expérience développeur}
+	\subsection*{Amélioration de l'expérience développeur}
 	
 	Mon tuteur a également souligné l'importance de la Developer Experience (\textbf{DevEx}). Grâce à JIB, la génération des conteneurs est simplifiée, rapide et reproductible, ce qui réduit considérablement les efforts nécessaires pour maintenir et déployer l'API.
 	
@@ -493,7 +488,7 @@
 	
 	Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI générées précédemment. La documentation produite est une interface graphique interactive, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
 	
-	\subsubsection{Mise en place d'un workflow GitHub Actions}
+	\subsection{Mise en place d'un workflow GitHub Actions}
 	
 	Pour automatiser la génération de la documentation à chaque nouvelle release, un workflow \textbf{GitHub Actions} a été intégré dans le projet. Ce workflow est déclenché automatiquement dès qu'une nouvelle release est publiée sur GitHub, et il permet de générer la documentation statique à l'aide de Redocly, puis de la déployer directement sur \textbf{GitHub Pages}.
 	
@@ -501,90 +496,64 @@
 	\begin{itemize}
 		\item \textbf{Installation de Node.js} : Le workflow commence par l'installation de \texttt{Node.js} via l'action \texttt{actions/setup-node@v3}. Node.js est nécessaire pour exécuter Redocly.
 		\item \textbf{Installation de Redocly} : Ensuite, Redocly est installé à l'aide de la commande \texttt{npm i -g @redocly/cli@latest}.
-		\item \textbf{Génération de la documentation HTML} : Le workflow génère la documentation statique en exécutant \texttt{redocly build-docs}, qui prend le fichier OpenAPI (\texttt{openapi.yaml}) et génère une page HTML dans le répertoire \texttt{./docs}.
+		\item \textbf{Génération de la documentation HTML} : Le workflow génère la documentation statique (Voir la figure \ref{fig:html_redocly} dans l'annexe) en exécutant \texttt{redocly build-docs}, qui prend le fichier OpenAPI (\texttt{openapi.yaml}) et génère une page HTML dans le répertoire \texttt{./docs}.
 		\item \textbf{Déploiement sur GitHub Pages} : Enfin, la documentation est déployée sur GitHub Pages en utilisant l'action \texttt{actions/deploy-pages@main}.
 	\end{itemize}
 	
-	Voici un extrait de mon fichier \texttt{pages.yml} dans le répertoire \texttt{.github/workflows/} :
+	Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages à l'url : \url{https://adriens.github.io/api-forfaits-opt/}.
 	
-	\begin{lstlisting}
-		name: Deploy
-		on:
-		release:
-		types: [published]
-		
-		permissions:
-		contents: read
-		pages: write
-		id-token: write
-		
-		jobs:
-		deploy:
-		environment:
-		name: github-pages
-		url: ${{ steps.deployment.outputs.page_url }}
-		runs-on: ubuntu-latest
-		steps:
-		- name: Checkout
-		uses: actions/checkout@v3
-		
-		- name: Install NodeJS
-		uses: actions/setup-node@v3
-		with:
-		node-version: '18.19.1'
-		
-		- name: Install Redocly
-		run: npm i -g @redocly/cli@latest
-		
-		- name: Build API HTML page
-		id: build_api_html_page
-		run: |
-		redocly build-docs openapi/openapi.yaml --output=./docs/index.html
-		
-		- name: Setup Pages
-		uses: actions/configure-pages@v2
-		
-		- name: Upload artifact
-		uses: actions/upload-artifact@v4
-		with:
-		path: './docs'
-		
-		- name: Deploy to GitHub Pages
-		id: deployment
-		uses: actions/deploy-pages@main
-	\end{lstlisting}
-	\begin{figure}[h!]
+	\section{Bump.sh et Redocly : Comparaison et Mise en Place}
+	
+	\textbf{Bump.sh} est une plateforme qui facilite la gestion et la publication de la documentation d'API, avec une fonctionnalité unique de suivi des différences détaillant les ajouts et modifications entre les versions de l'API. Contrairement à \textbf{Redocly}, qui génère uniquement une documentation statique interactive à partir des spécifications OpenAPI.	
+	
+	\begin{table}[h!]
 		\centering
-		\includegraphics[width=\textwidth]{asset/redocly.png}
-		\caption{Capture d'écran de la documentation Redocly}
-	\end{figure}
+		\begin{tabularx}{\textwidth}{|X|X|X|}
+			\hline
+			\textbf{Critère} & \textbf{Bump.sh} & \textbf{Redocly} \\
+			\hline
+			\textbf{Génération de la documentation} & $\checkmark$ & $\checkmark$ \\
+			\hline
+			\textbf{Suivi des versions} & $\checkmark$ & $\times$ \\
+			\hline
+			\textbf{Prise en charge de l'intégration CI/CD} & $\checkmark$ & $\checkmark$ \\
+			\hline
+			\textbf{Support pour les APIs} &  \textbf{OpenAPI},\textbf{AsyncAPI}, \textbf{GraphQL}, \textbf{gRPC}, \textbf{SOAP} & \textbf{OpenAPI} \\
+			\hline
+			\textbf{Mise à jour automatique de la documentation} & $\checkmark$ & $\checkmark$ \\
+			\hline
+		\end{tabularx}
+		\caption{Comparaison entre Bump.sh et Redocly}
+	\end{table}
+	\subsection{Mise en place de Bump.sh}
 	
-	Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages.
+	Pour mettre en place Bump.sh dans ce projet, j'ai procédé à l'upload d'une spécification OpenAPI au format YAML sur la plateforme Bump.sh. Voici les étapes réalisées :
 	
+	\begin{itemize}
+		\item J'ai récupérer le fichier de spécification OpenAPI au format \textbf{openapi.yml} généré lors du build.
+		\item J'ai téléchargé ce fichier sur la plateforme Bump.sh, qui a automatiquement généré la documentation de l'API (Voir la figure \ref{fig:bumpsh}).
+		\item Bump.sh l'a hébergée en ligne pour un accès facile et publique à l'url \url{https://bump.sh/morgancarre/doc/forfaits-opt-nc}.
+	\end{itemize}
+		
 	\section{Mise en place des tests unitaires et de la couverture de code}
+	\label{subsec:test-offres}
+	Les tests unitaires permettent de valider le bon fonctionnement des différentes parties du code.
+	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%. 
+	Pour ce projet, nous avons utilisé \texttt{JUnit} en combinaison avec \texttt{QuarkusTest}, une extension de Quarkus permettant de tester les endpoints, ainsi que JaCoCo pour mesurer le taux de couverture du code. 
 	
-	Afin de garantir la qualité du code et de s'assurer que les tests couvrent suffisamment les différentes parties de l'application, nous avons mis en place des tests unitaires accompagnés d'une vérification de la couverture de code avec un seuil minimum de 10\%.
+	\subsection{Test de l'endpoint \texttt{/offres}}
 	
-	\subsection{Tests unitaires}
-	Les tests unitaires permettent de valider le bon fonctionnement des différentes parties du code. Pour ce projet, nous avons utilisé \texttt{JUnit} en combinaison avec \texttt{QuarkusTest}, une extension de Quarkus permettant de tester les endpoints. 
-	
-	La classe \texttt{OffresResourceTest.java} que j'ai développée teste l'endpoint \texttt{/offres} de notre API. Ce test vérifie si l'endpoint répond correctement (status code 200) et si le corps de la réponse contient bien 5 offres.
-	
-	\begin{lstlisting}[language=Java]
-		@QuarkusTest
-		public class OffresResourceTest {
-			
-			@Test
-			public void testGetAllOffres() {
-				given()
-				.when().get("/offres")
-				.then()
-				.statusCode(200)
-				.body("$", notNullValue())
-				.body("$", hasSize(5));
-			}
-		}
-	\end{lstlisting}
+
+		\begin{lstlisting}[language=Java]
+				@Test
+				public void testGetAllOffres() {
+					given().when().get("/offres")
+					.then().statusCode(200)
+					.body("$", hasSize(5));
+				}
+		\end{lstlisting}
+			Le test \texttt{testGetAllOffres} vérifie que l'endpoint \texttt{/offres} répond avec un code HTTP 200 et contient bien 5 offres.
+
 	
 	\subsection{Ajout de la dépendance JaCoCo}
 	Pour mesurer la couverture des tests unitaires, nous avons utilisé \textbf{JaCoCo}, un outil de couverture de code Java. JaCoCo génère un rapport indiquant la proportion de code exécutée par les tests, ce qui permet d'identifier les parties du code qui ne sont pas couvertes.
@@ -603,7 +572,7 @@
 	\subsection{Configuration de la pipeline CI avec GitHub Actions et SonarQube}
 	Pour automatiser l'exécution des tests, la validation du build et l'analyse de la qualité du code, une pipeline CI a été configurée avec \textbf{GitHub Actions}. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
 	
-	\subsubsection{SonarQube}
+	\subsection{SonarQube}
 	SonarQube est un outil de qualité de code qui permet d'analyser en profondeur le code source, d'identifier des problèmes de qualité, des vulnérabilités et des codes redondants. Dans ce projet, SonarQube a été intégré à la pipeline CI pour effectuer une analyse automatique de la qualité du code à chaque build.
 	
 	Pour l'intégration de SonarQube, voici les étapes réalisées :
@@ -616,88 +585,153 @@
 	\end{verbatim}
 	
 	\noindent
-	\textbf{Intégration dans la pipeline CI} : SonarQube a été intégré à la pipeline GitHub Actions. La configuration complète est présentée ci-dessous. Elle inclut l'installation du JDK, la mise en cache des packages Maven et SonarQube, l'exécution des tests et l'analyse SonarQube.
-	
-	Voici la configuration complète de la pipeline dans GitHub Actions :
-	
-	\begin{lstlisting}
-		name: CI Pipeline with SonarQube
-		
-		on:
-			push:
-				branches:
-					- main
-			pull_request:
-				branches:
-					- main
-		
-		jobs:
-			build-and-analyze:
-				runs-on: ubuntu-latest
-				steps:
-					- name: Checkout repository
-					uses: actions/checkout@v3
-					with:
-						fetch-depth: 0  # Shallow clones should be disabled for SonarQube analysis
-		
-					- name: Set up JDK 23
-						uses: actions/setup-java@v3
-						with:
-							java-version: '23'
-							distribution: 'zulu'
-					
-					- name: Cache SonarQube packages
-					uses: actions/cache@v3
-					with:
-						path: ~/.sonar/cache
-						key: ${{ runner.os }}-sonar
-						restore-keys: ${{ runner.os }}-sonar
-					
-					- name: Cache Maven packages
-					uses: actions/cache@v3
-					with:
-						path: ~/.m2
-						key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-						restore-keys: ${{ runner.os }}-m2
-					
-					- name: Build and run tests with Maven
-					run: mvn clean verify
-					
-					- name: Run SonarQube analysis
-					env:
-						GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-						SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-					run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=adriens_api-forfaits-opt
-	\end{lstlisting}
-	\newpage
-	SonarQube génère un rapport détaillé sur la qualité du code, accessible directement en ligne via l'interface de SonarCloud. Ce rapport fournit une vue complète sur les problèmes de qualité du code, les vulnérabilités potentielles, ainsi que la couverture des tests.
-	\begin{figure}[h!]
-		\centering
-		\includegraphics[width=\textwidth]{asset/sonarq.png}
-		\caption{Capture d'écran du rapport SonarQube}
-		\label{fig:sonarq-report}
-	\end{figure}
-	
-	\newpage
-	\section{Anti-patterns}
-	\subsection{Erreur initiale : conteneurisation avec Dockerfile}
-	Dans un premier temps, j'avais créé un \texttt{Dockerfile} pour conteneuriser l'API. Voici un extrait du fichier initial :
-	\begin{verbatim}
-		FROM docker.io/library/maven:3.9.9-eclipse-temurin-21
-		WORKDIR /app
-		COPY . .
-		EXPOSE 8080
-		CMD ["mvn", "quarkus:dev"]
-	\end{verbatim}
-	
-	Cette approche présentait plusieurs problèmes :
+	\textbf{Intégration dans la pipeline CI} : inclut l'installation du JDK, la mise en cache des packages Maven et SonarQube, l'exécution des tests et l'analyse SonarQube (exemple d'analyse : \ref{analyse:sonar}).
+
+	\section{Nouvel endpoint : /offres/forfait-m}
+	L'objectif principal de ce nouvel endpoint est de fournir les différentes offres de la gamme "M", incluant des informations telles que :le nom, le prix,la volumétrie de données (par exemple : 1 Go, 5 Go, 25 Go, 100 Go), le temps d'appel (1h, appels illimités...), les SMS (illimités ou limités), l'url qui redirige sur le site de l'OPT
+
+	J'ai donc suivit le même schéma que pour l'endpoint /offres :
 	\begin{itemize}
-		\item \textbf{Utilisation de Maven dans l'image} : L'image contenait Maven, ce qui rendait le conteneur très lourd inutilement.
-		\item \textbf{Compilation dans le conteneur} : Le \texttt{Dockerfile} compilait l'application à chaque démarrage, ce qui est inefficace. L'image doit directement pointer vers le fichier JAR généré.
+	\item Mise en place des données de la gamme de forfait M dans un fichier CSV et créer le fichier de migration SQL.(\ref{subsec:mpd}).
+	\item Création d'une entitée JPA pour le forfait M pour pouvoir manipuler les données de la base de données en Java. (\ref{subsec:JPA}). 
+	\item Créer l'endpoint /offres/forfaits-m. (\ref{subsec:endpoint-m})
+	\item Mettre en place des tests unitaires (\ref{subsec:tests})
+	\item Documentation avec annotations \textbf{Openapi} (\ref{subsec:doc})
 	\end{itemize}
 	
-	Ce problème a été résolu en utilisant \textbf{Jib}, un outil intégré à Maven, qui simplifie la conteneurisation et génère une image optimisée sans nécessiter de \texttt{Dockerfile}.
+	\subsection{Mise en place des données}
+	\label{subsec:mpd}
+	Je me suis donc rendu sur le site de l'OPT pour récuperer les informations sur chaque forfait M pour les mettre en forme dans un fichier \texttt{forfait\_m.csv}
+	contenant les 6 champs décrit plus haut : 
+	\begin{itemize} 
+		\item \textbf{id} (le nom unique du forfait)
+		\item \textbf{prix}
+		\item \textbf{sms}
+		\item \textbf{url}
+		\item \textbf{vocal}
+		\item \textbf{volumétrie}
+	\end{itemize}
 	
+	Ensuite j'ai créer mon deuxième fichier de migration SQL \texttt{V2\_\_create\_and\_feed\_forfait\_m.sql} que Flyway executera au lancement de l'application. 
+	
+	Il créera une table \texttt{forfait\_m} puis remplira cette table avec le fichier \texttt{forfait\_m.csv} : 
+	\subsection{Création de l'entité ForfaitM}
+	\label{subsec:JPA}
+	Pour pouvoir manipuler la base de donnée en Java,comme pour l'endpoint \texttt{/offres}, il faut créer une entité JPA \texttt{ForfaitM.java} :
+	
+	On lie la table à notre entité java :
+	\begin{lstlisting}[language=java]
+		@Entity
+		@Table(name = "forfait_m") 
+	\end{lstlisting}
+	
+	On créer notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les méthodes getter pour chaque attribut.
+		
+	\subsection{Développement de l'endpoint /offres/forfaits-m}
+	\label{subsec:endpoint-m}
+	Dans cette section, nous allons implémenter l'endpoint \texttt{/offres/forfaits-m} pour exposer les forfaits de la gamme "M". Cet endpoint comportera deux méthodes principales.
+	
+	\begin{itemize}
+		\item La première méthode, \texttt{GET /offres/forfait-m}, permet de récupérer la liste de tous les forfaits de la gamme "M". 
+		Elle utilise l'annotation \texttt{@GET} et la méthode \texttt{createQuery} d'\texttt{EntityManager} pour effectuer une requête JPQL qui sélectionne tous les enregistrements de la table \texttt{ForfaitM}. 
+		Le résultat est retourné sous forme d'une liste d'objets \texttt{ForfaitM}.
+	\end{itemize}
+	
+	Voici la requête avec HTTPie : 
+	
+	\begin{lstlisting}[language=json]
+		http GET :8080/offres/forfait-m
+		HTTP/1.1 200 OK
+		Content-Type: application/json;charset=UTF-8
+		content-length: 722
+		
+		[
+		{
+			"id": "forfait-m-1",
+			"prix": 1000.0,
+			"sms": "SMS illimites",
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go",
+			"vocal": "1H",
+			"volumetrie": "1 Go"
+		},
+			[tous les autres forfait M]...
+		]
+		
+	\end{lstlisting}
+	
+	\begin{itemize}
+		\item La deuxième méthode, \texttt{GET /offres/forfait-m/{id}}, permet de récupérer les détails d'un forfait spécifique, identifié par \texttt{id}. 
+		Cette méthode prend un paramètre \texttt{id} extrait de l'URL, grâce à \texttt{@PathParam}, et l'utilise dans une requête JPQL pour chercher un forfait particulier dans la table \texttt{ForfaitM}. 
+		La méthode \texttt{getSingleResult} est utilisée pour récupérer un seul enregistrement correspondant à l'identifiant fourni.
+	\end{itemize}
+	Voici la requête avec HTTPie :
+	\begin{lstlisting}[language=json]
+		http GET :8080/offres/forfait-m/forfait-m-1
+		HTTP/1.1 200 OK
+		Content-Type: application/json;charset=UTF-8
+		content-length: 173
+		{
+			"id": "forfait-m-1",
+			"prix": 1000.0,
+			"sms": "SMS illimites",
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go",
+			"vocal": "1H",
+			"volumetrie": "1 Go"
+		}
+	\end{lstlisting}
+	\subsection{Gestion des erreurs 404 lors de la saisie d'un mauvais ID}
+	\label{subsec:error-handling}
+	
+	Dans le cadre de l'implémentation des endpoints de l'API, il est crucial de gérer correctement les erreurs, en particulier lorsque l'utilisateur fournit des identifiants invalides. La gestion des erreurs permet d'optimiser l'expérience utilisateur, de garantir la sécurité de l'application.
+	
+	Lorsque l'utilisateur demande des informations sur un forfait en utilisant un identifiant (ID) qui n'existe pas dans la base de données, il est essentiel que l'API réagisse de manière adéquate. Une réponse 404 est une manière standard de signaler que la ressource demandée est introuvable. Cette gestion des erreurs présente plusieurs avantages :
+	
+	\begin{itemize}
+		\item \textbf{Amélioration de l'expérience utilisateur} : Si l'utilisateur entre un mauvais ID, il recevra une réponse claire, lui permettant de comprendre que l'ID n'existe pas. Cela évite de laisser l'utilisateur dans l'incertitude ou de lui renvoyer une réponse incorrecte.
+		\item \textbf{Sécurité} : Sans une gestion d'erreur appropriée, des comportements non désirés peuvent survenir, comme le dévoilement d'informations internes à travers des messages d'erreur vagues ou des ressources mal protégées. Le renvoi d'une erreur 404 empêche la divulgation d'informations sensibles.
+	\end{itemize}
+	
+	\textbf{Implémentation de l'erreur 404} : 
+	Lorsqu'un ID erroné est fourni par l'utilisateur, l'API retourne une réponse 404 ainsi q'un message d'erreur "Forfait avec ID : (id invalide) non trouvé".Pour ce faire, un bloc \texttt{try-catch} est utilisé pour capturer une exception si l'ID fourni n'existe pas dans la base de données.
+
+	
+	\subsection{Tests unitaires}
+	\label{subsec:tests}
+	
+	Les tests unitaires sont mis en place avec un seuil de couverture de 10\%. Ils vérifient les comportements suivants :
+	
+	\begin{itemize}
+		\item Le test sur \texttt{/offres/forfait-m} vérifie que l'endpoint renvoie 4 forfaits, avec l'ID du premier à \texttt{"forfait-m-1"}.
+		\item Le test sur \texttt{/offres/forfait-m/{id}} vérifie qu'un forfait avec un ID spécifique renvoie correctement les informations, comme le prix.
+		\item Le test \texttt{NotFound} pour \texttt{/offres/forfait-m/{id}} vérifie la gestion des erreurs avec un message adapté en cas d'ID inconnu.
+	\end{itemize}
+
+	\subsection{Ajout de la documentation}
+	\label{subsec:doc}
+	
+	Comme pour l'endpoint \textbf{/offres} j'ai utilisé les annotations \textbf{openapi} pour documenter cet endpoint.
+	
+	Les principales annotations utilisées sont :
+	
+	\begin{itemize}
+		\item \textbf{\texttt{@Path}} : Spécifie le chemin de chaque endpoint.
+		\item \textbf{\texttt{@Operation}} : Décrit les actions effectuées par un endpoint (ex. : récupérer un forfait spécifique).
+		\item \textbf{\texttt{@Parameter}} : Déclare les paramètres d'entrée d'un endpoint, comme l'ID du forfait à récupérer.
+		\item \textbf{\texttt{@APIResponse}} : Définit les réponses possibles d'un endpoint, incluant les codes de réponse et les exemples de données retournées.
+		\item \textbf{\texttt{@Tag}} : Permet de regrouper les endpoints sous une même catégorie pour mieux organiser la documentation.
+		\item \textbf{\texttt{@ExampleObject}} : Fournit des exemples de réponses pour aider à comprendre le format des données.
+	\end{itemize}
+	
+	En générant la documentation statique avec Redocly à partir de ces annotations OpenAPI, nous avons pu obtenir une documentation claire et bien structurée (voir figure \ref{fig:redocly}).
+	
+	\subsection{Analyse avec SonarQube}
+	\label{analyse:sonar}
+	Une fois les nouvelles fonctionnalités ajoutées, j'ai ouvert une pull request pour fusionner la branche sur laquelle j'ai développé ces fonctionnalités avec la branche principale. Cela a déclenché la CI, incluant les tests unitaires et l'analyse avec SonarQube. SonarQube a ensuite généré un bref résumé de l'analyse dans les commentaires de la pull request
+	En cliquant sur le lien "See analysis details on SonarQube cloud" dans son commentaire, nous pouvons accéder aux détails de l'analyse du nouveau code qui a été poussé (voir figure \ref{fig:sonarq} ). 
+	
+	Cette analyse inclut principalement les informations suivantes : \begin{itemize} \item Le pourcentage de couverture du code par les tests. \item Les éventuelles vulnérabilités et les problèmes de qualité détectés dans le code. \item Les règles de code respectées et celles enfreintes. \item Des suggestions d'amélioration pour optimiser la qualité du code. \end{itemize}
+	
+
 	\newpage
 	\section{From 0 to Hero}
 	
@@ -743,7 +777,46 @@
 	à determiner
 	
 	\newpage
-	\section{Bibliographie}
+	\section{Annexe}
+	\subsection{illustrations}
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{asset/page_forfait.png}
+		\caption{Page \textit{"Identifiez le forfait qui vous ressemble"} sur le site de l’OPT.}
+		\label{fig:page_forfait}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{asset/hello.png}
+		\caption{Test de l'endpoint \texttt{/hello} avec HTTPIE.}
+		\label{fig:hello_endpoint}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=1\textwidth]{asset/endpoint offres.png}
+		\caption{Validation de l'endpoint \texttt{/offres} avec HTTPIE.}
+		\label{fig:offres_endpoint}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{asset/redocly.png}
+		\caption{Capture d'écran de la documentation Redocly}
+		\label{fig:html_redocly}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{asset/bump-sh-documentation.png}
+		\caption{Capture d'écran de la documentation générée par Bump.sh}
+		\label{fig:bumpsh}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{asset/Redocly_v2.png}
+		\caption{Documentation générée par Redocly}
+		\label{fig:redocly}
+	\end{figure}
+	\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/analyse_sonarq.png} \caption{Analyse détaillée sur SonarQube} \label{fig:sonarq}\end{figure}
+	\subsection{Bibliographie}
 	\begin{itemize}
 		\item \textbf{Documentation Quarkus} : Une ressource essentielle pour comprendre et utiliser Quarkus. Disponible sur : \url{https://quarkus.io/documentation/}
 		\item \textbf{Documentation Flyway} : Guide pour utiliser Flyway dans Quarkus : \url{https://quarkus.io/guides/flyway}
