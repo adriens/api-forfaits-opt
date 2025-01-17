@@ -1,4 +1,4 @@
-name: Check & deploy API documentation
+name: Check & deploy API documentation on Bump.sh
 
 on:
   release:
