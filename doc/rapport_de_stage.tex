@@ -711,10 +711,9 @@
 	
 	Comme pour l'endpoint \textbf{/offres} j'ai utilisé les annotations \textbf{openapi} pour documenter cet endpoint.
 	
-	Les principales annotations utilisées sont :
+	Voici les nouvelles annotations utilisées:
 	
 	\begin{itemize}
-		\item \textbf{\texttt{@Path}} : Spécifie le chemin de chaque endpoint.
 		\item \textbf{\texttt{@Operation}} : Décrit les actions effectuées par un endpoint (ex. : récupérer un forfait spécifique).
 		\item \textbf{\texttt{@Parameter}} : Déclare les paramètres d'entrée d'un endpoint, comme l'ID du forfait à récupérer.
 		\item \textbf{\texttt{@APIResponse}} : Définit les réponses possibles d'un endpoint, incluant les codes de réponse et les exemples de données retournées.
@@ -726,13 +725,96 @@
 	
 	\subsection{Analyse avec SonarQube}
 	\label{analyse:sonar}
-	Une fois les nouvelles fonctionnalités ajoutées, j'ai ouvert une pull request pour fusionner la branche sur laquelle j'ai développé ces fonctionnalités avec la branche principale. Cela a déclenché la CI, incluant les tests unitaires et l'analyse avec SonarQube. SonarQube a ensuite généré un bref résumé de l'analyse dans les commentaires de la pull request
+	Une fois les nouvelles fonctionnalités ajoutées, j'ai ouvert une pull request pour fusionner la branche sur laquelle j'ai développé ces fonctionnalités avec la branche principale. Cela a déclenché la CI, incluant les tests unitaires et l'analyse avec SonarQube. SonarQube a ensuite généré un bref résumé de l'analyse dans les commentaires de la pull request : 
+	
+		\begin{figure}[H] \centering \includegraphics[width=0.7\textwidth]{asset/sonarq_com.png} \caption{commentaire de SonarQube} \label{fig:sonarq}\end{figure}
+	
 	En cliquant sur le lien "See analysis details on SonarQube cloud" dans son commentaire, nous pouvons accéder aux détails de l'analyse du nouveau code qui a été poussé (voir figure \ref{fig:sonarq} ). 
 	
 	Cette analyse inclut principalement les informations suivantes : \begin{itemize} \item Le pourcentage de couverture du code par les tests. \item Les éventuelles vulnérabilités et les problèmes de qualité détectés dans le code. \item Les règles de code respectées et celles enfreintes. \item Des suggestions d'amélioration pour optimiser la qualité du code. \end{itemize}
 	
-
+	\subsection{Nouvel release et déploiement automatique de la documentation}
+	
+	Une fois la branche fusionnée avec la branche principale, j'ai fait une nouvel release. le workflow pour déployé sur GitHub pages c'est alors décelenché et à déployé la documentation de l'API à l'adresse \url{https://adriens.github.io/api-forfaits-opt/}.\\
+	J'avais aussi rajouté une autre workflow pour déployé la documentation  automatiquement sur \textbf{Bump.sh}, celui ci c'est aussi déclenché lors de la publication de la release et j'ai pu voir le rapport de changement de versions : 
+	
+	\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/changelog.png} \caption{chnagelog de Bump.sh} \label{fig:sonarq}\end{figure}
+	
+	\section{Nouvel endpoint pour la gamme "Data seul"}
+	
+	Afin de compléter l'exposition des forfaits télécoms de l'OPT, j'ai ajouté un nouvel endpoint permettant de récupérer les abonnements de la gamme "Data seul", accessible via \texttt{/offres/abonnement-data-seul}. Cet endpoint permet de retourner la liste des forfaits liés à cette gamme, incluant les forfaits "IMV" (Internet Mobile au Volume) et "IM4G" (Internet Mobile 4G).
+	
+	J'ai décliné cet endpoint en plusieurs sous-endpoints spécifiques pour faciliter l'accès aux abonnements en fonction de leurs types :
+	\begin{itemize}
+		\item \texttt{/offres/abonnement-data-seul/imv} : Pour récupérer uniquement les forfaits IMV.
+		\item \texttt{/offres/abonnement-data-seul/im4g} : Pour récupérer uniquement les forfaits IM4G.
+		\item \texttt{/offres/abonnement-data-seul/{id}} : Pour accéder à un forfait spécifique en fonction de son identifiant.
+	\end{itemize}
+	
+	Ces nouveaux endpoints permettent aux utilisateurs de filtrer les forfaits par type et d'accéder à des informations détaillées sur chaque abonnement.
+	
+	\textbf{Exemples d'appel} :
+	\begin{itemize}
+		\item \texttt{GET /offres/abonnement-data-seul} : Retourne la liste de tous les forfaits de la gamme "abonnement data seul".
+		\begin{lstlisting}[language=JSON]
+			[
+			{
+				"debit": "256 Ko/s",
+				"id": "IMV-10",
+				"prix": 530.0,
+				"type_forfait": "IMV",
+				"url": "https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf",
+				"volumetrie": "1 Mo"
+			},
+			[...]
+			]
+		\end{lstlisting}
+		
+		\item \texttt{GET /offres/abonnement-data-seul/imv} : Retourne la liste des forfaits IMV.
+		\begin{lstlisting}[language=JSON]
+			[
+			{
+				"debit": "256 Ko/s",
+				"id": "IMV-10",
+				"prix": 530.0,
+				"type_forfait": "IMV",
+				"url": "https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf",
+				"volumetrie": "1 Mo"
+			},
+			[...]
+			]
+		\end{lstlisting}
+		
+		\item \texttt{GET /offres/abonnement-data-seul/im4g} : Retourne la liste des forfaits IM4G.
+		\begin{lstlisting}[language=JSON]
+			[
+			{
+				"debit": "150 Mb/s",
+				"id": "IM4G-1",
+				"prix": 1908.0,
+				"type_forfait": "IM4G",
+				"url": "https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf",
+				"volumetrie": "1 Go"
+			},
+			[...]
+			]
+		\end{lstlisting}
+		
+		\item \texttt{GET /offres/abonnement-data-seul/IM4G-25} : Retourne les détails du forfait "IM4G-25".
+		\begin{lstlisting}[language=JSON]
+			{
+				"debit": "150 Mb/s",
+				"id": "IM4G-25",
+				"prix": 4558.0,
+				"type_forfait": "IM4G",
+				"url": "https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf",
+				"volumetrie": "25 Go"
+			}
+		\end{lstlisting}
+	\end{itemize}
+	
 	\newpage
+	
 	\section{From 0 to Hero}
 	
 	\subsection{Acquisition de Compétences Techniques}
