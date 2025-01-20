@@ -7,23 +7,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "forfait_m") // map la table forfait_m avec l'entité
-@Schema(description = "Forfait de la gamme M")
-public class ForfaitM {
+@Table(name = "abonnement_data_seul")
+public class AbonnementDataSeul {
 
     @Id
     @Schema(description = "Identifiant du forfait.")
     private String id;
     @Schema(description = "Quantité de données mobiles.")
     private String volumetrie;
-    @Schema(description = "Temps d'appel disponible.")
-    private String vocal;
-    @Schema(description = "Nombre de SMS disponibles.")
-    private String sms;
+    @Schema(description = "Débit de connexion.")
+    private String debit;
     @Schema(description = "Prix du forfait.")
     private Double prix;
     @Schema(description = "URL de la page du forfait sur le site officiel.")
     private String url;
+    @Schema(description = "Type de forfait : internet mobile au volume ou internet mobile 4G")
+    private String type_forfait;
 
     public String getId() {
         return id;
@@ -33,21 +32,18 @@ public class ForfaitM {
         return volumetrie;
     }
 
-    public String getVocal() {
-        return vocal;
-    }
-
-    public String getSms() {
-        return sms;
+    public String getDebit() {
+        return debit;
     }
 
     public Double getPrix() {
         return prix;
     }
 
-
     public String getUrl() {
         return url;
     }
-
+    public String getType_forfait() {
+        return type_forfait;
+    }
 }

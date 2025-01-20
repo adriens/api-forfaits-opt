@@ -1,0 +1,10 @@
+id,volumetrie,debit,prix,url,type_forfait
+IMV-10,"1 Mo","256 Ko/s",530,"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf","IMV"
+IMV-20,"20 Mo","256 Ko/s",742,"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf","IMV"
+IMV-50,"50 Mo","256 Ko/s",1378,"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf","IMV"
+IMV-100,"100 Mo","256 Ko/s",2438,"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf","IMV"
+IM4G-1,"1 Go","150 Mb/s",1908,"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf","IM4G"
+IM4G-5,"5 Go","150 Mb/s",2968,"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf","IM4G"
+IM4G-25,"25 Go","150 Mb/s",4558,"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf","IM4G"
+IM4G-50,"50 Go","150 Mb/s",7208,"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf","IM4G"
+IM4G-100,"100 Go","150 Mb/s",10918,"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf","IM4G"

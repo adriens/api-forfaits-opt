@@ -99,4 +99,124 @@ public class OffresResource {
                            .build();
         }
     }
+    
+    @GET
+    @Path("/abonnement-data-seul")
+    @Operation(
+        summary = "Liste des abonnements de données",
+        description = "Retourne la liste des abonnements de données (IMV et IM4G)."
+    )
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des abonnements de données (IMV et IM4G)",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = AbonnementDataSeul.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"IMV-10\",\"volumetrie\":\"1 Mo\",\"debit\":\"256 Ko/s\",\"prix\":530,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf\",\"type_forfait\":\"IMV\"}, {\"id\":\"IM4G-1\",\"volumetrie\":\"1 Go\",\"debit\":\"150 Mb/s\",\"prix\":1908,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf\",\"type_forfait\":\"IM4G\"}]"
+            )
+        )
+    )
+    @Tag(name = "Abonnement-data-seul", description = "Liste de tous les abonnements de données (IMV et IM4G)")
+    public List<AbonnementDataSeul> getAbonnementsDataSeul() {
+        return entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads", AbonnementDataSeul.class).getResultList();
+    }
+
+    @GET
+    @Path("/abonnement-data-seul/imv")
+    @Operation(
+        summary = "Liste des abonnements IMV",
+        description = "Retourne la liste des abonnements IMV."
+    )
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des abonnements IMV",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = AbonnementDataSeul.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"IMV-10\",\"volumetrie\":\"1 Mo\",\"debit\":\"256 Ko/s\",\"prix\":530,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf\",\"type_forfait\":\"IMV\"}]"
+            )
+        )
+    )
+    @Tag(name = "Abonnement-data-seul", description = "Liste de tous les abonnements IMV")
+    public List<AbonnementDataSeul> getAbonnementsIMV() {
+        return entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads WHERE ads.type_forfait = :type_forfait", AbonnementDataSeul.class)
+        .setParameter("type_forfait", "IMV")
+        .getResultList();
+
+    }
+
+    @GET
+    @Path("/abonnement-data-seul/im4g")
+    @Operation(
+        summary = "Liste des abonnements IM4G",
+        description = "Retourne la liste des abonnements IM4G."
+    )
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des abonnements IM4G",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = AbonnementDataSeul.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"IM4G-1\",\"volumetrie\":\"1 Go\",\"debit\":\"150 Mb/s\",\"prix\":1908,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf\",\"type_forfait\":\"IM4G\"}]"
+            )
+        )
+    )
+    @Tag(name = "Abonnement-data-seul", description = "Liste de tous les abonnements IM4G")
+    public List<AbonnementDataSeul> getAbonnementsIM4G() {
+        return entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads WHERE ads.type_forfait = :type", AbonnementDataSeul.class)
+        .setParameter("type", "IM4G")
+        .getResultList();
+    }
+
+    @GET
+    @Path("/abonnement-data-seul/{id}")
+    @Operation(
+        summary = "Détails d'un abonnement spécifique",
+        description = "Retourne les détails d'un abonnement spécifique de données en fonction de l'ID fourni."
+    )
+    @Parameter(
+        name = "id",
+        description = "ID de l'abonnement",
+        required = true,
+        example = "IMV-10"
+    )
+    @APIResponses({
+        @APIResponse(
+            responseCode = "200",
+            description = "Détails de l'abonnement",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = AbonnementDataSeul.class),
+                examples = @ExampleObject(
+                    name = "Exemple de réponse",
+                    value = "{\"id\":\"IMV-10\",\"volumetrie\":\"1 Mo\",\"debit\":\"256 Ko/s\",\"prix\":530,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf\",\"type_forfait\":\"IMV\"}"
+                )
+            )
+        ),
+        @APIResponse(
+            responseCode = "404",
+            description = "Abonnement non trouvé"
+        )
+    })
+    @Tag(name = "Abonnement-data-seul", description = "Accès à un abonnement spécifique")
+    public Response getAbonnementDataSeulById(@PathParam("id") String id) {
+        AbonnementDataSeul abonnementDataSeul;
+        try {
+            abonnementDataSeul = entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads WHERE ads.id = :id", AbonnementDataSeul.class)
+                                            .setParameter("id", id)
+                                            .getSingleResult();
+            return Response.ok(abonnementDataSeul).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Abonnement avec ID '" + id + "' non trouvé")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+        }
+    }
 }

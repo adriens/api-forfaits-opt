@@ -49,4 +49,56 @@ public class OffresResourceTest {
              .statusCode(404)  // Vérifier que le code d'état est 404
              .body(equalTo("Forfait avec ID 'forfait-m-unknown' non trouvé"));  // Vérifier le message d'erreur retourné
     }
+    @Test
+    public void testGetAllAbonnementsDataSeul() {
+        given()
+          .when().get("/offres/abonnement-data-seul")
+          .then()
+             .statusCode(200)  // Vérifier que la réponse HTTP est 200 OK
+             .body("$", notNullValue())  // Vérifier que la réponse n'est pas vide
+             .body("$", hasSize(9));  // Vérifier que la liste contient bien 10 abonnements (basé sur vos données)
+    }
+
+    @Test
+    public void testGetAbonnementsIMV() {
+        given()
+          .when().get("/offres/abonnement-data-seul/imv")
+          .then()
+             .statusCode(200)
+             .body("$", notNullValue())
+             .body("$", hasSize(4))
+             .body("[0].id", equalTo("IMV-10"));
+    }
+    
+    @Test
+    public void testGetAbonnementsIM4G() {
+        given()
+          .when().get("/offres/abonnement-data-seul/im4g")
+          .then()
+             .statusCode(200)
+             .body("$", notNullValue())
+             .body("$", hasSize(5))
+             .body("[0].id", equalTo("IM4G-1"));
+    }
+
+    @Test
+    public void testGetAbonnementDataSeulById() {
+        given()
+          .pathParam("id", "IMV-10")  // Spécifier l'ID du forfait à rechercher
+          .when().get("/offres/abonnement-data-seul/{id}")
+          .then()
+             .statusCode(200)  // Vérifier que la réponse HTTP est 200 OK
+             .body("id", equalTo("IMV-10"))  // Vérifier l'ID de l'abonnement renvoyé
+             .body("prix", equalTo(530.0f));  // Vérifier le prix de l'abonnement
+    }
+
+    @Test
+    public void testGetAbonnementDataSeulById_NotFound() {
+        given()
+          .pathParam("id", "IMV-unknown")  // ID qui n'existe pas
+          .when().get("/offres/abonnement-data-seul/{id}")
+          .then()
+             .statusCode(404)  // Vérifier que la réponse HTTP est 404
+             .body(equalTo("Abonnement avec ID 'IMV-unknown' non trouvé"));  // Vérifier le message d'erreur retourné
+    }
 }
