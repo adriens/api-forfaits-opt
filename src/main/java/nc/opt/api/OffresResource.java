@@ -349,4 +349,10 @@ public class OffresResource {
                         .build();
         }
     }
+
+    @GET
+    @Path("/tourism-card")
+    public List<TourismCard> getTourismCard(){
+        return entityManager.createQuery("SELECT t FROM TourismCard t", TourismCard.class).getResultList();
+    }
 }
