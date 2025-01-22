@@ -124,8 +124,8 @@ public class OffresResourceTest {
              .body("id", equalTo("kit-prepaye-1000"))
              .body("credit", equalTo(1000))
              .body("prix", equalTo(1050))
-             .body("smsOffert", equalTo(10))
-             .body("dureeValidite", equalTo(120));
+             .body("sms_offert", equalTo(10))
+             .body("duree_validite", equalTo(120));
     }
 
     @Test
@@ -136,5 +136,37 @@ public class OffresResourceTest {
           .then()
              .statusCode(404)
              .body(equalTo("Forfait prépayé avec ID 'kit-prepaye-unknown' non trouvé"));
+    }
+    @Test
+    public void testGetForfaitsBloques() {
+      given().when().get("/offres/forfait-bloque").then().statusCode(200)
+      .body("$",notNullValue()).body("$", hasSize(4))
+      .body("[0].id", equalTo("forfait-bloque-1000"))
+      .body("[1].id", equalTo("forfait-bloque-2000"))
+      .body("[2].id", equalTo("forfait-bloque-3000"))
+      .body("[3].id", equalTo("forfait-bloque-5000"));
+    }
+
+    @Test
+    public void testGetForfaitBloqueById() {
+        given()
+          .pathParam("id", "forfait-bloque-1000")
+          .when().get("/offres/forfait-bloque/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("forfait-bloque-1000"))
+             .body("prix", equalTo(1060))
+             .body("credit", equalTo(1000))
+             .body("sms_offert", equalTo(20))
+              .body("url", equalTo("https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000"));
+    }
+    @Test
+    public void testGetForfaitBloqueById_NotFound() {
+        given()
+          .pathParam("id", "forfait-bloque-unknown")
+          .when().get("/offres/forfait-bloque/{id}")
+          .then()
+             .statusCode(404)
+             .body(equalTo("Forfait bloqué avec ID 'forfait-bloque-unknown' non trouvé"));
     }
 }
