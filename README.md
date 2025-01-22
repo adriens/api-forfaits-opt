@@ -14,7 +14,8 @@ A la racine du dépôt :
     ```bash
     mvn quarkus:dev
 ## Lancer le projet dans un conteneur
-### Prérequis (sous ubunutu) : 
+### Prérequis (sous ubunutu) :
+- Java : 23
 - Maven : version 3.9
 - Podman : 
     ```bash
