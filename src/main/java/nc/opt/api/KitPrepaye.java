@@ -38,11 +38,11 @@ public class KitPrepaye {
         return prix;
     }
 
-    public Integer getSmsOffert() {
+    public Integer getSms_offert() {
         return sms_offert;
     }
 
-    public Integer getDureeValidite() {
+    public Integer getDuree_validite() {
         return duree_validite;
     }
 }

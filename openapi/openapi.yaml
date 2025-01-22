@@ -86,12 +86,6 @@ components:
           type: integer
           format: int32
           description: Durée de validité du kit (en jours).
-        smsOffert:
-          type: integer
-          format: int32
-        dureeValidite:
-          type: integer
-          format: int32
 paths:
   /hello:
     get:
