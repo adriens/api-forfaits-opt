@@ -40,6 +40,28 @@ components:
         url:
           type: string
           description: URL de la page du forfait sur le site Officiel.
+    ForfaitBloque:
+      description: Forfait bloqué
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant du forfait bloqué.
+        prix:
+          type: integer
+          format: int32
+          description: Prix du forfait bloqué.
+        credit:
+          type: integer
+          format: int32
+          description: Montant de crédit du kit.
+        sms_offert:
+          type: integer
+          format: int32
+          description: Nombre de SMS offert dans le forfait.
+        url:
+          type: string
+          description: Url de la page du forfait sur le site officiel.
     ForfaitM:
       description: Forfait de la gamme M
       type: object
@@ -218,6 +240,72 @@ paths:
                 $ref: "#/components/schemas/AbonnementDataSeul"
         "404":
           description: Abonnement non trouvé
+  /offres/forfait-bloque:
+    get:
+      summary: Liste des forfaits bloqués
+      description: Retourne la liste complète des forfaits bloqués disponibles.
+      tags:
+      - Forfaits bloqués
+      responses:
+        "200":
+          description: Liste des forfaits bloqués
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: forfait-bloque-1000
+                    credit: 1000
+                    prix: 1060
+                    sms_offert: 20
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000
+                  - id: forfait-bloque-2000
+                    credit: 2000
+                    prix: 2120
+                    sms_offert: 40
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-2000
+                  - id: forfait-bloque-3000
+                    credit: 3000
+                    prix: 3180
+                    sms_offert: 60
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-3000
+                  - id: forfait-bloque-5000
+                    credit: 5000
+                    prix: 5300
+                    sms_offert: 100
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-5000
+              schema:
+                $ref: "#/components/schemas/ForfaitBloque"
+  /offres/forfait-bloque/{id}:
+    get:
+      summary: Détails d'un forfait bloqué par ID
+      description: Retourne les détails d'un forfait bloqué spécifique en fonction
+        de l'ID fourni.
+      tags:
+      - Forfaits bloqués
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Détails du forfait bloqué
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                    id: forfait-bloque-1000
+                    credit: 1000
+                    prix: 1060
+                    sms_offert: 20
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000
+              schema:
+                $ref: "#/components/schemas/ForfaitBloque"
+        "404":
+          description: Forfait bloqué non trouvé
   /offres/forfait-m:
     get:
       summary: Liste des forfaits de la gamme forfait-m
@@ -346,6 +434,8 @@ tags:
   description: Accès à un abonnement spécifique
 - name: Forfait-m
   description: Détails d'un forfait spécifique de la gamme forfait-m
+- name: Forfaits bloqués
+  description: Accès à un forfait bloqué spécifique par ID
 - name: Gammes de Forfaits
   description: Liste les différentes gammes d'offres télécoms de l'OPT
 - name: Kit Prépayé
