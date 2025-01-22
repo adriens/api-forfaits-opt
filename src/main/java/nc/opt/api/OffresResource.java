@@ -281,4 +281,71 @@ public class OffresResource {
                             .build();
         }
     }
+
+    @GET
+    @Path("/forfait-bloque")
+    @Operation(
+        summary = "Liste des forfaits bloqués",
+        description = "Retourne la liste complète des forfaits bloqués disponibles."
+    )
+
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des forfaits bloqués",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ForfaitBloque.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"forfait-bloque-1000\",\"credit\":1000,\"prix\":1060,\"sms_offert\":20,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000\"}, " +
+                        "{\"id\":\"forfait-bloque-2000\",\"credit\":2000,\"prix\":2120,\"sms_offert\":40,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-2000\"}, " +
+                        "{\"id\":\"forfait-bloque-3000\",\"credit\":3000,\"prix\":3180,\"sms_offert\":60,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-3000\"}, " +
+                        "{\"id\":\"forfait-bloque-5000\",\"credit\":5000,\"prix\":5300,\"sms_offert\":100,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-5000\"}]"
+            )
+        )
+    )
+
+    @Tag(name = "Forfaits bloqués", description = "Liste de tous les forfaits bloqués")
+    public List<ForfaitBloque> getForfaitsBloques() {
+        return entityManager.createQuery("SELECT fb FROM ForfaitBloque fb" , ForfaitBloque.class)
+        .getResultList();
+    }
+    @GET
+    @Path("/forfait-bloque/{id}")
+    @Operation(
+        summary = "Détails d'un forfait bloqué par ID",
+        description = "Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni."
+    )
+    @APIResponses({
+        @APIResponse(
+            responseCode = "200",
+            description = "Détails du forfait bloqué",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ForfaitBloque.class),
+                examples = @ExampleObject(
+                    name = "Exemple de réponse",
+                    value = "{\"id\":\"forfait-bloque-1000\",\"credit\":1000,\"prix\":1060,\"sms_offert\":20,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000\"}"
+                )
+            )
+        ),
+        @APIResponse(
+            responseCode = "404",
+            description = "Forfait bloqué non trouvé"
+        )
+    })
+    @Tag(name = "Forfaits bloqués", description = "Accès à un forfait bloqué spécifique par ID")
+    public Response getForfaitBloqueById(@PathParam("id") String id) {
+        try {
+            ForfaitBloque forfaitBloque = entityManager.createQuery("SELECT fb FROM ForfaitBloque fb WHERE fb.id = :id", ForfaitBloque.class)
+                                                    .setParameter("id", id)
+                                                    .getSingleResult();
+            return Response.ok(forfaitBloque).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Forfait bloqué avec ID '" + id + "' non trouvé")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+        }
+    }
 }
