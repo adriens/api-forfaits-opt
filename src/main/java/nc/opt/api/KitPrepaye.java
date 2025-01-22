@@ -11,20 +11,23 @@ import jakarta.persistence.Table;
 public class KitPrepaye {
 
     @Id
-    @Schema(description = "Identifiant du kit prépayé.")
+    @Schema(description = "Identifiant du kit prépayé/recharge liberté.")
     private String id;
 
-    @Schema(description = "Montant de crédit du kit.")
+    @Schema(description = "Montant de crédit du kit/recharge.")
     private Integer credit;
 
-    @Schema(description = "Prix du kit prépayé.")
+    @Schema(description = "Prix du kit prépayé/recharge liberté.")
     private Integer prix;
 
-    @Schema(description = "Nombre de SMS inclus dans le kit.")
+    @Schema(description = "Nombre de SMS inclus dans le kit/recharge.")
     private Integer sms_offert;
 
-    @Schema(description = "Durée de validité du kit (en jours).")
+    @Schema(description = "Durée de validité du kit/recharge (en jours).")
     private Integer duree_validite;
+
+    @Schema(description = "Url de la page du kit sur le site officiel.")
+    private String url;
 
     public String getId() {
         return id;
@@ -44,5 +47,9 @@ public class KitPrepaye {
 
     public Integer getDuree_validite() {
         return duree_validite;
+    }
+
+    public String getUrl() {
+        return url;
     }
 }

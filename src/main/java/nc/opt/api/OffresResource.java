@@ -233,9 +233,10 @@ public class OffresResource {
             schema = @Schema(implementation = KitPrepaye.class),
             examples = @ExampleObject(
                 name = "Exemple de réponse",
-                value = "[{\"id\":\"kit-prepaye-1000\",\"credit\":1000,\"prix\":1050,\"sms_offret\":10,\"duree_validite\":120}, " +
-                        "{\"id\":\"kit-prepaye-3000\",\"credit\":3000,\"prix\":3150,\"sms_offret\":30,\"duree_validite\":150}, " +
-                        "{\"id\":\"kit-prepaye-5000\",\"credit\":5000,\"prix\":5250,\"sms_offret\":50,\"duree_validite\":180}]"
+                value = "[{\"id\":\"kit-prepaye\",\"credit\":3000,\"prix\":6000,\"sms_offert\":0,\"duree_validite\":90,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}, " +
+                        "{\"id\":\"recharge-liberte-1000\",\"credit\":1000,\"prix\":1050,\"sms_offert\":10,\"duree_validite\":120,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}, " +
+                        "{\"id\":\"recharge-liberte-3000\",\"credit\":3000,\"prix\":3150,\"sms_offert\":30,\"duree_validite\":150,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}, " +
+                        "{\"id\":\"recharge-liberte-5000\",\"credit\":5000,\"prix\":5250,\"sms_offert\":50,\"duree_validite\":180,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}]"
             )
         )
     )
@@ -258,7 +259,7 @@ public class OffresResource {
                 schema = @Schema(implementation = KitPrepaye.class),
                 examples = @ExampleObject(
                     name = "Exemple de réponse",
-                    value = "{\"id\":\"kit-prepaye-1000\",\"credit\":1000,\"prix\":1050,\"sms_offert\":10,\"duree_validite\":120}"
+                    value = "{\"id\":\"kit-prepaye\",\"credit\":3000,\"prix\":6000,\"sms_offert\":0,\"duree_validite\":90,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}"
                 )
             )
         ),

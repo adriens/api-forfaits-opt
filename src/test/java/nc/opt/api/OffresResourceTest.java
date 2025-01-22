@@ -108,24 +108,26 @@ public class OffresResourceTest {
           .then()
              .statusCode(200)
              .body("$", notNullValue())
-             .body("$", hasSize(3))
-             .body("[0].id", equalTo("kit-prepaye-1000"))
-             .body("[1].id", equalTo("kit-prepaye-3000"))
-             .body("[2].id", equalTo("kit-prepaye-5000"));
+             .body("$", hasSize(4))
+             .body("[0].id", equalTo("kit-prepaye"))
+             .body("[1].id", equalTo("recharge-liberte-1000"))
+             .body("[2].id", equalTo("recharge-liberte-3000"))
+             .body("[3].id", equalTo("recharge-liberte-5000"));
     }
 
     @Test
     public void testGetKitPrepayeById() {
         given()
-          .pathParam("id", "kit-prepaye-1000")
+          .pathParam("id", "kit-prepaye")
           .when().get("/offres/prepaye/{id}")
           .then()
              .statusCode(200)
-             .body("id", equalTo("kit-prepaye-1000"))
-             .body("credit", equalTo(1000))
-             .body("prix", equalTo(1050))
-             .body("sms_offert", equalTo(10))
-             .body("duree_validite", equalTo(120));
+             .body("id", equalTo("kit-prepaye"))
+             .body("credit", equalTo(3000))
+             .body("prix", equalTo(6000))
+             .body("sms_offert", equalTo(0))
+             .body("duree_validite", equalTo(90))
+             .body("url", equalTo("https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"));
     }
 
     @Test
