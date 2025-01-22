@@ -1,5 +1,68 @@
 ---
 openapi: 3.1.0
+components:
+  schemas:
+    AbonnementDataSeul:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant du forfait.
+        volumetrie:
+          type: string
+          description: Quantité de données mobiles.
+        debit:
+          type: string
+          description: Débit de connexion.
+        prix:
+          type: number
+          format: double
+          description: Prix du forfait.
+        url:
+          type: string
+          description: URL de la page du forfait sur le site officiel.
+        type_forfait:
+          type: string
+          description: "Type de forfait : internet mobile au volume ou internet mobile\
+            \ 4G"
+    Forfait:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant de la gamme du forfait.
+        desc:
+          type: string
+          description: Nom de la gamme du forfait.
+        description:
+          type: string
+          description: Description du forfait.
+        url:
+          type: string
+          description: URL de la page du forfait sur le site Officiel.
+    ForfaitM:
+      description: Forfait de la gamme M
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant du forfait.
+        volumetrie:
+          type: string
+          description: Quantité de données mobiles.
+        vocal:
+          type: string
+          description: Temps d'appel disponible.
+        sms:
+          type: string
+          description: Nombre de SMS disponibles.
+        prix:
+          type: number
+          format: double
+          description: Prix du forfait.
+        url:
+          type: string
+          description: URL de la page du forfait sur le site officiel.
 paths:
   /hello:
     get:
@@ -27,6 +90,111 @@ paths:
                 items:
                   $ref: "#/components/schemas/Forfait"
       summary: Get All Offres
+  /offres/abonnement-data-seul:
+    get:
+      summary: Liste des abonnements de données
+      description: Retourne la liste des abonnements de données (IMV et IM4G).
+      tags:
+      - Abonnement-data-seul
+      responses:
+        "200":
+          description: Liste des abonnements de données (IMV et IM4G)
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: IMV-10
+                    volumetrie: 1 Mo
+                    debit: 256 Ko/s
+                    prix: 530
+                    url: https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf
+                    type_forfait: IMV
+                  - id: IM4G-1
+                    volumetrie: 1 Go
+                    debit: 150 Mb/s
+                    prix: 1908
+                    url: https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf
+                    type_forfait: IM4G
+              schema:
+                $ref: "#/components/schemas/AbonnementDataSeul"
+  /offres/abonnement-data-seul/im4g:
+    get:
+      summary: Liste des abonnements IM4G
+      description: Retourne la liste des abonnements IM4G.
+      tags:
+      - Abonnement-data-seul
+      responses:
+        "200":
+          description: Liste des abonnements IM4G
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: IM4G-1
+                    volumetrie: 1 Go
+                    debit: 150 Mb/s
+                    prix: 1908
+                    url: https://www.opt.nc/sites/serviciel/files/media/file/FI_ForfaitInternetMobile4G%202022_1.pdf
+                    type_forfait: IM4G
+              schema:
+                $ref: "#/components/schemas/AbonnementDataSeul"
+  /offres/abonnement-data-seul/imv:
+    get:
+      summary: Liste des abonnements IMV
+      description: Retourne la liste des abonnements IMV.
+      tags:
+      - Abonnement-data-seul
+      responses:
+        "200":
+          description: Liste des abonnements IMV
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: IMV-10
+                    volumetrie: 1 Mo
+                    debit: 256 Ko/s
+                    prix: 530
+                    url: https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf
+                    type_forfait: IMV
+              schema:
+                $ref: "#/components/schemas/AbonnementDataSeul"
+  /offres/abonnement-data-seul/{id}:
+    get:
+      summary: Détails d'un abonnement spécifique
+      description: Retourne les détails d'un abonnement spécifique de données en fonction
+        de l'ID fourni.
+      tags:
+      - Abonnement-data-seul
+      parameters:
+      - description: ID de l'abonnement
+        example: IMV-10
+        name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Détails de l'abonnement
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                    id: IMV-10
+                    volumetrie: 1 Mo
+                    debit: 256 Ko/s
+                    prix: 530
+                    url: https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf
+                    type_forfait: IMV
+              schema:
+                $ref: "#/components/schemas/AbonnementDataSeul"
+        "404":
+          description: Abonnement non trouvé
   /offres/forfait-m:
     get:
       summary: Liste des forfaits de la gamme forfait-m
@@ -90,39 +258,12 @@ paths:
         "404":
           description: Forfait non trouvé
 tags:
+- name: Abonnement-data-seul
+  description: Accès à un abonnement spécifique
 - name: Forfait-m
   description: Détails d'un forfait spécifique de la gamme forfait-m
 - name: Gammes de Forfaits
   description: Liste les différentes gammes d'offres télécoms de l'OPT
-components:
-  schemas:
-    Forfait:
-      type: object
-      properties:
-        id:
-          type: string
-        desc:
-          type: string
-        description:
-          type: string
-        url:
-          type: string
-    ForfaitM:
-      type: object
-      properties:
-        id:
-          type: string
-        volumetrie:
-          type: string
-        vocal:
-          type: string
-        sms:
-          type: string
-        prix:
-          type: number
-          format: double
-        url:
-          type: string
 info:
   title: forfaits-opt-nc API
   version: 1.0.0-SNAPSHOT
