@@ -41,4 +41,8 @@ public class ForfaitBloque {
     public Integer getSms_offert() {
         return sms_offert;
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
