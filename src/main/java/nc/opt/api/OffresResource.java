@@ -219,4 +219,66 @@ public class OffresResource {
                         .build();
         }
     }
+    @GET
+    @Path("/prepaye") // Spécifie le chemin pour les kits prépayés
+    @Operation(
+        summary = "Liste des forfaits prépayés",
+        description = "Retourne la liste complète des forfaits prépayés disponibles."
+    )
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des forfaits prépayés",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = KitPrepaye.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"kit-prepaye-1000\",\"credit\":1000,\"prix\":1050,\"sms_offret\":10,\"duree_validite\":120}, " +
+                        "{\"id\":\"kit-prepaye-3000\",\"credit\":3000,\"prix\":3150,\"sms_offret\":30,\"duree_validite\":150}, " +
+                        "{\"id\":\"kit-prepaye-5000\",\"credit\":5000,\"prix\":5250,\"sms_offret\":50,\"duree_validite\":180}]"
+            )
+        )
+    )
+    @Tag(name = "Kit Prépayé", description = "Liste de tous les forfaits prépayés")
+    public List<KitPrepaye> getAllKitsPrepaye() {
+        return entityManager.createQuery("SELECT k FROM KitPrepaye k", KitPrepaye.class).getResultList();
+    }
+    @GET
+    @Path("/prepaye/{id}")
+    @Operation(
+        summary = "Détails d'un forfait prépayé par ID",
+        description = "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni."
+    )
+    @APIResponses({
+        @APIResponse(
+            responseCode = "200",
+            description = "Détails du forfait prépayé",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = KitPrepaye.class),
+                examples = @ExampleObject(
+                    name = "Exemple de réponse",
+                    value = "{\"id\":\"kit-prepaye-1000\",\"credit\":1000,\"prix\":1050,\"sms_offert\":10,\"duree_validite\":120}"
+                )
+            )
+        ),
+        @APIResponse(
+            responseCode = "404",
+            description = "Forfait prépayé non trouvé"
+        )
+    })
+    @Tag(name = "Kit Prépayé", description = "Accès à un forfait prépayé spécifique par ID")
+    public Response getKitPrepayeById(@PathParam("id") String id) {
+        try {
+            KitPrepaye kitPrepaye = entityManager.createQuery("SELECT k FROM KitPrepaye k WHERE k.id = :id", KitPrepaye.class)
+                                                    .setParameter("id", id)
+                                                    .getSingleResult();
+            return Response.ok(kitPrepaye).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                            .entity("Forfait prépayé avec ID '" + id + "' non trouvé")
+                            .type(MediaType.TEXT_PLAIN)
+                            .build();
+        }
+    }
 }
