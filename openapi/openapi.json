@@ -83,6 +83,44 @@
             "description" : "URL de la page du forfait sur le site officiel."
           }
         }
+      },
+      "KitPrepaye" : {
+        "description" : "Forfait prépayé",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Identifiant du kit prépayé."
+          },
+          "credit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Montant de crédit du kit."
+          },
+          "prix" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Prix du kit prépayé."
+          },
+          "sms_offert" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Nombre de SMS inclus dans le kit."
+          },
+          "duree_validite" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Durée de validité du kit (en jours)."
+          },
+          "smsOffert" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "dureeValidite" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
       }
     }
   },
@@ -351,6 +389,89 @@
           }
         }
       }
+    },
+    "/offres/prepaye" : {
+      "get" : {
+        "summary" : "Liste des forfaits prépayés",
+        "description" : "Retourne la liste complète des forfaits prépayés disponibles.",
+        "tags" : [ "Kit Prépayé" ],
+        "responses" : {
+          "200" : {
+            "description" : "Liste des forfaits prépayés",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : [ {
+                      "id" : "kit-prepaye-1000",
+                      "credit" : 1000,
+                      "prix" : 1050,
+                      "sms_offret" : 10,
+                      "duree_validite" : 120
+                    }, {
+                      "id" : "kit-prepaye-3000",
+                      "credit" : 3000,
+                      "prix" : 3150,
+                      "sms_offret" : 30,
+                      "duree_validite" : 150
+                    }, {
+                      "id" : "kit-prepaye-5000",
+                      "credit" : 5000,
+                      "prix" : 5250,
+                      "sms_offret" : 50,
+                      "duree_validite" : 180
+                    } ]
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/KitPrepaye"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/offres/prepaye/{id}" : {
+      "get" : {
+        "summary" : "Détails d'un forfait prépayé par ID",
+        "description" : "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.",
+        "tags" : [ "Kit Prépayé" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Détails du forfait prépayé",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : {
+                      "id" : "kit-prepaye-1000",
+                      "credit" : 1000,
+                      "prix" : 1050,
+                      "sms_offert" : 10,
+                      "duree_validite" : 120
+                    }
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/KitPrepaye"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Forfait prépayé non trouvé"
+          }
+        }
+      }
     }
   },
   "tags" : [ {
@@ -362,6 +483,9 @@
   }, {
     "name" : "Gammes de Forfaits",
     "description" : "Liste les différentes gammes d'offres télécoms de l'OPT"
+  }, {
+    "name" : "Kit Prépayé",
+    "description" : "Liste de tous les forfaits prépayés"
   } ],
   "info" : {
     "title" : "forfaits-opt-nc API",
