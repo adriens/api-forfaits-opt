@@ -181,38 +181,66 @@
       }
     }
   },
+  "tags" : [ {
+    "name" : "Abonnement-data-seul",
+    "description" : "Accès à un abonnement spécifique"
+  }, {
+    "name" : "Forfait-m",
+    "description" : "Détails d'un forfait spécifique de la gamme forfait-m"
+  }, {
+    "name" : "Forfaits bloqués",
+    "description" : "Accès à un forfait bloqué spécifique par ID"
+  }, {
+    "name" : "Gammes de Forfaits",
+    "description" : "Liste les différentes gammes d'offres télécoms de l'OPT"
+  }, {
+    "name" : "Kit Prépayé",
+    "description" : "Liste de tous les forfaits prépayés"
+  }, {
+    "name" : "Tourism Card",
+    "description" : "Voir les détails de la tourism card"
+  } ],
   "paths" : {
-    "/hello" : {
-      "get" : {
-        "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "text/plain" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        },
-        "summary" : "Hello",
-        "tags" : [ "Greeting Resource" ]
-      }
-    },
     "/offres" : {
       "get" : {
         "tags" : [ "Gammes de Forfaits" ],
         "responses" : {
           "200" : {
-            "description" : "OK",
+            "description" : "Liste des gammes de forfaits",
             "content" : {
               "application/json" : {
-                "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/Forfait"
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : [ {
+                      "id" : "forfaits-m",
+                      "desc" : "Gamme forfaits M",
+                      "description" : "Un forfait « tout compris ». Appels + SMS + Internet Mobile VoIP inclus, sans engagement",
+                      "url" : "https://www.opt.nc/particuliers/mobile/choisissez-le-forfait-qui-vous-ressemble"
+                    }, {
+                      "id" : "forfaits-bloques",
+                      "desc" : "Gamme forfaits bloqués",
+                      "description" : "Un forfait voix et SMS permettant de maîtriser son budget sans risque de hors-forfait, sans engagement",
+                      "url" : "https://www.opt.nc/particuliers/mobile/choisissez-le-forfait-qui-vous-ressemble"
+                    }, {
+                      "id" : "data-only",
+                      "desc" : "Abonnement data seul",
+                      "description" : "Un forfait Internet dédié aux objets connectés avec un débit jusqu'à 150 Mb/s, rechargeable et compatible avec des options SMS en local.",
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/abonnement-data-seul"
+                    }, {
+                      "id" : "prepaye",
+                      "desc" : "Kit prépayé Liberté",
+                      "description" : "Un forfait sans engagement, décompté pour les appels et SMS (local et international), et compatible avec Internet Mobile à la Demande. Rechargeable avec des cartes Liberté pour prolonger la validité du crédit.",
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"
+                    }, {
+                      "id" : "tourism-card",
+                      "desc" : "Tourism Card",
+                      "description" : "Une carte prépayée conçue pour les vacanciers, valable 3 mois, permettant appels, SMS et accès à Internet Mobile, aussi bien en local qu'à l'international.",
+                      "url" : "https://tourismcard.nc/"
+                    } ]
                   }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/Forfait"
                 }
               }
             }
@@ -327,14 +355,21 @@
         "description" : "Retourne les détails d'un abonnement spécifique de données en fonction de l'ID fourni.",
         "tags" : [ "Abonnement-data-seul" ],
         "parameters" : [ {
-          "description" : "ID de l'abonnement",
-          "example" : "IMV-10",
-          "name" : "id",
+          "description" : "ID de l'abonnement data seul",
+          "examples" : {
+            "valid_id" : {
+              "value" : "IMV-10"
+            },
+            "invalid_id" : {
+              "value" : "IMV-9999"
+            }
+          },
           "required" : true,
-          "in" : "path",
           "schema" : {
             "type" : "string"
-          }
+          },
+          "name" : "id",
+          "in" : "path"
         } ],
         "responses" : {
           "200" : {
@@ -342,7 +377,7 @@
             "content" : {
               "application/json" : {
                 "examples" : {
-                  "Exemple de réponse" : {
+                  "valid_id" : {
                     "value" : {
                       "id" : "IMV-10",
                       "volumetrie" : "1 Mo",
@@ -360,7 +395,16 @@
             }
           },
           "404" : {
-            "description" : "Abonnement non trouvé"
+            "description" : "Abonnement non trouvé",
+            "content" : {
+              "text/plain" : {
+                "examples" : {
+                  "invalid_id" : {
+                    "value" : "Abonnement avec ID 'IMV-9999' non trouvé"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -419,12 +463,21 @@
         "description" : "Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni.",
         "tags" : [ "Forfaits bloqués" ],
         "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
+          "description" : "ID du forfait bloqué",
+          "examples" : {
+            "valid_id" : {
+              "value" : "forfait-bloque-1000"
+            },
+            "invalid_id" : {
+              "value" : "forfait-bloque-9999"
+            }
+          },
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "name" : "id",
+          "in" : "path"
         } ],
         "responses" : {
           "200" : {
@@ -432,7 +485,7 @@
             "content" : {
               "application/json" : {
                 "examples" : {
-                  "Exemple de réponse" : {
+                  "valid_id" : {
                     "value" : {
                       "id" : "forfait-bloque-1000",
                       "credit" : 1000,
@@ -449,7 +502,16 @@
             }
           },
           "404" : {
-            "description" : "Forfait bloqué non trouvé"
+            "description" : "Forfait bloqué non trouvé",
+            "content" : {
+              "text/plain" : {
+                "examples" : {
+                  "invalid_id" : {
+                    "value" : "Forfait bloqué avec ID 'forfait-bloque-9999' non trouvé"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -498,14 +560,21 @@
         "description" : "Retourne les détails d'un forfait spécifique de la gamme forfait-m en fonction de l'ID fourni.",
         "tags" : [ "Forfait-m" ],
         "parameters" : [ {
-          "description" : "ID du forfait",
-          "example" : "forfait-m-1",
-          "name" : "id",
+          "description" : "ID du forfait M",
+          "examples" : {
+            "valid_id" : {
+              "value" : "forfait-m-1"
+            },
+            "invalid_id" : {
+              "value" : "forfait-m-9999"
+            }
+          },
           "required" : true,
-          "in" : "path",
           "schema" : {
             "type" : "string"
-          }
+          },
+          "name" : "id",
+          "in" : "path"
         } ],
         "responses" : {
           "200" : {
@@ -513,7 +582,7 @@
             "content" : {
               "application/json" : {
                 "examples" : {
-                  "Exemple de réponse" : {
+                  "valid_id" : {
                     "value" : {
                       "id" : "forfait-m-1",
                       "volumetrie" : "1 Go",
@@ -531,7 +600,16 @@
             }
           },
           "404" : {
-            "description" : "Forfait non trouvé"
+            "description" : "Forfait M non trouvé",
+            "content" : {
+              "text/plain" : {
+                "examples" : {
+                  "invalid_id" : {
+                    "value" : "Forfait avec ID 'forfait-m-9999' non trouvé"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -594,14 +672,24 @@
         "description" : "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.",
         "tags" : [ "Kit Prépayé" ],
         "parameters" : [ {
-          "description" : "ID de l'abonnement",
-          "example" : "kit-prepaye",
-          "name" : "id",
+          "description" : "ID du kit/recharge prépayé",
+          "examples" : {
+            "valid_id" : {
+              "value" : "kit-prepaye"
+            },
+            "valid_id_2" : {
+              "value" : "recharge-liberte-1000"
+            },
+            "invalid_id" : {
+              "value" : "kit-prepaye-1000"
+            }
+          },
           "required" : true,
-          "in" : "path",
           "schema" : {
             "type" : "string"
-          }
+          },
+          "name" : "id",
+          "in" : "path"
         } ],
         "responses" : {
           "200" : {
@@ -609,14 +697,14 @@
             "content" : {
               "application/json" : {
                 "examples" : {
-                  "Exemple de réponse" : {
+                  "valid_id_2" : {
                     "value" : {
-                      "id" : "kit-prepaye",
-                      "credit" : 3000,
-                      "prix" : 6000,
-                      "sms_offert" : 0,
-                      "duree_validite" : 90,
-                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"
+                      "id" : "recharge-liberte-1000",
+                      "credit" : 1000,
+                      "prix" : 1050,
+                      "sms_offert" : 10,
+                      "duree_validite" : 120,
+                      "url" : "https://rechargetonmob.nc/"
                     }
                   }
                 },
@@ -627,7 +715,16 @@
             }
           },
           "404" : {
-            "description" : "Forfait prépayé non trouvé"
+            "description" : "Forfait non trouvé",
+            "content" : {
+              "text/plain" : {
+                "examples" : {
+                  "invalid_id" : {
+                    "value" : "Forfait prépayé avec ID 'kit-prepaye-9999' non trouvé"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -663,25 +760,6 @@
       }
     }
   },
-  "tags" : [ {
-    "name" : "Abonnement-data-seul",
-    "description" : "Accès à un abonnement spécifique"
-  }, {
-    "name" : "Forfait-m",
-    "description" : "Détails d'un forfait spécifique de la gamme forfait-m"
-  }, {
-    "name" : "Forfaits bloqués",
-    "description" : "Accès à un forfait bloqué spécifique par ID"
-  }, {
-    "name" : "Gammes de Forfaits",
-    "description" : "Liste les différentes gammes d'offres télécoms de l'OPT"
-  }, {
-    "name" : "Kit Prépayé",
-    "description" : "Liste de tous les forfaits prépayés"
-  }, {
-    "name" : "Tourism Card",
-    "description" : "Voir les détails de la tourism card"
-  } ],
   "info" : {
     "title" : "forfaits-opt-nc API",
     "version" : "1.0.0-SNAPSHOT"
