@@ -443,9 +443,11 @@ paths:
       tags:
       - Kit Prépayé
       parameters:
-      - name: id
-        in: path
+      - description: ID de l'abonnement
+        example: kit-prepaye
+        name: id
         required: true
+        in: path
         schema:
           type: string
       responses:

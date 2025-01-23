@@ -594,9 +594,11 @@
         "description" : "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.",
         "tags" : [ "Kit Prépayé" ],
         "parameters" : [ {
+          "description" : "ID de l'abonnement",
+          "example" : "kit-prepaye",
           "name" : "id",
-          "in" : "path",
           "required" : true,
+          "in" : "path",
           "schema" : {
             "type" : "string"
           }

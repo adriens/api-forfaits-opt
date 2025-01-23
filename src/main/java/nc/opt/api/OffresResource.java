@@ -250,6 +250,12 @@ public class OffresResource {
         summary = "Détails d'un forfait prépayé par ID",
         description = "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni."
     )
+    @Parameter(
+        name = "id",
+        description = "ID de l'abonnement",
+        required = true,
+        example = "kit-prepaye"
+    )
     @APIResponses({
         @APIResponse(
             responseCode = "200",
