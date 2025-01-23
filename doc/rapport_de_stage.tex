@@ -739,21 +739,13 @@
 	J'avais aussi rajouté une autre workflow pour déployé la documentation  automatiquement sur \textbf{Bump.sh}, celui ci c'est aussi déclenché lors de la publication de la release et j'ai pu voir le rapport de changement de versions : 
 	
 	\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/changelog.png} \caption{chnagelog de Bump.sh} \label{fig:sonarq}\end{figure}
-	
-	\section{Nouvel endpoint pour la gamme "Data seul"}
+	\section{Déveleppement des endpoints pour les forfaits restants}
+	\subsection{Endpoint pour la gamme "Data seul"}
 	
 	Afin de compléter l'exposition des forfaits télécoms de l'OPT, j'ai ajouté un nouvel endpoint permettant de récupérer les abonnements de la gamme "Data seul", accessible via \texttt{/offres/abonnement-data-seul}. Cet endpoint permet de retourner la liste des forfaits liés à cette gamme, incluant les forfaits "IMV" (Internet Mobile au Volume) et "IM4G" (Internet Mobile 4G).
 	
 	J'ai décliné cet endpoint en plusieurs sous-endpoints spécifiques pour faciliter l'accès aux abonnements en fonction de leurs types :
-	\begin{itemize}
-		\item \texttt{/offres/abonnement-data-seul/imv} : Pour récupérer uniquement les forfaits IMV.
-		\item \texttt{/offres/abonnement-data-seul/im4g} : Pour récupérer uniquement les forfaits IM4G.
-		\item \texttt{/offres/abonnement-data-seul/{id}} : Pour accéder à un forfait spécifique en fonction de son identifiant.
-	\end{itemize}
-	
-	Ces nouveaux endpoints permettent aux utilisateurs de filtrer les forfaits par type et d'accéder à des informations détaillées sur chaque abonnement.
-	
-	\textbf{Exemples d'appel} :
+
 	\begin{itemize}
 		\item \texttt{GET /offres/abonnement-data-seul} : Retourne la liste de tous les forfaits de la gamme "abonnement data seul".
 		\begin{lstlisting}[language=JSON]
@@ -812,7 +804,130 @@
 			}
 		\end{lstlisting}
 	\end{itemize}
+	Ces nouveaux endpoints permettent aux utilisateurs de filtrer les forfaits par type et d'accéder à des informations détaillées sur chaque abonnement.
 	
+	\subsection{Endpoint pour la gamme Forfait bloqué}
+	\texttt{GET /offres/forfait-bloque} permet de récupérer la liste complète des forfaits bloqués. Cette gamme inclut des forfaits avec un prix fixe, un crédit défini, et un nombre spécifique de SMS.
+	
+	- \textbf{Endpoint principal} :
+	- \texttt{GET /offres/forfait-bloque} : Retourne la liste de tous les forfaits bloqués.
+	Exemple d'appel :
+	\begin{lstlisting}[language=bash]
+		http GET :8080/offres/forfait-bloque
+	\end{lstlisting}
+	Exemple de réponse :
+	\begin{lstlisting}[language=JSON]
+		[
+		{
+			"id": "forfait-bloque-1000",
+			"prix": 1060,
+			"credit": 1000,
+			"sms_offert": 20,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000"
+		},
+		{
+			"id": "forfait-bloque-2000",
+			"prix": 2120,
+			"credit": 2000,
+			"sms_offert": 40,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-2000"
+		}
+		]
+	\end{lstlisting}
+	
+	- \textbf{Endpoint spécifique} :
+	- \texttt{GET /offres/forfait-bloque/{id}} : Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni.
+	Exemple d'appel :
+	\begin{lstlisting}[language=bash]
+		http GET :8080/offres/forfait-bloque/forfait-bloque-1000
+	\end{lstlisting}
+	Exemple de réponse :
+	\begin{lstlisting}[language=JSON]
+		{
+			"id": "forfait-bloque-1000",
+			"prix": 1060,
+			"credit": 1000,
+			"sms_offert": 20,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000"
+		}
+	\end{lstlisting}
+	
+	\subsection{Endpoint pour le kit prépayé liberté}
+	\texttt{GET /offres/prepaye} permet de récupérer la liste de tous les kits prépayés de la gamme liberté, offrant des forfaits avec des crédits différents et des durées de validité variées.
+	
+	- \textbf{Endpoint principal} :
+	- \texttt{GET /offres/prepaye} : Retourne la liste complète des kits prépayés de la gamme "liberté".
+	Exemple d'appel :
+	\begin{lstlisting}[language=bash]
+		http GET :8080/offres/prepaye
+	\end{lstlisting}
+	Exemple de réponse :
+	\begin{lstlisting}[language=JSON]
+		[
+		{
+			"id": "kit-prepaye",
+			"credit": 3000,
+			"prix": 6000,
+			"sms_offert": 0,
+			"duree_validite": 90,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"
+		},
+		{
+			"id": "recharge-liberte-1000",
+			"credit": 1000,
+			"prix": 1050,
+			"sms_offert": 10,
+			"duree_validite": 120,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"
+		}
+		]
+	\end{lstlisting}
+	
+	- \textbf{Endpoint spécifique} :
+	- \texttt{GET /offres/prepaye/{id}} : Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.
+	Exemple d'appel :
+	\begin{lstlisting}[language=bash]
+		http GET :8080/offres/prepaye/recharge-liberte-1000
+	\end{lstlisting}
+	Exemple de réponse :
+	\begin{lstlisting}[language=JSON]
+		{
+			"id": "recharge-liberte-1000",
+			"credit": 1000,
+			"prix": 1050,
+			"sms_offert": 10,
+			"duree_validite": 120,
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"
+		}
+	\end{lstlisting}
+	
+	\subsection{Endpoint pour la "Tourism card"}
+	\texttt{GET /offres/tourism-card} permet de récupérer les informations sur le forfait "Tourism card", qui est conçu pour les utilisateurs ayant des besoins spécifiques pendant leurs séjours en Nouvelle-Calédonie.
+	
+	- \textbf{Endpoint principal} :
+	- \texttt{GET /offres/tourism-card} : Retourne la liste des forfaits "Tourism card".
+	Exemple d'appel :
+	\begin{lstlisting}[language=bash]
+		http GET :8080/offres/tourism-card
+	\end{lstlisting}
+	Exemple de réponse :
+	\begin{lstlisting}[language=JSON]
+		[
+		{
+			"id": "tourism-card",
+			"credit": 2000,
+			"prix": 5000,
+			"volumetrie": "25 Go",
+			"duree_validite": "3 Mois",
+			"url": "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/tourism-card-1000"
+		}
+		]
+	\end{lstlisting}
+	\subsection{Documentation et tests unitaires}
+	
+	Chaque endpoint développé a été correctement documenté à l'aide des annotations \texttt{MicroProfile OpenAPI}, ce qui a permis de compléter progressivement la documentation générée avec \texttt{ReDocly} à mesure que les fonctionnalités étaient implémentées.
+	
+	De plus, des tests unitaires ont été réalisés pour chaque endpoint afin de garantir leur bon fonctionnement, en vérifiant le rapport JaCoCo pour surveiller que le seuil de couverture soit bien au dessus de 10\%.
 	\newpage
 	
 	\section{From 0 to Hero}

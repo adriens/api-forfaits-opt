@@ -40,6 +40,28 @@ components:
         url:
           type: string
           description: URL de la page du forfait sur le site Officiel.
+    ForfaitBloque:
+      description: Forfait bloqué
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant du forfait bloqué.
+        prix:
+          type: integer
+          format: int32
+          description: Prix du forfait bloqué.
+        credit:
+          type: integer
+          format: int32
+          description: Montant de crédit du kit.
+        sms_offert:
+          type: integer
+          format: int32
+          description: Nombre de SMS offert dans le forfait.
+        url:
+          type: string
+          description: Url de la page du forfait sur le site officiel.
     ForfaitM:
       description: Forfait de la gamme M
       type: object
@@ -63,6 +85,56 @@ components:
         url:
           type: string
           description: URL de la page du forfait sur le site officiel.
+    KitPrepaye:
+      description: Forfait prépayé
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant du kit prépayé/recharge liberté.
+        credit:
+          type: integer
+          format: int32
+          description: Montant de crédit du kit/recharge.
+        prix:
+          type: integer
+          format: int32
+          description: Prix du kit prépayé/recharge liberté.
+        sms_offert:
+          type: integer
+          format: int32
+          description: Nombre de SMS inclus dans le kit/recharge.
+        duree_validite:
+          type: integer
+          format: int32
+          description: Durée de validité du kit/recharge (en jours).
+        url:
+          type: string
+          description: Url de la page du kit sur le site officiel.
+    TourismCard:
+      description: Tourism card
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant de l'offre tourisme
+        prix:
+          type: integer
+          format: int32
+          description: Prix de l'offre tourisme
+        credit:
+          type: integer
+          format: int32
+          description: Crédit disponible
+        volumetrie:
+          type: string
+          description: Données mobiles disponibles
+        duree_validite:
+          type: string
+          description: Durée de validité de l'offre tourisme
+        url:
+          type: string
+          description: Url de la page de l'offre tourisme
 paths:
   /hello:
     get:
@@ -195,6 +267,72 @@ paths:
                 $ref: "#/components/schemas/AbonnementDataSeul"
         "404":
           description: Abonnement non trouvé
+  /offres/forfait-bloque:
+    get:
+      summary: Liste des forfaits bloqués
+      description: Retourne la liste complète des forfaits bloqués disponibles.
+      tags:
+      - Forfaits bloqués
+      responses:
+        "200":
+          description: Liste des forfaits bloqués
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: forfait-bloque-1000
+                    credit: 1000
+                    prix: 1060
+                    sms_offert: 20
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000
+                  - id: forfait-bloque-2000
+                    credit: 2000
+                    prix: 2120
+                    sms_offert: 40
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-2000
+                  - id: forfait-bloque-3000
+                    credit: 3000
+                    prix: 3180
+                    sms_offert: 60
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-3000
+                  - id: forfait-bloque-5000
+                    credit: 5000
+                    prix: 5300
+                    sms_offert: 100
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-5000
+              schema:
+                $ref: "#/components/schemas/ForfaitBloque"
+  /offres/forfait-bloque/{id}:
+    get:
+      summary: Détails d'un forfait bloqué par ID
+      description: Retourne les détails d'un forfait bloqué spécifique en fonction
+        de l'ID fourni.
+      tags:
+      - Forfaits bloqués
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Détails du forfait bloqué
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                    id: forfait-bloque-1000
+                    credit: 1000
+                    prix: 1060
+                    sms_offert: 20
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000
+              schema:
+                $ref: "#/components/schemas/ForfaitBloque"
+        "404":
+          description: Forfait bloqué non trouvé
   /offres/forfait-m:
     get:
       summary: Liste des forfaits de la gamme forfait-m
@@ -257,13 +395,113 @@ paths:
                 $ref: "#/components/schemas/ForfaitM"
         "404":
           description: Forfait non trouvé
+  /offres/prepaye:
+    get:
+      summary: Liste des forfaits prépayés
+      description: Retourne la liste complète des forfaits prépayés disponibles.
+      tags:
+      - Kit Prépayé
+      responses:
+        "200":
+          description: Liste des forfaits prépayés
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                  - id: kit-prepaye
+                    credit: 3000
+                    prix: 6000
+                    sms_offert: 0
+                    duree_validite: 90
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte
+                  - id: recharge-liberte-1000
+                    credit: 1000
+                    prix: 1050
+                    sms_offert: 10
+                    duree_validite: 120
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte
+                  - id: recharge-liberte-3000
+                    credit: 3000
+                    prix: 3150
+                    sms_offert: 30
+                    duree_validite: 150
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte
+                  - id: recharge-liberte-5000
+                    credit: 5000
+                    prix: 5250
+                    sms_offert: 50
+                    duree_validite: 180
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte
+              schema:
+                $ref: "#/components/schemas/KitPrepaye"
+  /offres/prepaye/{id}:
+    get:
+      summary: Détails d'un forfait prépayé par ID
+      description: Retourne les détails d'un forfait prépayé spécifique en fonction
+        de l'ID fourni.
+      tags:
+      - Kit Prépayé
+      parameters:
+      - description: ID de l'abonnement
+        example: kit-prepaye
+        name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Détails du forfait prépayé
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                    id: kit-prepaye
+                    credit: 3000
+                    prix: 6000
+                    sms_offert: 0
+                    duree_validite: 90
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte
+              schema:
+                $ref: "#/components/schemas/KitPrepaye"
+        "404":
+          description: Forfait prépayé non trouvé
+  /offres/tourism-card:
+    get:
+      summary: Liste l'offre de tourisme
+      tags:
+      - Tourism Card
+      responses:
+        "200":
+          description: Détails de la tourism card
+          content:
+            application/json:
+              examples:
+                Exemple de réponse:
+                  value:
+                    id: tourism-card
+                    prix: "5000"
+                    credit: "2000"
+                    volumetrie: 25 Go
+                    duree_validite: 3 mois
+                    url: https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/tourism-card-1000
+              schema:
+                $ref: "#/components/schemas/TourismCard"
 tags:
 - name: Abonnement-data-seul
   description: Accès à un abonnement spécifique
 - name: Forfait-m
   description: Détails d'un forfait spécifique de la gamme forfait-m
+- name: Forfaits bloqués
+  description: Accès à un forfait bloqué spécifique par ID
 - name: Gammes de Forfaits
   description: Liste les différentes gammes d'offres télécoms de l'OPT
+- name: Kit Prépayé
+  description: Liste de tous les forfaits prépayés
+- name: Tourism Card
+  description: Voir les détails de la tourism card
 info:
   title: forfaits-opt-nc API
   version: 1.0.0-SNAPSHOT

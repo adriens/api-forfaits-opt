@@ -1,0 +1,5 @@
+id,credit,prix,sms_offert,duree_validite,url,
+kit-prepaye,3000,6000,0,90,"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte",
+recharge-liberte-1000,1000,1050,10,120,"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte",
+recharge-liberte-3000,3000,3150,30,150,"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte",
+recharge-liberte-5000,5000,5250,50,180,"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte",

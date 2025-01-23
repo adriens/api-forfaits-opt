@@ -33,30 +33,30 @@ public class OffresResourceTest {
     @Test
     public void testGetForfaitMById() {
         given()
-          .pathParam("id", "forfait-m-1")  // Spécifier l'ID du forfait à rechercher
+          .pathParam("id", "forfait-m-1")
           .when().get("/offres/forfait-m/{id}")
           .then()
              .statusCode(200)
-             .body("id", equalTo("forfait-m-1"))  // Vérifier l'ID du forfait renvoyé
-             .body("prix", equalTo(1000.0f));  // Vérifier le prix du forfait
+             .body("id", equalTo("forfait-m-1"))
+             .body("prix", equalTo(1000.0f)); 
     }
     @Test
     public void testGetForfaitMById_NotFound() {
         given()
-          .pathParam("id", "forfait-m-unknown")  // ID qui n'existe pas
+          .pathParam("id", "forfait-m-unknown")
           .when().get("/offres/forfait-m/{id}")
           .then()
-             .statusCode(404)  // Vérifier que le code d'état est 404
-             .body(equalTo("Forfait avec ID 'forfait-m-unknown' non trouvé"));  // Vérifier le message d'erreur retourné
+             .statusCode(404)
+             .body(equalTo("Forfait avec ID 'forfait-m-unknown' non trouvé"));
     }
     @Test
     public void testGetAllAbonnementsDataSeul() {
         given()
           .when().get("/offres/abonnement-data-seul")
           .then()
-             .statusCode(200)  // Vérifier que la réponse HTTP est 200 OK
-             .body("$", notNullValue())  // Vérifier que la réponse n'est pas vide
-             .body("$", hasSize(9));  // Vérifier que la liste contient bien 10 abonnements (basé sur vos données)
+             .statusCode(200)
+             .body("$", notNullValue())
+             .body("$", hasSize(9));
     }
 
     @Test
@@ -84,21 +84,100 @@ public class OffresResourceTest {
     @Test
     public void testGetAbonnementDataSeulById() {
         given()
-          .pathParam("id", "IMV-10")  // Spécifier l'ID du forfait à rechercher
+          .pathParam("id", "IMV-10")
           .when().get("/offres/abonnement-data-seul/{id}")
           .then()
-             .statusCode(200)  // Vérifier que la réponse HTTP est 200 OK
-             .body("id", equalTo("IMV-10"))  // Vérifier l'ID de l'abonnement renvoyé
-             .body("prix", equalTo(530.0f));  // Vérifier le prix de l'abonnement
+             .statusCode(200)
+             .body("id", equalTo("IMV-10"))
+             .body("prix", equalTo(530.0f));
     }
 
     @Test
     public void testGetAbonnementDataSeulById_NotFound() {
         given()
-          .pathParam("id", "IMV-unknown")  // ID qui n'existe pas
+          .pathParam("id", "IMV-unknown")
           .when().get("/offres/abonnement-data-seul/{id}")
           .then()
-             .statusCode(404)  // Vérifier que la réponse HTTP est 404
-             .body(equalTo("Abonnement avec ID 'IMV-unknown' non trouvé"));  // Vérifier le message d'erreur retourné
+             .statusCode(404)
+             .body(equalTo("Abonnement avec ID 'IMV-unknown' non trouvé"));
+    }
+    @Test
+    public void testGetAllKitsPrepaye() {
+        given()
+          .when().get("/offres/prepaye")
+          .then()
+             .statusCode(200)
+             .body("$", notNullValue())
+             .body("$", hasSize(4))
+             .body("[0].id", equalTo("kit-prepaye"))
+             .body("[1].id", equalTo("recharge-liberte-1000"))
+             .body("[2].id", equalTo("recharge-liberte-3000"))
+             .body("[3].id", equalTo("recharge-liberte-5000"));
+    }
+
+    @Test
+    public void testGetKitPrepayeById() {
+        given()
+          .pathParam("id", "kit-prepaye")
+          .when().get("/offres/prepaye/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("kit-prepaye"))
+             .body("credit", equalTo(3000))
+             .body("prix", equalTo(6000))
+             .body("sms_offert", equalTo(0))
+             .body("duree_validite", equalTo(90))
+             .body("url", equalTo("https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte"));
+    }
+
+    @Test
+    public void testGetKitPrepayeById_NotFound() {
+        given()
+          .pathParam("id", "kit-prepaye-unknown")
+          .when().get("/offres/prepaye/{id}")
+          .then()
+             .statusCode(404)
+             .body(equalTo("Forfait prépayé avec ID 'kit-prepaye-unknown' non trouvé"));
+    }
+    @Test
+    public void testGetForfaitsBloques() {
+      given().when().get("/offres/forfait-bloque").then().statusCode(200)
+      .body("$",notNullValue()).body("$", hasSize(4))
+      .body("[0].id", equalTo("forfait-bloque-1000"))
+      .body("[1].id", equalTo("forfait-bloque-2000"))
+      .body("[2].id", equalTo("forfait-bloque-3000"))
+      .body("[3].id", equalTo("forfait-bloque-5000"));
+    }
+
+    @Test
+    public void testGetForfaitBloqueById() {
+        given()
+          .pathParam("id", "forfait-bloque-1000")
+          .when().get("/offres/forfait-bloque/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("forfait-bloque-1000"))
+             .body("prix", equalTo(1060))
+             .body("credit", equalTo(1000))
+             .body("sms_offert", equalTo(20))
+              .body("url", equalTo("https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000"));
+    }
+    @Test
+    public void testGetForfaitBloqueById_NotFound() {
+        given()
+          .pathParam("id", "forfait-bloque-unknown")
+          .when().get("/offres/forfait-bloque/{id}")
+          .then()
+             .statusCode(404)
+             .body(equalTo("Forfait bloqué avec ID 'forfait-bloque-unknown' non trouvé"));
+    }
+    @Test
+    public void testGetTourismCard(){
+      given()
+        .when().get("/offres/tourism-card")
+        .then()
+          .statusCode(200)
+          .body("$",hasSize(1))
+          .body("[0].id", equalTo("tourism-card"));
     }
 }
