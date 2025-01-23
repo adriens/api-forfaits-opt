@@ -352,6 +352,25 @@ public class OffresResource {
 
     @GET
     @Path("/tourism-card")
+    @Operation(
+        summary = "Liste l'offre de tourisme"
+    )
+
+    @APIResponse(
+        responseCode = "200",
+        description = "Détails de la tourism card",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = TourismCard.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "{\"id\": \"tourism-card\",\"prix\":\"5000\",\"credit\":\"2000\",\"volumetrie\":\"25 Go\",\"duree_validite\":\"3 mois\",\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/tourism-card-1000\"}"
+            )
+        )
+    )
+
+
+    @Tag(name="Tourism Card", description = "Voir les détails de la tourism card")
     public List<TourismCard> getTourismCard(){
         return entityManager.createQuery("SELECT t FROM TourismCard t", TourismCard.class).getResultList();
     }

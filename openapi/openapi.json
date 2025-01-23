@@ -146,6 +146,38 @@
             "description" : "Url de la page du kit sur le site officiel."
           }
         }
+      },
+      "TourismCard" : {
+        "description" : "Tourism card",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "Identifiant de l'offre tourisme"
+          },
+          "prix" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Prix de l'offre tourisme"
+          },
+          "credit" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Crédit disponible"
+          },
+          "volumetrie" : {
+            "type" : "string",
+            "description" : "Données mobiles disponibles"
+          },
+          "duree_validite" : {
+            "type" : "string",
+            "description" : "Durée de validité de l'offre tourisme"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "Url de la page de l'offre tourisme"
+          }
+        }
       }
     }
   },
@@ -597,6 +629,36 @@
           }
         }
       }
+    },
+    "/offres/tourism-card" : {
+      "get" : {
+        "summary" : "Liste l'offre de tourisme",
+        "tags" : [ "Tourism Card" ],
+        "responses" : {
+          "200" : {
+            "description" : "Détails de la tourism card",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "Exemple de réponse" : {
+                    "value" : {
+                      "id" : "tourism-card",
+                      "prix" : "5000",
+                      "credit" : "2000",
+                      "volumetrie" : "25 Go",
+                      "duree_validite" : "3 mois",
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/tourism-card-1000"
+                    }
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/TourismCard"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "tags" : [ {
@@ -614,6 +676,9 @@
   }, {
     "name" : "Kit Prépayé",
     "description" : "Liste de tous les forfaits prépayés"
+  }, {
+    "name" : "Tourism Card",
+    "description" : "Voir les détails de la tourism card"
   } ],
   "info" : {
     "title" : "forfaits-opt-nc API",
