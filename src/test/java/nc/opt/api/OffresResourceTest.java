@@ -171,4 +171,13 @@ public class OffresResourceTest {
              .statusCode(404)
              .body(equalTo("Forfait bloqué avec ID 'forfait-bloque-unknown' non trouvé"));
     }
+    @Test
+    public void testGetTourismCard(){
+      given()
+        .when().get("/offres/tourism-card")
+        .then()
+          .statusCode(200)
+          .body("$",hasSize(1))
+          .body("[0].id", equalTo("tourism-card"));
+    }
 }
