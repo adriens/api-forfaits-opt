@@ -188,6 +188,9 @@
     "name" : "Forfait-m",
     "description" : "Détails d'un forfait spécifique de la gamme forfait-m"
   }, {
+    "name" : "Forfaits",
+    "description" : "Recherche un forfait par ID dans toutes les gammes"
+  }, {
     "name" : "Forfaits bloqués",
     "description" : "Accès à un forfait bloqué spécifique par ID"
   }, {
@@ -757,6 +760,66 @@
             }
           }
         }
+      }
+    },
+    "/offres/{id}" : {
+      "get" : {
+        "description" : "Retourne les détails d'un forfait en fonction de l'ID fourni",
+        "tags" : [ "Forfaits" ],
+        "parameters" : [ {
+          "description" : "ID du forfait",
+          "examples" : {
+            "valid_id" : {
+              "value" : "forfait-m-1"
+            },
+            "invalid_id" : {
+              "value" : "forfait-m-9999"
+            }
+          },
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "name" : "id",
+          "in" : "path"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Détails du forfait m",
+            "content" : {
+              "application/json" : {
+                "examples" : {
+                  "valid_id" : {
+                    "value" : {
+                      "id" : "forfait-m-1",
+                      "volumetrie" : "1 Go",
+                      "vocal" : "1 H",
+                      "sms" : "Illimité",
+                      "prix" : 1000.0,
+                      "url" : "https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go"
+                    }
+                  }
+                },
+                "schema" : {
+                  "$ref" : "#/components/schemas/ForfaitM"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Forfait non trouvé",
+            "content" : {
+              "text/plain" : {
+                "examples" : {
+                  "invalid_id" : {
+                    "value" : "Forfait avec ID 'forfait-m-9999' non trouvé"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary" : "Get Forfait By Id"
       }
     }
   },

@@ -180,4 +180,29 @@ public class OffresResourceTest {
           .body("$",hasSize(1))
           .body("[0].id", equalTo("tourism-card"));
     }
+    @Test
+    public void testGetForfaitById() {
+        given()
+          .pathParam("id", "forfait-m-1")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("forfait-m-1"))
+             .body("prix", equalTo(1000.0f));
+
+        given()
+          .pathParam("id", "IMV-10")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("IMV-10"))
+             .body("prix", equalTo(530.0f));
+
+        given()
+          .pathParam("id", "unknown-forfait")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(404)
+             .body(equalTo("Forfait avec ID 'unknown-forfait' non trouvé dans toutes les gammes."));
+    }
 }
