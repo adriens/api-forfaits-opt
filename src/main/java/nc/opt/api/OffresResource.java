@@ -26,6 +26,18 @@ public class OffresResource {
     EntityManager entityManager;
 
     @GET
+    @APIResponse(
+        responseCode = "200",
+        description = "Liste des gammes de forfaits",
+        content = @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = Forfait.class),
+            examples = @ExampleObject(
+                name = "Exemple de réponse",
+                value = "[{\"id\":\"forfaits-m\",\"desc\":\"Gamme forfaits M\",\"description\":\"Un forfait « tout compris ». Appels + SMS + Internet Mobile VoIP inclus, sans engagement\",\"url\":\"https://www.opt.nc/particuliers/mobile/choisissez-le-forfait-qui-vous-ressemble\"}, {\"id\":\"forfaits-bloques\",\"desc\":\"Gamme forfaits bloqués\",\"description\":\"Un forfait voix et SMS permettant de maîtriser son budget sans risque de hors-forfait, sans engagement\",\"url\":\"https://www.opt.nc/particuliers/mobile/choisissez-le-forfait-qui-vous-ressemble\"}, {\"id\":\"data-only\",\"desc\":\"Abonnement data seul\",\"description\":\"Un forfait Internet dédié aux objets connectés avec un débit jusqu'à 150 Mb/s, rechargeable et compatible avec des options SMS en local.\",\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/abonnement-data-seul\"}, {\"id\":\"prepaye\",\"desc\":\"Kit prépayé Liberté\",\"description\":\"Un forfait sans engagement, décompté pour les appels et SMS (local et international), et compatible avec Internet Mobile à la Demande. Rechargeable avec des cartes Liberté pour prolonger la validité du crédit.\",\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}, {\"id\":\"tourism-card\",\"desc\":\"Tourism Card\",\"description\":\"Une carte prépayée conçue pour les vacanciers, valable 3 mois, permettant appels, SMS et accès à Internet Mobile, aussi bien en local qu'à l'international.\",\"url\":\"https://tourismcard.nc/\"}]"
+            )
+        )
+    )
     @Tag(name = "Gammes de Forfaits", description = "Liste les différentes gammes d'offres télécoms de l'OPT") 
     public List<Forfait> getAllOffres() {
         return entityManager.createQuery("SELECT f FROM Forfait f", Forfait.class).getResultList();
@@ -60,32 +72,45 @@ public class OffresResource {
         summary = "Détails d'un forfait spécifique de la gamme forfait-m",
         description = "Retourne les détails d'un forfait spécifique de la gamme forfait-m en fonction de l'ID fourni."
     )
-    @Parameter(
-        name = "id",
-        description = "ID du forfait",
-        required = true,
-        example = "forfait-m-1"
-    )
-    @APIResponses({
-        @APIResponse(
-            responseCode = "200",
-            description = "Détails du forfait",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ForfaitM.class),
-                examples = @ExampleObject(
-                    name = "Exemple de réponse",
-                    value = "{\"id\":\"forfait-m-1\",\"volumetrie\":\"1 Go\",\"vocal\":\"1 H\",\"sms\":\"Illimité\",\"prix\":1000.0,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go\"}"
+    @APIResponses(
+        value = {
+            @APIResponse(
+                responseCode = "200",
+                description = "Détails du forfait",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ForfaitM.class),
+                    examples = @ExampleObject(
+                        name = "valid_id",
+                        value = "{\"id\":\"forfait-m-1\",\"volumetrie\":\"1 Go\",\"vocal\":\"1 H\",\"sms\":\"Illimité\",\"prix\":1000.0,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go\"}"
+                    )
+                )
+            ),
+            @APIResponse(
+                responseCode = "404",
+                description = "Forfait M non trouvé",
+                content = @Content(
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(
+                        name = "invalid_id",
+                        value = "Forfait avec ID 'forfait-m-9999' non trouvé"
+                    )
                 )
             )
-        ),
-        @APIResponse(
-            responseCode = "404",
-            description = "Forfait non trouvé"
-        )
-    })
+        }
+    )
     @Tag(name = "Forfait-m", description = "Détails d'un forfait spécifique de la gamme forfait-m")
-    public Response getForfaitMById(@PathParam("id") String id) {
+    public Response getForfaitMById(
+        @Parameter(
+            description = "ID du forfait M",
+            schema = @Schema(implementation =  String.class),
+            required = true,
+            examples = {
+                @ExampleObject(name = "valid_id", value = "forfait-m-1"),
+                @ExampleObject(name = "invalid_id", value = "forfait-m-9999")
+            }
+        )      
+    @PathParam("id") String id) {
         ForfaitM forfaitM;
         try {
             forfaitM = entityManager.createQuery("SELECT fm FROM ForfaitM fm WHERE fm.id = :id", ForfaitM.class)
@@ -180,32 +205,45 @@ public class OffresResource {
         summary = "Détails d'un abonnement spécifique",
         description = "Retourne les détails d'un abonnement spécifique de données en fonction de l'ID fourni."
     )
-    @Parameter(
-        name = "id",
-        description = "ID de l'abonnement",
-        required = true,
-        example = "IMV-10"
-    )
-    @APIResponses({
-        @APIResponse(
+    @APIResponses(
+        value={
+            @APIResponse(
             responseCode = "200",
             description = "Détails de l'abonnement",
             content = @Content(
                 mediaType = "application/json",
                 schema = @Schema(implementation = AbonnementDataSeul.class),
                 examples = @ExampleObject(
-                    name = "Exemple de réponse",
+                    name = "valid_id",
                     value = "{\"id\":\"IMV-10\",\"volumetrie\":\"1 Mo\",\"debit\":\"256 Ko/s\",\"prix\":530,\"url\":\"https://www.opt.nc/sites/serviciel/files/media/file/FI_Internet%20Mobile%20au%20Volume.pdf\",\"type_forfait\":\"IMV\"}"
                 )
             )
         ),
-        @APIResponse(
-            responseCode = "404",
-            description = "Abonnement non trouvé"
-        )
-    })
+            @APIResponse(
+                responseCode = "404",
+                description = "Abonnement non trouvé",
+                content = @Content(
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(
+                        name = "invalid_id",
+                        value = "Abonnement avec ID 'IMV-9999' non trouvé"
+                    )
+                )
+            )
+        }
+    )
     @Tag(name = "Abonnement-data-seul", description = "Accès à un abonnement spécifique")
-    public Response getAbonnementDataSeulById(@PathParam("id") String id) {
+    public Response getAbonnementDataSeulById(
+        @Parameter(
+            description = "ID de l'abonnement data seul",
+            schema = @Schema(implementation =  String.class),
+            required = true,
+            examples = {
+                @ExampleObject(name = "valid_id", value = "IMV-10"),
+                @ExampleObject(name = "invalid_id", value = "IMV-9999")
+            }
+        )  
+    @PathParam("id") String id) {
         AbonnementDataSeul abonnementDataSeul;
         try {
             abonnementDataSeul = entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads WHERE ads.id = :id", AbonnementDataSeul.class)
@@ -250,32 +288,58 @@ public class OffresResource {
         summary = "Détails d'un forfait prépayé par ID",
         description = "Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni."
     )
-    @Parameter(
-        name = "id",
-        description = "ID de l'abonnement",
-        required = true,
-        example = "kit-prepaye"
-    )
-    @APIResponses({
-        @APIResponse(
-            responseCode = "200",
-            description = "Détails du forfait prépayé",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = KitPrepaye.class),
-                examples = @ExampleObject(
-                    name = "Exemple de réponse",
-                    value = "{\"id\":\"kit-prepaye\",\"credit\":3000,\"prix\":6000,\"sms_offert\":0,\"duree_validite\":90,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}"
+    @APIResponses(
+        value = {
+            @APIResponse(
+                responseCode = "200",
+                description = "Détails du forfait prépayé",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = KitPrepaye.class),
+                    examples = @ExampleObject(
+                        name = "valid_id",
+                        value = "{\"id\":\"kit-prepaye\",\"credit\":3000,\"prix\":6000,\"sms_offert\":0,\"duree_validite\":90,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/kit-prepaye-liberte\"}"
+                    )
+                )
+            ),
+            @APIResponse(
+                responseCode = "200",
+                description = "Détails du forfait prépayé",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = KitPrepaye.class),
+                    examples = @ExampleObject(
+                        name = "valid_id_2",
+                        value = "{\"id\":\"recharge-liberte-1000\",\"credit\":1000,\"prix\":1050,\"sms_offert\":10,\"duree_validite\":120,\"url\":\"https://rechargetonmob.nc/\"}"
+                    )
+                )
+            ),
+            @APIResponse(
+                responseCode = "404",
+                description = "Forfait non trouvé",
+                content = @Content(
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(
+                        name = "invalid_id",
+                        value = "Forfait prépayé avec ID 'kit-prepaye-9999' non trouvé"
+                    )
                 )
             )
-        ),
-        @APIResponse(
-            responseCode = "404",
-            description = "Forfait prépayé non trouvé"
-        )
-    })
+        }
+    )
     @Tag(name = "Kit Prépayé", description = "Accès à un forfait prépayé spécifique par ID")
-    public Response getKitPrepayeById(@PathParam("id") String id) {
+    public Response getKitPrepayeById(
+        @Parameter(
+            description = "ID du kit/recharge prépayé",
+            schema = @Schema(implementation =  String.class),
+            required = true,
+            examples = {
+                @ExampleObject(name = "valid_id", value = "kit-prepaye"),
+                @ExampleObject(name = "valid_id_2", value = "recharge-liberte-1000"),
+                @ExampleObject(name = "invalid_id", value = "kit-prepaye-1000")
+            }
+        ) 
+    @PathParam("id") String id) {
         try {
             KitPrepaye kitPrepaye = entityManager.createQuery("SELECT k FROM KitPrepaye k WHERE k.id = :id", KitPrepaye.class)
                                                     .setParameter("id", id)
@@ -323,26 +387,45 @@ public class OffresResource {
         summary = "Détails d'un forfait bloqué par ID",
         description = "Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni."
     )
-    @APIResponses({
-        @APIResponse(
-            responseCode = "200",
-            description = "Détails du forfait bloqué",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ForfaitBloque.class),
-                examples = @ExampleObject(
-                    name = "Exemple de réponse",
-                    value = "{\"id\":\"forfait-bloque-1000\",\"credit\":1000,\"prix\":1060,\"sms_offert\":20,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000\"}"
+    @APIResponses(
+        value = {
+            @APIResponse(
+                responseCode = "200",
+                description = "Détails du forfait bloqué",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ForfaitBloque.class),
+                    examples = @ExampleObject(
+                        name = "valid_id",
+                        value = "{\"id\":\"forfait-bloque-1000\",\"credit\":1000,\"prix\":1060,\"sms_offert\":20,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-bloque-1000\"}"
+                    )
+                )
+            ),
+            @APIResponse(
+                responseCode = "404",
+                description = "Forfait bloqué non trouvé",
+                content = @Content(
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(
+                        name = "invalid_id",
+                        value = "Forfait bloqué avec ID 'forfait-bloque-9999' non trouvé"
+                    )
                 )
             )
-        ),
-        @APIResponse(
-            responseCode = "404",
-            description = "Forfait bloqué non trouvé"
-        )
-    })
+        }
+    )
     @Tag(name = "Forfaits bloqués", description = "Accès à un forfait bloqué spécifique par ID")
-    public Response getForfaitBloqueById(@PathParam("id") String id) {
+    public Response getForfaitBloqueById(    
+        @Parameter(
+            description = "ID du forfait bloqué",
+            schema = @Schema(implementation =  String.class),
+            required = true,
+            examples = {
+                @ExampleObject(name = "valid_id", value = "forfait-bloque-1000"),
+                @ExampleObject(name = "invalid_id", value = "forfait-bloque-9999")
+            }
+        ) 
+    @PathParam("id") String id) {
         try {
             ForfaitBloque forfaitBloque = entityManager.createQuery("SELECT fb FROM ForfaitBloque fb WHERE fb.id = :id", ForfaitBloque.class)
                                                     .setParameter("id", id)

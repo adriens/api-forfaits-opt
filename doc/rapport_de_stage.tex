@@ -131,12 +131,13 @@
 	\pagenumbering{gobble} 
 	\newpage
 	\begin{abstract}
-		Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai travaillé sur le développement d'une API permettant de fournir des informations sur les différents forfaits télécoms. Ce projet a pour objectif de rendre les données publiques liées aux offres mobiles plus accessibles, en utilisant des outils modernes pour assurer une solution efficace et évolutive.
+		Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai développé une API permettant de centraliser et d'exposer les informations relatives aux forfaits télécoms proposés par l'OPT-NC. L'objectif principal de ce projet était de fournir une API permettant d’accéder facilement aux données des forfaits pour potentiellement l'intégrer dans diverses applications.
 		
-		L'API repose sur une stack technologique composée de Quarkus pour le développement de microservices performants, Flyway pour la gestion des migrations de base de données, et une base de données H2 pour le développement et les tests. 
+		L'API a été construite à l'aide du framework Quarkus, avec une gestion des migrations de base de données via Flyway. Des outils comme OpenAPI ont été utilisés pour la documentation automatique, tandis que Microcks a permis de simuler les réponses de l'API pour les tests, avant son déploiement réel. La solution a également été conteneurisée grâce à Jib, ce qui a simplifié sa gestion et son déploiement. 
 		
-		Ce rapport détaille les méthodologies adoptées, les technologies choisies et les différentes étapes de réalisation du projet, tout en mettant en lumière les défis rencontrés.
+		Ce rapport détaille les étapes du développement de l'API, les outils utilisés et les solutions mises en œuvre pour permettre une utilisation optimale de l'API.
 	\end{abstract}
+
 	\newpage
 	\section*{Remerciements}
 	
@@ -163,7 +164,7 @@
 	
 	\subsection{Bref descriptif de l’entreprise et du déroulement du stage}
 	
-	L’Office des Postes et Télécommunications de Nouvelle-Calédonie (\textbf{OPT-NC}) est un acteur incontournable en Nouvelle-Calédonie, intervenant dans les domaines des télécommunications, de la finance, et des services postaux (et couvrant ainsi un large éventail de secteurs d'activité). L’entreprise propose des solutions variées allant des forfaits mobiles et connexions Internet aux services financiers et de distribution postale.
+	L’Office des Postes et Télécommunications de Nouvelle-Calédonie (\textbf{OPT-NC}) est un acteur incontournable en Nouvelle-Calédonie, couvrant un large éventail de secteurs d'activité : intervenant dans les domaines des télécommunications, de la finance, et des services postaux,etc...
 	
 	Au sein de son département \textbf{DSI/GLIA}, j’ai intégré une équipe dynamique spécialisée dans le développement et la gestion de solutions logicielles.
 	
@@ -185,7 +186,7 @@
 	
 	Une fois une tâche terminée, je soumettais mon travail pour vérification à travers une demande spécifique appelée \textit{pull request}. Mon maître de stage, Adrien SALES, examinait ces propositions, identifiait d'éventuelles améliorations ou corrections, et me fournissait des retours. Après validation, les modifications étaient intégrées à la branche principale du projet, garantissant ainsi une progression structurée et contrôlée.
 	
-	Des extraits de code sont inclus dans ce rapport, mais le code complet est disponible sur le dépôt \textbf{GitHub} à l'adresse suivante : \url{https://github.com/adriens/api-forfaits-opt}. Si des détails supplémentaires sont nécessaires, vous pouvez consulter le dépôt GitHub.
+	Des extraits de code sont inclus dans ce rapport, mais le code complet est disponible sur le dépôt \textbf{GitHub} à l'adresse suivante : \url{https://github.com/adriens/api-forfaits-opt}.
 	
 	\subsection{Stack}
 	
@@ -236,7 +237,6 @@
 	Ce format inclut le titre de l’issue, une description détaillée des objectifs, et parfois des liens vers des ressources ou des outils nécessaires à sa réalisation.
 	
 	J’ai donc créé une issue distincte pour chaque sous-tâche, en précisant le contexte, les objectifs et les résultats attendus. Cette structuration a permis une meilleure visibilité sur les étapes du projet, tout en facilitant le suivi et la validation des différentes phases par mon maître de stage.
-	\newpage
 	\section{Identification des types de forfaits et création du fichier \texttt{offres.csv}}
 	
 	Ma deuxième tâche a consisté à identifier les différents types de forfaits disponibles sur la page de l’OPT intitulée \textit{"Identifiez le forfait qui vous ressemble"} (voir Figure~\ref{fig:page_forfait} dans l'Annexe). Pour cela, j’ai analysé les caractéristiques propres à chaque forfait, notamment leur nom, leur description et leur utilisation, afin de les préparer sous une forme exploitable.
@@ -923,12 +923,57 @@
 		}
 		]
 	\end{lstlisting}
+	
 	\subsection{Documentation et tests unitaires}
 	
 	Chaque endpoint développé a été correctement documenté à l'aide des annotations \texttt{MicroProfile OpenAPI}, ce qui a permis de compléter progressivement la documentation générée avec \texttt{ReDocly} à mesure que les fonctionnalités étaient implémentées.
 	
 	De plus, des tests unitaires ont été réalisés pour chaque endpoint afin de garantir leur bon fonctionnement, en vérifiant le rapport JaCoCo pour surveiller que le seuil de couverture soit bien au dessus de 10\%.
-	\newpage
+
+	
+	\section{Microcks : Simulation des Mocks API}
+	
+	Pour simuler et tester les réponses de l'API, j'ai ajouté la dépendance \textbf{Microcks} à mon projet. Ensuite, j'ai fourni les fichiers \textbf{OpenAPI} générés par les annotations sur mes différents endpoints à Microcks. Ce dernier utilise ces spécifications pour générer des mocks d'API.
+	
+	\subsection*{Fonctionnement de Microcks}
+	
+	Une fois les fichiers OpenAPI intégrés à Microcks, il a simulé les différentes réponses que l'API peut renvoyer. Cela inclut les réponses réussies (200 OK), ainsi que les erreurs (404, 500, etc.), telles que spécifiées dans les annotations de mes endpoints.
+	
+	\subsection*{Exemples de tests avec Microcks}
+	
+	Voici un exemple de simulation de l'endpoint \texttt{/offres/forfait-m/{id}} à l'aide de Microcks. En utilisant l'interface de Microcks, j'ai pu obtenir un mock de cet endpoint qui génère automatiquement la réponse selon le paramètre entré, ici le paramètre est un id valide : 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{asset/mock_forfaitm.png}
+		\caption{Endpoint \texttt{/offres/forfait-m/{id}} dans Microcks avec paramètre valide}
+		\label{fig:endpoint-offres/forfait-m/{id}}
+	\end{figure}
+	
+	Tandis qu'ici l'exemple est fait avec un paramètre invalide :
+	
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{asset/microcks_invalid.png}
+		\caption{Endpoint \texttt{/offres/forfait-m/{id}} dans Microcks avec paramètre invalide}
+		\label{fig:endpoint-offres/forfait-m/{id}}
+	\end{figure}
+	
+	Le \textbf{Conformance Index} de Microcks mesure à quel point les mocks sont conformes aux spécifications OpenAPI, est de \textbf{66.67\%}. Cela signifie que la simulation est proche à \textbf{66.67\%} du comportement attendu de l'API réelle.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{asset/conformance-index.png}
+		\caption{Conformance Index dans Microcks}
+		\label{fig:conformance-index}
+	\end{figure}
+	
+	\subsection*{Avantages de l'utilisation de Microcks}
+	
+	\begin{itemize}
+		\item \textbf{Accessibilité pour les développeurs} : Si l'API n'est pas encore prête à être déployée, Microcks permet aux développeurs de tester l'API en simulant ses réponses, même si celle-ci n'est pas encore en production. Cela permet de continuer à avancer sur l'intégration sans attendre que l'API soit entièrement déployée.
+		\item \textbf{Tests réalistes} : Grâce au conteneur Microcks, il est possible d'effectuer de vraies requêtes HTTP, offrant ainsi des tests réalistes
+	\end{itemize}
 	
 	\section{From 0 to Hero}
 	
