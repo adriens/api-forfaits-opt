@@ -204,5 +204,28 @@ public class OffresResourceTest {
           .then()
              .statusCode(404)
              .body(equalTo("Forfait avec ID 'unknown-forfait' non trouvé dans toutes les gammes."));
+
+        given()
+          .pathParam("id", "kit-prepaye")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id", equalTo("kit-prepaye"))
+              .body("prix", equalTo(6000));
+
+        given()
+          .pathParam("id", "forfait-bloque-1000")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id", equalTo("forfait-bloque-1000"))
+              .body("prix", equalTo(1060));
+        given()
+          .pathParam("id", "tourism-card")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id[0]", equalTo("tourism-card"))
+              .body("prix[0]", equalTo(5000));
     }
 }
