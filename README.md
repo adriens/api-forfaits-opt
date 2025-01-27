@@ -42,6 +42,8 @@ A la racine du dépôt :
 - compiler en pdf : 
     ```bash
         pdflatex rapport_de_stage.tex
+        pdflatex rapport_de_stage.tex
+Bien lancer la compilation 2 fois (pour voir la tables des matières)
 - lire : 
     ```bash 
     xdg-open rapport_de_stage.pdf
