@@ -463,4 +463,93 @@ public class OffresResource {
     public List<TourismCard> getTourismCard(){
         return entityManager.createQuery("SELECT t FROM TourismCard t", TourismCard.class).getResultList();
     }
+    @GET
+    @Path("/{id}")
+    @Operation(
+        description = "Retourne les détails d'un forfait en fonction de l'ID fourni"
+    )
+
+    @APIResponses(
+        value = {
+            @APIResponse(
+                responseCode = "200",
+                description = "Détails du forfait m",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ForfaitM.class),
+                    examples = @ExampleObject(
+                        name = "valid_id",
+                        value = "{\"id\":\"forfait-m-1\",\"volumetrie\":\"1 Go\",\"vocal\":\"1 H\",\"sms\":\"Illimité\",\"prix\":1000.0,\"url\":\"https://www.opt.nc/particuliers/mobile/quel-forfait-choisir/forfait-m-1-go\"}"
+                    )
+                )
+            ),
+            @APIResponse(
+                responseCode = "404",
+                description = "Forfait non trouvé",
+                content = @Content(
+                    mediaType = "text/plain",
+                    examples = @ExampleObject(
+                        name = "invalid_id",
+                        value = "Forfait avec ID 'forfait-m-9999' non trouvé"
+                    )
+                )
+            )
+        }
+    )
+
+
+
+    @Tag(name = "Forfaits", description = "Recherche un forfait par ID dans toutes les gammes")
+    public Response getForfaitById(
+        @Parameter(
+            description = "ID du forfait",
+            schema = @Schema(implementation =  String.class),
+            required = true,
+            examples = {
+                @ExampleObject(name = "valid_id", value = "forfait-m-1"),
+                @ExampleObject(name = "invalid_id", value = "forfait-m-9999")
+            }
+        )
+    @PathParam("id") String id) {
+        try {
+            ForfaitM forfaitM = entityManager.createQuery("SELECT fm FROM ForfaitM fm WHERE fm.id = :id", ForfaitM.class)
+                                            .setParameter("id", id)
+                                            .getSingleResult();
+            return Response.ok(forfaitM).build();
+        } catch (Exception e) {
+            try {
+                AbonnementDataSeul abonnementDataSeul = entityManager.createQuery("SELECT ads FROM AbonnementDataSeul ads WHERE ads.id = :id", AbonnementDataSeul.class)
+                                                                    .setParameter("id", id)
+                                                                    .getSingleResult();
+                return Response.ok(abonnementDataSeul).build();
+            } catch (Exception ex) {
+                try {
+                    KitPrepaye kitPrepaye = entityManager.createQuery("SELECT k FROM KitPrepaye k WHERE k.id = :id", KitPrepaye.class)
+                                                        .setParameter("id", id)
+                                                        .getSingleResult();
+                    return Response.ok(kitPrepaye).build();
+                } catch (Exception exc) {
+                    try {
+                        ForfaitBloque forfaitBloque = entityManager.createQuery("SELECT fb FROM ForfaitBloque fb WHERE fb.id = :id", ForfaitBloque.class)
+                                                                .setParameter("id", id)
+                                                                .getSingleResult();
+                        return Response.ok(forfaitBloque).build();
+                    } catch (Exception exc2) {
+                        try {
+                            TourismCard tourismCard = entityManager.createQuery("SELECT t FROM TourismCard t WHERE t.id = :id", TourismCard.class)
+                                                                .setParameter("id", id)
+                                                                .getSingleResult();
+                            return Response.ok(tourismCard).build();
+                        } catch (Exception exc3) {
+                            return Response.status(Response.Status.NOT_FOUND)
+                                        .entity("Forfait avec ID '" + id + "' non trouvé dans toutes les gammes.")
+                                        .type(MediaType.TEXT_PLAIN)
+                                        .build();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -180,4 +180,52 @@ public class OffresResourceTest {
           .body("$",hasSize(1))
           .body("[0].id", equalTo("tourism-card"));
     }
+    @Test
+    public void testGetForfaitById() {
+        given()
+          .pathParam("id", "forfait-m-1")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("forfait-m-1"))
+             .body("prix", equalTo(1000.0f));
+
+        given()
+          .pathParam("id", "IMV-10")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(200)
+             .body("id", equalTo("IMV-10"))
+             .body("prix", equalTo(530.0f));
+
+        given()
+          .pathParam("id", "unknown-forfait")
+          .when().get("/offres/{id}")
+          .then()
+             .statusCode(404)
+             .body(equalTo("Forfait avec ID 'unknown-forfait' non trouvé dans toutes les gammes."));
+
+        given()
+          .pathParam("id", "kit-prepaye")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id", equalTo("kit-prepaye"))
+              .body("prix", equalTo(6000));
+
+        given()
+          .pathParam("id", "forfait-bloque-1000")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id", equalTo("forfait-bloque-1000"))
+              .body("prix", equalTo(1060));
+        given()
+          .pathParam("id", "tourism-card")
+          .when().get("/offres/{id}")
+          .then()
+              .statusCode(200)
+              .body("id[0]", equalTo("tourism-card"))
+              .body("prix[0]", equalTo(5000));
+    }
 }
