@@ -11,6 +11,7 @@ on:
 jobs:
   build-and-analyze:
     runs-on: ubuntu-latest
+    if: ${{ github.head_ref != '55-support-presentation-soutenance' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
