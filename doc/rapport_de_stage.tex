@@ -195,9 +195,9 @@
 		
 		Voici les principaux outils et technologies que j’ai utilisés pour ce projet :
 	\begin{itemize}
-		\item \textbf{Ubunutu} : Système d'exploitation Linux utilisé comme environnement de développement pour le projet.
+		\item \textbf{Ubuntu} : Système d'exploitation Linux utilisé comme environnement de développement pour le projet.
 		\item \textbf{Java} : Langage de programmation principal utilisé pour le développement de l'API.
-		\item \textbf{Maven} : Outil de gestion de projet et des dépendances.
+		\item \textbf{Maven} : Outil de gestion des dépendances et d'automatisation de projets java.
 		\item \textbf{Quarkus} : Framework Java pour le développement de microservices performants.
 		\item \textbf{Flyway} : Outil de gestion des migrations de base de données, assurant la cohérence du schéma de données.
 		\item \textbf{H2 Database} : Base de données embarquée utilisée pour les phases de développement et de test.
@@ -288,6 +288,7 @@
 			\item Une structure de projet standardisée et prête à l’emploi, permettant de se concentrer rapidement sur le développement des fonctionnalités.
 			\item Un mode développement interactif grâce à \textit{mvn quarkus:dev}, qui améliore la productivité.
 			\item La possibilité d’ajouter facilement des extensions pour enrichir le projet, telles que Flyway ou Hibernate.
+			\item Un \textit{Dev UI}, une interface graphique intégrée qui facilite le développement en permettant de visualiser et d'interagir avec l'application en temps réel. Cela permet de tester et de déboguer plus rapidement sans avoir à effectuer de nombreuses actions manuelles.
 		\end{itemize}
 		
 		Cette première étape m’a permis de comprendre l’organisation d’un projet Quarkus et de mettre en place un environnement fonctionnel prêt à accueillir des fonctionnalités plus avancées.
@@ -463,6 +464,7 @@
 			\item \texttt{@Produces(MediaType.APPLICATION\_JSON)} : Indique que la réponse de cet endpoint sera au format JSON.
 			\item \texttt{@GET} : Indique que cet endpoint utilise la méthode HTTP GET pour récupérer des données.
 			\item \texttt{@Tag} : Ajoute une catégorie (\texttt{Forfaits}) et une description détaillant la fonctionnalité de l'endpoint ("Liste les différentes gammes d'offres télécoms de l'OPT").
+			\item \texttt{@Operation} : Décrit l'opération spécifique de l'endpoint, permettant de préciser son but et son fonctionnement dans la documentation OpenAPI. \item \texttt{@APIResponses} : Permet de spécifier les différentes réponses possibles d'un endpoint, en indiquant notamment les codes de statut HTTP associés et leur signification. 
 		\end{itemize}
 	
 		\subsection{Utilisation de Redocly pour la génération de documentation statique}
@@ -680,12 +682,10 @@
 		
 		Cette analyse inclut principalement les informations suivantes : \begin{itemize} \item Le pourcentage de couverture du code par les tests. \item Les éventuelles vulnérabilités et les problèmes de qualité détectés dans le code. \item Les règles de code respectées et celles enfreintes. \item Des suggestions d'amélioration pour optimiser la qualité du code. \end{itemize}
 		
-		\subsection*{Nouvel release et déploiement automatique de la documentation}
+		\subsection*{Nouvelle release et déploiement automatique de la documentation}
 		
-		Une fois la branche fusionnée avec la branche principale, j'ai fait une nouvel release. le workflow pour déployé sur GitHub pages c'est alors décelenché et à déployé la documentation de l'API à l'adresse \url{https://adriens.github.io/api-forfaits-opt/}.\\
-		J'avais aussi rajouté un autre workflow pour déployé la documentation  automatiquement sur \textbf{Bump.sh}, celui ci c'est aussi déclenché lors de la publication de la release et j'ai pu voir le rapport de changement de versions : 
-		
-		\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/changelog.png} \caption{chnagelog de Bump.sh} \label{fig:sonarq}\end{figure}
+		Une fois la branche fusionnée avec la branche principale, j'ai effectué une nouvelle release. Le workflow pour déployer sur GitHub Pages s'est alors déclenché et a déployé la documentation de l'API à l'adresse \url{https://adriens.github.io/api-forfaits-opt/}. \ J'avais également ajouté un autre workflow pour déployer la documentation automatiquement sur \textbf{Bump.sh}. Celui-ci s'est également déclenché lors de la publication de la release, et j'ai pu consulter le rapport de changement de versions.
+		\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/changelog.png} \caption{changelog de Bump.sh} \label{fig:sonarq}\end{figure}
 		\section{Déveleppement des endpoints pour les forfaits restants}
 		\subsection*{Endpoint pour la gamme "Data seul"}
 		
@@ -857,7 +857,7 @@
 		
 		\section{Microcks : Simulation des Mocks API}
 		
-		Pour simuler et tester les réponses de l'API, j'ai ajouté la dépendance \textbf{Microcks} à mon projet. Ensuite, j'ai fourni les fichiers \textbf{OpenAPI} générés par les annotations sur mes différents endpoints à Microcks. Ce dernier utilise ces spécifications pour générer des mocks d'API.
+	Microcks est un outil open source de test et de simulation d'APIs qui permet de générer des mocks d'API à partir de spécifications OpenAPI. Il est conçu pour faciliter la simulation des comportements d'une API sans avoir à la déployer, ce qui est particulièrement utile lors des phases de développement et d'intégration. En intégrant Microcks à mon projet, j'ai pu simuler les réponses de mes endpoints en utilisant les fichiers OpenAPI générés par les annotations sur mes différents endpoints.
 		
 		\subsection*{Fonctionnement de Microcks}
 		
