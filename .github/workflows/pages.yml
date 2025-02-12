@@ -1,7 +1,12 @@
-name: Deploy
+name: Deploy API Docs and Presentation
+
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -27,16 +32,17 @@ jobs:
         run: npm i -g @redocly/cli@latest
 
       - name: Build API HTML page
-        id: build_api_html_page
         run: |
           redocly build-docs openapi/openapi.yaml --output=./docs/api/index.html
 
       - name: ⚙️ Setup Github Pages
         uses: actions/configure-pages@v5
+
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './docs/api'
+          path: './docs'
+
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main

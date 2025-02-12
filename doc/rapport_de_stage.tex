@@ -3,6 +3,8 @@
 	\usepackage{listings}
 	\usepackage{xcolor}
 	\usepackage{float}
+	\usepackage{hyperref}
+	\hypersetup{breaklinks=true}
 	\usepackage{setspace} % Pour gérer l'interligne
 	\singlespacing % Définit l'interligne simple
 	
@@ -105,7 +107,7 @@
 		\begin{titlepage}
 			\begin{center}
 				{\LARGE \textbf{Rapport de Stage}} \\[1cm]
-				{\large Effectué du \textbf{02/12/2024} au \textbf{[à déterminer]}} \\[1cm]
+				{\large Effectué du \textbf{02/12/2024} au \textbf{07/02/2025}} \\[1cm]
 				
 				
 				
@@ -133,11 +135,11 @@
 		\pagenumbering{gobble} 
 		\newpage
 		\begin{abstract}
-			Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai développé une API permettant de centraliser et d'exposer les informations relatives aux forfaits télécoms proposés par l'OPT-NC. L'objectif principal de ce projet était de fournir une API permettant d’accéder facilement aux données des forfaits pour potentiellement l'intégrer dans diverses applications comme un chatbot sur le site de l'OPT qui conseillerai les clients sur le forfait à choisir.
+			Dans le cadre de mon stage à l'Université de la Nouvelle-Calédonie (UNC), en collaboration avec l'Office des Postes et Télécommunications de Nouvelle-Calédonie (OPT-NC) supervisé par Adrien SALES, j'ai développé une API permettant de centraliser et d'exposer les informations relatives aux forfaits télécoms proposés par l'OPT-NC. L'objectif principal de ce projet était de fournir une API permettant d’accéder facilement aux données des forfaits pour potentiellement l'intégrer dans diverses applications comme un chatbot sur le site de l'OPT qui conseillerait les clients sur le forfait optimale à choisir ou bien un front-end dynamique.
 			
-			L'API a été construite à l'aide du framework Quarkus, avec une gestion des migrations de base de données via Flyway. Des outils comme OpenAPI ont été utilisés pour la documentation automatique, tandis que Microcks a permis de simuler les réponses de l'API pour les tests, avant son déploiement réel. La solution a également été conteneurisée grâce à Jib, ce qui a simplifié sa gestion et son déploiement. 
+			L'API a été construite à l'aide du framework Quarkus, avec une gestion des migrations de base de données via Flyway. Des outils comme OpenAPI ont été utilisés pour la documentation automatique, tandis que Microcks a permis de simuler les réponses de l'API pour les tests, avant son déploiement réel. La solution a également été conteneurisée grâce à jib, ce qui a simplifié sa gestion et son déploiement. 
 			
-			Ce rapport détaille les étapes du développement de l'API, les outils utilisés et les solutions mises en œuvre pour permettre une utilisation optimale de l'API.
+			Ce rapport détaille les étapes du développement de l'API, les outils utilisés et les solutions mises en œuvre pour permettre une DEVEX (Developer Experience) et une UX (User Experience) optimales de l’API.
 		\end{abstract}
 	
 		\newpage
@@ -161,22 +163,22 @@
 		
 		\subsection{Annonce du stage}
 		
-		Du \textbf{02 décembre 2024} au \textbf{[à déterminer]}, j’ai effectué un stage au sein de l’entreprise \textbf{OPT} (située à Nouméa, Nouvelle-Calédonie). Au cours de ce stage au département \textbf{DSI/GLIA (Direction des Systèmes d'Information / Génie Logiciel Inter-Applicatif)}, j’ai eu l’occasion de me plonger dans le développement d’une API permettant de fournir des informations sur les différents forfaits télécoms proposés par l’entreprise.
+		Du \textbf{02 décembre 2024} au \textbf{07 février 2025}, j’ai effectué un stage au sein de l’entreprise \textbf{OPT} (située à Nouméa, Nouvelle-Calédonie). Au cours de ce stage au département \textbf{DSI/GLIA (Direction des Systèmes d'Information / Génie Logiciel Inter-Applicatif)}, j’ai eu l’occasion de me plonger dans le développement d’une API permettant de fournir des informations sur les différents forfaits télécoms proposés par l’entreprise.
 		
-		Ce stage a été pour moi une opportunité d’explorer plusieurs aspects clés du métier de développeur \textbf{backend}, notamment en matière de gestion de bases de données, d’architecture de microservices, et de l’utilisation des technologies modernes comme Quarkus et Flyway. J’ai également pu développer des compétences techniques liées à la conception d’API REST.
+		Ce stage a été pour moi une opportunité d’explorer plusieurs aspects clés du métier de développeur \textbf{backend}, notamment en matière de gestion de bases de données, d’architecture de microservices cloud natifs, et de l’utilisation des technologies modernes comme Quarkus et Flyway. J’ai également pu développer des compétences techniques liées a la conception d’APIs REST.
 		
 		\subsection{Bref descriptif de l’entreprise et du déroulement du stage}
 		
 		L’Office des Postes et Télécommunications de Nouvelle-Calédonie (\textbf{OPT-NC}) est un acteur incontournable en Nouvelle-Calédonie, couvrant un large éventail de secteurs d'activité : intervenant dans les domaines des télécommunications, de la finance, et des services postaux,etc...
 		
-		Au sein de son département \textbf{DSI/GLIA}, j’ai intégré une équipe dynamique spécialisée dans le développement et la gestion de solutions logicielles.
+		Au sein de son département \textbf{DSI/GLIA}, j’ai intégré une équipe dynamique spécialisée dans le développement, la gestion et l'intégration de solutions logicielles.
 		
 		
-		Supervisé par \textbf{Adrien SALES}, chef de section de l’équipe \textbf{GLIA}, j’ai bénéficié d’un encadrement rigoureux, favorisant l’apprentissage et la réalisation des différentes missions. Parmi ces missions, j’ai été chargé de concevoir une architecture basée sur Quarkus et Flyway, tout en suivant les bonnes pratiques de développement logiciel.
+		Supervisé par \textbf{Adrien SALES}, manager de l’équipe \textbf{GLIA}, j’ai bénéficié d’un encadrement rigoureux, favorisant l’apprentissage et la réalisation des différentes missions. Parmi ces missions, j’ai été chargé de concevoir une architecture basée sur Quarkus et Flyway, tout en suivant les bonnes pratiques de développement logiciel.
 		
 		\subsection{Problématique et objectifs du rapport}
 		
-		Ce stage m’a permis de développer une API destinée à centraliser et rendre accessibles les informations sur les forfaits télécoms proposés par l’OPT-NC. L’objectif principal était de créer un outil moderne et fonctionnel, facilitant l’accès à ces données et leur utilisation dans d’éventuelles applications ou analyses.
+		Ce stage m’a permis de développer une API destinée à centraliser et rendre accessibles les informations sur les forfaits télécoms proposés par l’OPT-NC. L’objectif principal était de créer un service, facilitant l’accès à ces données et leur utilisation dans d’éventuelles applications ou analyses.
 		
 		Ce rapport se concentre sur le processus de développement de l’API, en détaillant les étapes de conception, les choix technologiques réalisés, ainsi que les difficultés techniques rencontrées et les solutions mises en œuvre.
 		
@@ -187,9 +189,9 @@
 		
 		Durant ce stage, j'ai suivi une approche de travail progressive, divisant le développement de l'API en plusieurs tâches spécifiques (appelées \textit{issues}). Chaque tâche correspondait à une fonctionnalité ou une étape précise du projet.
 		
-		Une fois une tâche terminée, je soumettais mon travail pour vérification à travers une demande spécifique appelée \textit{pull request}. Mon maître de stage, Adrien SALES, examinait ces propositions, identifiait d'éventuelles améliorations ou corrections, et me fournissait des retours. Après validation, les modifications étaient intégrées à la branche principale du projet, garantissant ainsi une progression structurée et contrôlée.
+		Une fois une tâche terminée, je soumettais mon travail pour vérification à travers une demande spécifique appelée \textit{Pull Request}. Mon maître de stage, Adrien SALES, effectuer les revues de code, identifiait d'éventuelles améliorations ou corrections, et me fournissait des retours. Après validation, les modifications étaient intégrées à la branche \textbf{main}(principale) de la repository, garantissant ainsi une progression structurée et contrôlée.
 		
-		Des extraits de code sont inclus dans ce rapport, mais le code complet est disponible sur le dépôt \textbf{GitHub} à l'adresse suivante : \url{https://github.com/adriens/api-forfaits-opt}.
+		Des extraits de code sont inclus dans ce rapport, mais le code complet est pour l'instant disponible en Open Source sur le dépôt \textbf{GitHub} à l'adresse suivante : \url{https://github.com/adriens/api-forfaits-opt}.
 		
 		\subsection{Stack}
 		
@@ -197,18 +199,18 @@
 	\begin{itemize}
 		\item \textbf{Ubuntu} : Système d'exploitation Linux utilisé comme environnement de développement pour le projet.
 		\item \textbf{Java} : Langage de programmation principal utilisé pour le développement de l'API.
-		\item \textbf{Maven} : Outil de gestion des dépendances et d'automatisation de projets java.
+		\item \textbf{(Apache) Maven} : Outil de gestion des dépendances et d'automatisation de projets java.
 		\item \textbf{Quarkus} : Framework Java pour le développement de microservices performants.
 		\item \textbf{Flyway} : Outil de gestion des migrations de base de données, assurant la cohérence du schéma de données.
 		\item \textbf{H2 Database} : Base de données embarquée utilisée pour les phases de développement et de test.
-		\item \textbf{Git et GitHub} : Pour la gestion des versions et la collaboration.
+		\item \textbf{Git et GitHub.com} : Pour la gestion des versions et la collaboration.
 		\item \textbf{Visual Studio Code} : Environnement de développement intégré.
 		\item \textbf{HTTPie} : Outil en ligne de commande pour tester les endpoints de l'API.
 		\item \textbf{Podman} : Outil pour la gestion et l'exécution de conteneurs, utilisé pour tester l'API en environnement conteneurisé.
 		\item \textbf{Redocly} : Outil utilisé pour générer de la documentation statique à partir des spécifications OpenAPI.
-		\item\textbf{Bump.sh} : Outil similaire à Redocly avec des fonctionnalités supplémentaires.
+		\item\textbf{Bump.sh} : Service cloud similaire a Redocly dédié à l'historisation des documentations d'API
 		\item \textbf{Jib} : Outil intégré à Maven pour créer des images conteneurisées sans utiliser de \texttt{Dockerfile}. Il simplifie la conteneurisation et génère des images légères et optimisées.
-		\item \textbf{SonarQube} : Outil d'analyse de la qualité du code qui détecte les problèmes, les vulnérabilités et les redondances, améliorant ainsi la qualité et la sécurité du code.
+		\item \textbf{SonarQube(.sonarsource.com)} : Outil d'analyse de la qualité du code qui détecte les problèmes, les vulnérabilités et les redondances, améliorant ainsi la qualité et la sécurité du code.
 	\end{itemize}
 		
 		\section{Première tâche : conversion des sous-tâches en issues}
@@ -220,7 +222,7 @@
 		L’issue principale intitulée \textit{/offres : Lister les types d'abonnements \#1} décrivait les objectifs généraux et les actions attendues pour atteindre ce résultat. Voici quelques exemples de sous-tâches qui devaient être transformées en issues individuelles :
 		
 		\begin{itemize}
-			\item Implémenter l'endpoint \texttt{/offres} avec Flyway
+			\item Implémenter l'endpoint \texttt{/offres} en injectant les données avec Flyway
 			\item Documenter avec des spécifications OpenAPI complètes
 			\item Ajouter une CI pour tester le build Maven
 			\item Générer une documentation HTML statique avec Redocly
@@ -286,7 +288,7 @@
 		L’utilisation de Quarkus offre plusieurs avantages, notamment :
 		\begin{itemize}
 			\item Une structure de projet standardisée et prête à l’emploi, permettant de se concentrer rapidement sur le développement des fonctionnalités.
-			\item Un mode développement interactif grâce à \textit{mvn quarkus:dev}, qui améliore la productivité.
+			\item Une DevEx optimale via un mode de développement interactif grâce à \textit{mvn quarkus:dev}, qui améliore la productivité.
 			\item La possibilité d’ajouter facilement des extensions pour enrichir le projet, telles que Flyway ou Hibernate.
 			\item Un \textit{Dev UI}, une interface graphique intégrée qui facilite le développement en permettant de visualiser et d'interagir avec l'application en temps réel. Cela permet de tester et de déboguer plus rapidement sans avoir à effectuer de nombreuses actions manuelles.
 		\end{itemize}
@@ -415,7 +417,9 @@
 				\end{verbatim}
 				\item \textbf{Lancement du conteneur} :
 				\begin{verbatim}
-					podman run --name forfaits-container -p 8080:8080 forfaits-opt-nc:1.0.0-SNAPSHOT
+					podman run --name forfaits-container\
+					-p 8080:8080\
+					forfaits-opt-nc:1.0.0-SNAPSHOT
 				\end{verbatim}
 			\end{itemize}
 		\end{enumerate}
@@ -445,13 +449,13 @@
 		
 		\section{Documentation de l'API}
 		
-		La documentation d'une API est essentielle pour garantir une utilisation efficace et correcte de celle-ci par les développeurs. Elle facilite la compréhension des fonctionnalités offertes, les méthodes disponibles, les formats de données acceptés, et les réponses possibles. Une API bien documentée améliore non seulement l'expérience utilisateur pour les développeurs mais aussi la maintenance et l'évolution du service.
+		La documentation d'une API est essentielle pour garantir une utilisation efficace et correcte de celle-ci par les developpeurs désireux de la consommer. Elle facilite la compréhension des fonctionnalités offertes, les méthodes disponibles, les formats de données acceptés, et les réponses possibles. Une API bien documentée améliore non seulement la DevEx mais aussi la maintenance et l'évolution du service.
 		
 		\subsection{Utilisation de OpenAPI}
 		
-		Dans ce projet, l'outil \textbf{OpenAPI} a été choisi pour documenter automatiquement l'API. Grâce à lui, la documentation est générée directement à partir des annotations. Cela permet d'avoir une documentation de l'API toujours à jour. 
+		Dans ce projet, la spécification \textbf{OpenAPI} a été choisi pour documenter automatiquement l'API. Grâce à elle, la documentation est générée directement à partir des annotations. Cela permet d'avoir une documentation de l'API toujours à jour. 
 		
-		L'intérêt principal d'OpenAPI est sa capacité à produire une spécification au format \texttt{YAML} et \texttt{JSON}, qui pourra être utilisée par la suite (cf. la sous-section \ref{subsec:redocly}).
+		L'intérêt principal d'OpenAPI est sa capacité à produire une spécification au format \texttt{YAML} et \texttt{JSON}, qui pourra être utilisée par la suite par exemple pour générer du code client (js, node, Python, Go,...).
 		
 		La configuration de OpenAPI dans le projet a été réalisée avec les étapes suivantes :
 		\begin{itemize}
@@ -467,10 +471,10 @@
 			\item \texttt{@Operation} : Décrit l'opération spécifique de l'endpoint, permettant de préciser son but et son fonctionnement dans la documentation OpenAPI. \item \texttt{@APIResponses} : Permet de spécifier les différentes réponses possibles d'un endpoint, en indiquant notamment les codes de statut HTTP associés et leur signification. 
 		\end{itemize}
 	
-		\subsection{Utilisation de Redocly pour la génération de documentation statique}
+		\subsection{Utilisation de Redocly pour la génération de documentation HTML statique}
 		\label{subsec:redocly}
 		
-		Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation statique de l'API à partir des spécifications OpenAPI générées précédemment. La documentation produite est une interface graphique interactive, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
+		Dans ce projet, l'outil \textbf{Redocly} a été utilisé pour générer une documentation HTML statique de l'API à partir des spécifications OpenAPI générées précédemment. La documentation produite est une interface graphique interactive, permettant aux utilisateurs de mieux comprendre les fonctionnalités de l'API.
 		
 		\subsection{Mise en place d'un workflow GitHub Actions}
 		
@@ -486,9 +490,9 @@
 		
 		Cette approche permet non seulement de maintenir la documentation à jour automatiquement, mais aussi de l'héberger de manière simple et accessible via GitHub Pages à l'url : \url{https://adriens.github.io/api-forfaits-opt/}.
 		
-		\section{Bump.sh et Redocly : Comparaison et Mise en Place}
+		\section{bump.sh et Redocly : Comparaison et Mise en Place}
 		
-		\textbf{Bump.sh} est une plateforme qui facilite la gestion et la publication de la documentation d'API, avec une fonctionnalité unique de suivi des différences détaillant les ajouts et modifications entre les versions de l'API. Contrairement à \textbf{Redocly}, qui génère uniquement la documentation.
+		\textbf{bump.sh} est une plateforme qui facilite la gestion, la publication et l'historisation de la documentation d’API, avec une fonctionnalité unique de suivi des différences détaillant les ajouts et modifications entre les versions de l'API. Contrairement à \textbf{Redocly}, qui génère uniquement la documentation.
 		\begin{table}[h!]
 			\centering
 			\begin{tabularx}{\textwidth}{|X|X|X|}
@@ -556,7 +560,7 @@
 		Pour automatiser l'exécution des tests, la validation du build et l'analyse de la qualité du code, une pipeline CI a été configurée avec \textbf{GitHub Actions}. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
 		
 		\subsection{SonarQube}
-		SonarQube est un outil de qualité de code qui permet d'analyser en profondeur le code source, d'identifier des problèmes de qualité, des vulnérabilités et des codes redondants. Dans ce projet, SonarQube a été intégré à la pipeline CI pour effectuer une analyse automatique de la qualité du code à chaque build.
+		SonarQube est un outil de qualité de code qui permet d'analyser en profondeur le code source, d'identifier des problèmes de qualité, des vulnérabilités et des codes redondants. Dans ce projet, SonarQube est intégré au pipeline CI et directement aux Pull Requests (PRs), permettant une analyse automatique et un retour immédiat à chaque soumission. Cette intégration assure une expérience développeur (DevEx) optimale et continue en garantissant une qualité de code constante avant fusion.
 		
 		Pour l'intégration de SonarQube, voici les étapes réalisées :
 		\begin{itemize}
@@ -568,11 +572,11 @@
 		\section{Nouvel endpoint : /offres/forfait-m}
 		L'objectif principal de ce nouvel endpoint est de fournir les différentes offres de la gamme "M", incluant des informations telles que :le nom, le prix,la volumétrie de données (par exemple : 1 Go, 5 Go, 25 Go, 100 Go), le temps d'appel (1h, appels illimités...), les SMS (illimités ou limités), l'url qui redirige sur le site de l'OPT
 	
-		J'ai donc suivit le même schéma que pour l'endpoint /offres :
+		J'ai donc suivi le même schéma que pour l'endpoint /offres :
 		
 		\subsection*{Mise en place des données}
 		\label{subsec:mpd}
-		Je me suis donc rendu sur le site de l'OPT pour récuperer les informations sur chaque forfait M pour les mettre en forme dans un fichier \texttt{forfait\_m.csv}
+		Je me suis donc rendu sur le site de l'OPT pour récuperer les informations publiquement disponibles sur chaque forfait M pour les mettre en forme dans un fichier \texttt{forfait\_m.csv}
 		contenant les 6 champs décrit plus haut : 
 		\begin{itemize} 
 			\item \textbf{id} (le nom unique du forfait)
@@ -583,7 +587,7 @@
 			\item \textbf{volumétrie}
 		\end{itemize}
 		
-		Ensuite j'ai créer mon deuxième fichier de migration SQL \texttt{V2\_\_create\_and\_feed\_forfait\_m.sql} que Flyway executera au lancement de l'application. 
+		Ensuite j'ai créé mon deuxième fichier de migration SQL \texttt{V2\_\_create\_and\_feed\_forfait\_m.sql} que Flyway exécutera au boot de l'application. 
 		
 		Il créera une table \texttt{forfait\_m} puis remplira cette table avec le fichier \texttt{forfait\_m.csv} : 
 		\subsection*{Création de l'entité ForfaitM}
@@ -596,7 +600,7 @@
 			@Table(name = "forfait_m") 
 		\end{lstlisting}
 		
-		On créer notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les méthodes getter pour chaque attribut.
+		On créé notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les "getter" pour chaque attribut.
 			
 		\subsection*{Développement de l'endpoint /offres/forfaits-m}
 		\label{subsec:endpoint-m}
@@ -772,7 +776,7 @@
 		\end{lstlisting}
 		
 		- \textbf{Endpoint spécifique} :
-		- \texttt{GET /offres/forfait-bloque/{id}} : Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni.
+		- \texttt{GET /offres/forfait-bloque/\{id\}} : Retourne les détails d'un forfait bloqué spécifique en fonction de l'ID fourni.
 		
 		\subsection*{Endpoint pour le kit prépayé liberté}
 		\texttt{GET /offres/prepaye} permet de récupérer la liste de tous les kits prépayés de la gamme liberté, offrant des forfaits avec des crédits différents et des durées de validité variées.
@@ -805,7 +809,7 @@
 		\end{lstlisting}
 		
 		- \textbf{Endpoint spécifique} :
-		- \texttt{GET /offres/prepaye/{id}} : Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.
+		- \texttt{GET /offres/prepaye/\{id\}} : Retourne les détails d'un forfait prépayé spécifique en fonction de l'ID fourni.
 		\subsection*{Endpoint pour la "Tourism card"}
 		\texttt{GET /offres/tourism-card} permet de récupérer les informations sur le forfait "Tourism card", qui est conçu pour les utilisateurs ayant des besoins spécifiques pendant leurs séjours en Nouvelle-Calédonie.
 		Exemple d'appel :
@@ -827,7 +831,7 @@
 		
 		\subsection*{Endpoint de recherche globale d'un forfait par identifiant}
 		
-		\texttt{GET /offres/{id}} permet de récupérer un forfait spécifique à partir de son identifiant. Cet endpoint permet une recherche globale d'un forfait, sans avoir à accéder à l'endpoint d'une gamme spécifique. Par exemple, avant l'implémentation de cet endpoint, pour chercher le forfait avec l'identifiant \textbf{forfait-m-1}, il était nécessaire de se rendre à l'endpoint \textbf{/offres/forfait-m/forfait-m-1}. Grâce à ce nouvel endpoint \textbf{/offres/{id}}, la recherche est désormais globale, c'est-à-dire effectuée dans toutes les tables.
+		\texttt{GET /offres/\{id\}} permet de récupérer un forfait spécifique à partir de son identifiant. Cet endpoint permet une recherche globale d'un forfait, sans avoir à accéder à l'endpoint d'une gamme spécifique. Par exemple, avant l'implémentation de cet endpoint, pour chercher le forfait avec l'identifiant \textbf{forfait-m-1}, il était nécessaire de se rendre à l'endpoint \textbf{/offres/forfait-m/forfait-m-1}. Grâce à ce nouvel endpoint \textbf{/offres/{id}}, la recherche est désormais globale, c'est-à-dire effectuée dans toutes les tables.
 	
 		
 			Exemple d'appel :
@@ -857,7 +861,7 @@
 		
 		\section{Microcks : Simulation des Mocks API}
 		
-	Microcks est un outil open source de test et de simulation d'APIs qui permet de générer des mocks d'API à partir de spécifications OpenAPI. Il est conçu pour faciliter la simulation des comportements d'une API sans avoir à la déployer, ce qui est particulièrement utile lors des phases de développement et d'intégration. En intégrant Microcks à mon projet, j'ai pu simuler les réponses de mes endpoints en utilisant les fichiers OpenAPI générés par les annotations sur mes différents endpoints.
+	Microcks est un outil open source de test et de simulation d'APIs qui fait partie de la cncf (Cloud Native Computing Foundation). Il permet de générer des mocks d'API à partir de spécifications OpenAPI. Il est conçu pour faciliter la simulation des comportements d'une API sans avoir à la déployer, ce qui est particulièrement utile lors des phases de développement et d'intégration, cf \href{https://dev.to/optnc/microcks-for-dummies-1imn}{Microcks for Dummies}. En intégrant Microcks à mon projet, j'ai pu simuler les réponses de mes endpoints en utilisant les fichiers OpenAPI générés par les annotations sur mes différents endpoints.
 		
 		\subsection*{Fonctionnement de Microcks}
 		
@@ -865,12 +869,12 @@
 		
 		\subsection*{Exemples de tests avec Microcks}
 		
-		Voici un exemple de simulation de l'endpoint \texttt{/offres/forfait-m/{id}}. En utilisant l'interface de Microcks, j'ai pu obtenir un mock de cet endpoint qui génère automatiquement la réponse selon le paramètre entré, ici le paramètre est un id valide : 
+		Voici un exemple de simulation de l'endpoint \texttt{/offres/forfait-m/\{id\}}. En utilisant l'interface de Microcks, j'ai pu obtenir un mock de cet endpoint qui génère automatiquement la réponse selon le paramètre entré, ici le paramètre est un id valide : 
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\textwidth]{asset/mock_forfaitm.png}
-			\caption{Endpoint \texttt{/offres/forfait-m/{id}} dans Microcks avec paramètre valide}
+			\caption{Endpoint \texttt{/offres/forfait-m/\{id\}} dans Microcks avec paramètre valide}
 			\label{fig:endpoint-offres/forfait-m/{id}}
 		\end{figure}
 		
@@ -940,29 +944,25 @@
 		
 		\subsection*{Ressenti personnel}
 		
-		Ce stage a été une expérience très enrichissante, tant sur le plan technique que personnel. J'ai gagné en autonomie, appris à m'adapter à un environnement professionnel. Travailler sur un projet réel m'a motivé et m'a permis de renforcer ma confiance dans mes capacités à gérer des projets similaires à l'avenir.
+			Ce stage a été une expérience très enrichissante, tant sur le plan technique que personnel. J'ai gagné en autonomie et appris à m'adapter à un environnement professionnel. Travailler sur un projet réel et en équipe, avec une bonne partie des travaux en remote et en pur cloud, m'a motivé et permis de renforcer ma confiance dans mes capacités à gérer des projets similaires à l'avenir.
 		
 	\section{Conclusion}
 	
-	Ce stage a été une expérience très enrichissante, tant sur le plan technique que personnel. Ce projet m'a permis de découvrir et d’aborder différentes facettes du développement d'une API, telles que l'intégration continue (CI), la gestion des migrations de base de données avec Flyway, la documentation automatique avec OpenAPI, Redocly et Bump.sh, ainsi que les tests unitaires et la couverture de code avec JaCoCo.
-	
-	\vspace{0.2cm}
-	
-	Grâce à ce stage, j’ai significativement progressé dans des domaines tels que le développement d'API, la conteneurisation, ainsi que dans l’utilisation d’outils d'analyses et de documentation. L'expérience m’a permis de comprendre l’importance de chaque étape dans la création d’une API tout en améliorant la qualité du code et en automatisant les processus avec des outils modernes.
-	
-	\vspace{0.2cm}
-	
-	Sur le plan personnel, ce stage m’a permis de gagner en autonomie et de renforcer ma confiance dans mes capacités à gérer des projets de développement.
-	
-	\vspace{0.2cm}
-	
-	Ce stage a été une véritable opportunité d’apprentissage, qui m’a préparé à de futurs défis professionnels et m’a donné une base solide pour continuer à évoluer dans le domaine du développement \textbf{backend}.
+		Ce projet m'a permis de découvrir et d’aborder différentes facettes du développement d'une API, telles que l'intégration continue (CI), la gestion des migrations de base de données avec Flyway, la documentation automatique avec OpenAPI, Redocly et Bump.sh, ainsi que les tests unitaires et la couverture de code avec JaCoCo.
+		
+		\vspace{0.2cm}
+		
+		Grâce à ce stage, j’ai significativement progressé dans des domaines tels que le développement d'API, la conteneurisation et l’utilisation d’outils d'analyses et de documentation. J’ai aussi mieux compris l’importance de chaque étape dans la création d’une API, notamment pour améliorer la qualité du code et automatiser les processus avec des outils modernes.
+		
+		\vspace{0.2cm}
+		
+		Ce stage a été une véritable opportunité d’apprentissage, qui m’a préparé à de futurs défis professionnels et m’a donné une base solide pour continuer à évoluer dans le domaine du développement backend.
 
 
 		
 		\newpage
 		\section{Annexe}
-		\subsection{illustrations}
+		\subsection{Illustrations}
 			\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.8\textwidth]{asset/page_forfait.png}
@@ -1007,7 +1007,15 @@
 			\item \textbf{Tutoriel sur HTTPie} : Introduction à l'utilisation de HTTPie pour tester des API REST. Disponible sur : \url{https://httpie.io/docs/cli}
 			\item\textbf{Documentation Quarkus sur JIB} : \url{https://quarkus.io/guides/container-image#jib}
 			\item \textbf{Podman Documentation} : Documentation officielle pour apprendre à gérer des conteneurs avec Podman. Disponible sur : \url{https://podman.io/documentation}
-			\item \textbf{Article sur OpenAPI et Redocly} : Tutoriel sur la génération de documentation statique avec OpenAPI et Redocly. Disponible sur : \url{https://redocly.com/docs/cli/} et demo : \url{https://dev.to/optnc/api-documentation-release-automation-with-github-redocly-and-open-api-f6h}
+			\item \textbf{Tutoriel sur la génération de documentation statique avec OpenAPI et Redocly.} \url{https://redocly.com/docs/cli/} 
+		\end{itemize}
+		Article du GLIA :
+		\sloppy 
+		\begin{itemize}
+			\item \textbf{Annotations java :} \url{https://dev.to/optnc/openapi-java-annotation-for-better-\
+				api-documentation-43oe}
+			\item \textbf{Article sur OpenApi :} \url{https://dev.to/optnc/api-documentation-release-automation-with-github-redocly-and-open-api-f6h}
+			\item \textbf{Build et déployer une documentation statique avec Quakus/Redocly sur Github Pages :} \url{https://dev.to/optnc/build-deliver-static-documentation-w-quarkusreodcly-on-github-pages-4224}
 			\item \textbf {Site de bump.sh} : \url{https://bump.sh/}
 			\item \textbf{Site SonarQube} : \url{https://www.sonarsource.com/products/sonarqube/}
 			\item \textbf{Article sur Microcks par Vinh FAUCHER} : \url{https://dev.to/optnc/microcks-for-dummies-1imn}
