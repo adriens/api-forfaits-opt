@@ -139,7 +139,7 @@
 			
 			L'API a été construite à l'aide du framework Quarkus, avec une gestion des migrations de base de données via Flyway. Des outils comme OpenAPI ont été utilisés pour la documentation automatique, tandis que Microcks a permis de simuler les réponses de l'API pour les tests, avant son déploiement réel. La solution a également été conteneurisée grâce à jib, ce qui a simplifié sa gestion et son déploiement. 
 			
-			Ce rapport détaille les étapes du développement de l'API, les outils utilisés et les solutions mises en œuvre pour permettre une DEVEX (Developer Experience) et une UX (User Experience) optimales de l’API.
+			Ce rapport détaille les étapes du développement de l'API, les outils utilisés et les solutions mises en œuvre pour permettre une DEVEX (Developer Experience) optimales de l’API.
 		\end{abstract}
 	
 		\newpage
@@ -169,7 +169,7 @@
 		
 		\subsection{Bref descriptif de l’entreprise et du déroulement du stage}
 		
-		L’Office des Postes et Télécommunications de Nouvelle-Calédonie (\textbf{OPT-NC}) est un acteur incontournable en Nouvelle-Calédonie, couvrant un large éventail de secteurs d'activité : intervenant dans les domaines des télécommunications, de la finance, et des services postaux,etc...
+		L’Office des Postes et Télécommunications de Nouvelle-Calédonie (\textbf{OPT-NC}) est un acteur incontournable en Nouvelle-Calédonie, couvrant un large éventail de secteurs d'activité : intervenant dans les domaines des télécommunications, de la finance, la distribution et des services postaux.
 		
 		Au sein de son département \textbf{DSI/GLIA}, j’ai intégré une équipe dynamique spécialisée dans le développement, la gestion et l'intégration de solutions logicielles.
 		
@@ -187,7 +187,7 @@
 		
 		\subsection{Méthodologie de travail}
 		
-		Durant ce stage, j'ai suivi une approche de travail progressive, divisant le développement de l'API en plusieurs tâches spécifiques (appelées \textit{issues}). Chaque tâche correspondait à une fonctionnalité ou une étape précise du projet.
+		Durant ce stage, j'ai suivi une approche de travail itératif, divisant le développement de l'API en plusieurs tâches spécifiques (appelées \textit{issues}). Chaque tâche correspondait à une fonctionnalité ou une étape précise du projet.
 		
 		Une fois une tâche terminée, je soumettais mon travail pour vérification à travers une demande spécifique appelée \textit{Pull Request}. Mon maître de stage, Adrien SALES, effectuer les revues de code, identifiait d'éventuelles améliorations ou corrections, et me fournissait des retours. Après validation, les modifications étaient intégrées à la branche \textbf{main}(principale) de la repository, garantissant ainsi une progression structurée et contrôlée.
 		
@@ -517,7 +517,7 @@
 		Pour mettre en place Bump.sh dans ce projet, j'ai procédé à l'upload d'une spécification OpenAPI au format YAML sur la plateforme Bump.sh. Voici les étapes réalisées :
 		
 		\begin{itemize}
-			\item J'ai récupérer le fichier de spécification OpenAPI au format \textbf{openapi.yml} généré lors du build.
+			\item J'ai récupéré le fichier de spécification OpenAPI au format \textbf{openapi.yml} généré lors du build.
 			\item J'ai téléchargé ce fichier sur la plateforme Bump.sh, qui a automatiquement généré la documentation de l'API (Voir la figure \ref{fig:bumpsh}).
 			\item Bump.sh l'a hébergée en ligne pour un accès facile et publique à l'url \url{https://bump.sh/morgancarre/doc/forfaits-opt-nc}.
 		\end{itemize}
@@ -556,8 +556,8 @@
 			\label{fig:jacoco-report}
 		\end{figure}
 		
-		\subsection{Configuration de la pipeline CI avec GitHub Actions et SonarQube}
-		Pour automatiser l'exécution des tests, la validation du build et l'analyse de la qualité du code, une pipeline CI a été configurée avec \textbf{GitHub Actions}. Cette pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
+		\subsection{Configuration du pipeline CI avec GitHub Actions et SonarQube}
+		Pour automatiser l'exécution des tests, la validation du build et l'analyse de la qualité du code, un pipeline CI a été configurée avec \textbf{GitHub Actions}. Ce pipeline s'exécute à chaque push ou pull request sur la branche \texttt{main}.
 		
 		\subsection{SonarQube}
 		SonarQube est un outil de qualité de code qui permet d'analyser en profondeur le code source, d'identifier des problèmes de qualité, des vulnérabilités et des codes redondants. Dans ce projet, SonarQube est intégré au pipeline CI et directement aux Pull Requests (PRs), permettant une analyse automatique et un retour immédiat à chaque soumission. Cette intégration assure une expérience développeur (DevEx) optimale et continue en garantissant une qualité de code constante avant fusion.
@@ -600,7 +600,7 @@
 			@Table(name = "forfait_m") 
 		\end{lstlisting}
 		
-		On créé notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les "getter" pour chaque attribut.
+		On crée notre classe \texttt{ForfaitM} en définissant les paramètres de l'entité et en ajoutant les "getter" pour chaque attribut.
 			
 		\subsection*{Développement de l'endpoint /offres/forfaits-m}
 		\label{subsec:endpoint-m}
@@ -686,9 +686,9 @@
 		
 		Cette analyse inclut principalement les informations suivantes : \begin{itemize} \item Le pourcentage de couverture du code par les tests. \item Les éventuelles vulnérabilités et les problèmes de qualité détectés dans le code. \item Les règles de code respectées et celles enfreintes. \item Des suggestions d'amélioration pour optimiser la qualité du code. \end{itemize}
 		
-		\subsection*{Nouvelle release et déploiement automatique de la documentation}
+		\subsection*{Nouvelle release et delivery  automatique de la documentation}
 		
-		Une fois la branche fusionnée avec la branche principale, j'ai effectué une nouvelle release. Le workflow pour déployer sur GitHub Pages s'est alors déclenché et a déployé la documentation de l'API à l'adresse \url{https://adriens.github.io/api-forfaits-opt/}. \ J'avais également ajouté un autre workflow pour déployer la documentation automatiquement sur \textbf{Bump.sh}. Celui-ci s'est également déclenché lors de la publication de la release, et j'ai pu consulter le rapport de changement de versions.
+		Une fois la branche fusionnée avec la branche principale, j'ai effectué une nouvelle release. Le workflow pour déployer sur GitHub Pages s'est alors déclenché et a déployé la documentation de l'API à l'adresse \url{https://adriens.github.io/api-forfaits-opt/}. \ J'avais également ajouté un autre workflow pour déployer la documentation automatiquement sur \textbf{Bump.sh}. Celui-ci s'est également déclenché lors de la publication de la release, et j'ai pu consulter le rapport de changement de version.
 		\begin{figure}[H] \centering \includegraphics[width=\textwidth]{asset/changelog.png} \caption{changelog de Bump.sh} \label{fig:sonarq}\end{figure}
 		\section{Déveleppement des endpoints pour les forfaits restants}
 		\subsection*{Endpoint pour la gamme "Data seul"}
@@ -940,7 +940,7 @@
 		
 		\subsection*{Efforts et résultats}
 		
-		Au début du stage, mes compétences étaient limitées dans des domaines comme Quarkus, la conteneurisation et les API REST. Cependant, avec un travail régulier, j'ai rapidement progressé. L'intégration d'outils comme SonarQube et Microcks m'a permis d'améliorer la qualité du code et de comprendre l'importance de la CI/CD.
+		Au début du stage, mes compétences étaient limitées dans des domaines comme Quarkus, la conteneurisation et les APIs REST. Cependant, avec un travail régulier, j'ai rapidement progressé. L'intégration d'outils comme SonarQube et Microcks m'a permis d'améliorer la qualité du code et de comprendre l'importance de la CI/CD.
 		
 		\subsection*{Ressenti personnel}
 		
@@ -1009,7 +1009,7 @@
 			\item \textbf{Podman Documentation} : Documentation officielle pour apprendre à gérer des conteneurs avec Podman. Disponible sur : \url{https://podman.io/documentation}
 			\item \textbf{Tutoriel sur la génération de documentation statique avec OpenAPI et Redocly.} \url{https://redocly.com/docs/cli/} 
 		\end{itemize}
-		Article du GLIA :
+		Articles du GLIA :
 		\sloppy 
 		\begin{itemize}
 			\item \textbf{Annotations java :} \url{https://dev.to/optnc/openapi-java-annotation-for-better-\
